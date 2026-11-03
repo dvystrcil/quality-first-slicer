@@ -77,8 +77,8 @@ A successful build on one Linux distribution would not establish the same depend
 - [ ] Extract every active URL, Git repository/tag, commit, hash, patch, and conditional from all dependency CMake files.
 - [ ] Resolve Git tags and branch archives to immutable commits; inspect the SoftFever-maintained dependency forks against their upstreams.
 - [ ] Inspect vendored `deps_src` projects and all nested license/notice files.
-- [ ] Inspect the local patches and platform binary bundles.
-- [ ] Verify archive hashes independently and record retrieval dates and source metadata.
+- [ ] Inspect the local patches and platform binary bundles; the first Windows GMP/MPFR/WebView2 binary inventory is documented in [Windows binary provenance](windows-binary-provenance.md).
+- [ ] Verify archive hashes independently and record retrieval dates and source metadata; the repeatable inputs and verifier are now available in [the source archive manifest](../audit/orcaslicer-v2.4.2-source-archives.json), [verification procedure](archive-verification.md), and [verification script](../tools/verify-source-archives.py). No downloads have yet been verified.
 - [ ] Generate an SBOM from the exact checked-out source/build configuration, then manually reconcile it with the CMake declarations.
 - [ ] Complete license and notice review before importing any source or assets.
 
