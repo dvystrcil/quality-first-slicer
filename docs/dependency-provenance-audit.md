@@ -45,7 +45,7 @@ The versions, URLs, hashes, and tags below are transcribed from the named v2.4.2
 - wxWidgets is sourced from a SoftFever-maintained repository, not the canonical wxWidgets repository. The checked-in declaration uses a Git tag with shallow clone and does not record the resolved commit SHA. Treat this as a high-priority provenance and reproducibility item.
 - OpenVDB and Blosc use non-canonical fork/archive sources. Blosc's active source URL is a branch archive rather than a release tag or immutable commit URL, even though a checksum is declared. The checksum gives content integrity for the archive that was reviewed, but the branch name itself is mutable.
 - GMP is obtained from a SoftFever release asset rather than the GNU upstream URL. Its origin, patch, and release process need independent review.
-- OCCT and OpenEXR include local patch steps. Those patch files are part of the effective source and must be retained, reviewed, and included in provenance records.
+- OCCT and OpenEXR include local patch steps. Those patch files are part of the effective source and must be retained, reviewed, and included in SBOM/provenance.
 - Windows build logic also copies GMP, MPFR, WebView2 loader, OCCT, and FreeType DLLs into the application output. The binary and redistribution review must include those copied artifacts.
 
 ## 3. System dependencies and conditional behavior
@@ -78,7 +78,7 @@ A successful build on one Linux distribution would not establish the same depend
 - [ ] Resolve Git tags and branch archives to immutable commits; inspect the SoftFever-maintained dependency forks against their upstreams.
 - [ ] Inspect vendored `deps_src` projects and all nested license/notice files.
 - [ ] Inspect the local patches and platform binary bundles; the first Windows GMP/MPFR/WebView2 binary inventory is documented in [Windows binary provenance](windows-binary-provenance.md).
-- [ ] Verify archive hashes independently and record retrieval dates and source metadata; the repeatable inputs and verifier are now available in [the source archive manifest](../audit/orcaslicer-v2.4.2-source-archives.json), [verification procedure](archive-verification.md), and [verification script](../tools/verify-source-archives.py). No downloads have yet been verified.
+- [ ] Verify all source archive hashes independently. The first manual run verified 24 of 25 entries; NanoSVG remains an unresolved mismatch documented in [the verification procedure](archive-verification.md). The repeatable inputs and verifier are available in [the source archive manifest](../audit/orcaslicer-v2.4.2-source-archives.json) and [verification script](../tools/verify-source-archives.py).
 - [ ] Generate an SBOM from the exact checked-out source/build configuration, then manually reconcile it with the CMake declarations.
 - [ ] Complete license and notice review before importing any source or assets.
 
@@ -86,4 +86,4 @@ A successful build on one Linux distribution would not establish the same depend
 
 The v2.4.2 build is not a simple list of upstream packages. It combines system package discovery, vendored code, pinned archives, forked dependency sources, local patches, and platform-specific binary redistribution. A reproducible and legally reviewable fork baseline therefore needs a platform-specific dependency manifest and a provenance review of the maintained forks and copied binaries.
 
-**No dependencies are approved for import by this document.** No local source checkout, archive verification, SBOM generation, build, or legal review has been performed.
+**No dependencies are approved for import by this document.** No local source checkout, SBOM generation, build, or legal review has been performed. Archive verification is partial as described above.
