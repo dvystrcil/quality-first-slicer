@@ -35,7 +35,7 @@ class VerifySourceArchivesTests(unittest.TestCase):
     def test_sha256_file_returns_digest_and_size(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "payload.bin"
-            payload = b"known fixture\\x00bytes"
+            payload = b"known fixture\x00bytes"
             path.write_bytes(payload)
             digest, size = MODULE.sha256_file(path)
         self.assertEqual(digest, hashlib.sha256(payload).hexdigest())
