@@ -76,7 +76,7 @@ The following are active source declarations found in the v2.4.2 dependency CMak
 | Blosc | Fork branch archive | Same fork; cross-compile disables SSE2/AVX2 | Shared fork archive | Shared fork archive; Debug dependency build can be added |
 | OpenEXR | GCC13 patch | Cross-compile has architecture-specific build handling | Shared source; no Linux GCC patch branch | ARM64-specific SSE-disable patch; Debug dependency build can be added |
 | GMP / MPFR | Build from source archives | Build from source; macOS architecture and cross-compile flags | Build from source path | Copy prebuilt headers/libs/DLLs from repository directories |
-| FreeType | Shared release asset; static build; zlib integration enabled | Shared release asset; static build | Shared release asset; static build | Shared release asset; DLL build; Debug dependency build can be added |
+| FreeType | Shared release asset; static build; zlib integration enabled | Shared release asset; static build | Shared release asset; DLL build (`WIN32`) | Shared release asset; DLL build; Debug dependency build can be added |
 | wxWidgets | GTK2 by default; GTK3 when `DEP_WX_GTK3` is enabled | Shared fork/tag; native macOS toolkit defaults | Shared fork/tag | Shared fork/tag; Edge WebView enabled; architecture-specific library directory |
 | Qhull | Included | Included | Included | Omitted from `_dep_list` for MSVC |
 | Windows runtime packaging | Not applicable to this packaging path | Not applicable to this packaging path | Not the MSVC DLL-copy path | Copies GMP, MPFR, WebView2Loader, OCCT, and FreeType DLLs |
@@ -114,7 +114,7 @@ The presence of a patch is part of the dependency's effective source and must be
 
 ### 4.3 Windows architecture and binary packaging
 
-The MSVC dependency path explicitly recognizes x86, x64, and ARM64. It maps the active Visual Studio compiler version to a Boost toolset and selects the corresponding wxWidgets library directory. The main application packaging helper copies:
+The MSVC dependency path explicitly recognizes x86, x64, and ARM64. FreeType's component CMake uses the broader `WIN32` condition for shared-library output, so the DLL build setting also applies to MinGW. It maps the active Visual Studio compiler version to a Boost toolset and selects the corresponding wxWidgets library directory. The main application packaging helper copies:
 
 - GMP DLL and MPFR DLL for the selected architecture;
 - WebView2Loader.dll for the selected architecture;
