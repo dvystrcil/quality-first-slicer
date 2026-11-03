@@ -21,7 +21,7 @@ import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 
 
 def sha256_file(path: Path) -> tuple[str, int]:
@@ -92,7 +92,7 @@ def load_manifest(path: Path) -> dict[str, Any]:
 def verify_artifact(
     artifact: dict[str, Any],
     cache_dir: Path,
-    preserve_mismatches_dir: Path | None = None,
+    preserve_mismatches_dir: Optional[Path] = None,
 ) -> dict[str, Any]:
     artifact_id = artifact["id"]
     expected = artifact["sha256"].lower()
