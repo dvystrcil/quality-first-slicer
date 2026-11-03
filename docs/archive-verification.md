@@ -31,6 +31,17 @@ The manifest contains 25 source archive entries. MPFR has two mirror URLs for th
 - The manifest explicitly excludes the shallow wxWidgets tag, the Apple cross-compile PNG Git checkout, and prebuilt Windows GMP/MPFR/WebView2 binaries. Those need separate immutable-source or binary verification.
 - The tool uses only the Python standard library. It does not modify the manifest and does not commit generated reports automatically.
 
+## Latest verification result
+
+Manual workflow run [41740959467](https://github.com/dvystrcil/quality-first-slicer/actions/runs/41740959467), completed 2026-11-03, downloaded all 25 manifest entries:
+
+- **24 passed:** each downloaded archive matched the SHA-256 declared in the manifest.
+- **1 unresolved mismatch:** NanoSVG. The workflow report records expected SHA-256 `8d9c1624ad6518dd6dfa31e4f8dc7da9ec243d88bae595c7a037450617fec851`, but the downloaded archive was `299320` bytes with SHA-256 `1e3f94a052dd2abb139993ed3496c90ed4458d6f907027bf03cbaed889fe2567`.
+- The requested URL in upstream `deps/NanoSVG/NanoSVG.cmake` is `https://github.com/SoftFever/nanosvg/archive/863f6aa97ef62028126fa2c19bd4350394c2e15e.zip`. GitHub redirected the download to `https://codeload.github.com/SoftFever/Orca-deps-nanosvg/zip/863f6aa97ef62028126fa2c19bd4350394c2e15e`.
+- The redirected repository resolves the requested commit SHA `863f6aa97ef62028126fa2c19bd4350394c2e15e`. The repository rename/redirect is a plausible explanation for the archive digest difference (for example, a changed archive root directory), but archive contents have not yet been compared to establish that explanation.
+
+**Disposition:** keep NanoSVG as a failed verification. Do not replace the expected digest or mark it verified until the archive contents and the exact upstream source intent have been independently reconciled. The 24 successful matches are evidence of byte-for-byte agreement with the upstream CMake declarations, not independent proof of source authenticity or licensing.
+
 ## Current limitations
 
-This repository's manifest was transcribed from upstream CMake source. The expected values are therefore still declarations until the downloaded bytes have been independently checked. No archive verification has been run in this review environment.
+The manifest's expected values were transcribed from upstream CMake source. The 24 matching downloads now have independent byte-level verification evidence against those declarations. NanoSVG remains unresolved as documented above. No archive has been extracted or built as part of this verification run, and no complete SBOM, authenticity review, license review, or legal review has been performed.
