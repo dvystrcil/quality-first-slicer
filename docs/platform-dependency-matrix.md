@@ -15,7 +15,7 @@ The dependency project selects one platform file in this order:
 |---|---|---|
 | `MSVC` | `deps/deps-windows.cmake` | Visual Studio toolset mapping; x86, x64, and ARM64 dependency bundles; optional Debug dependency builds |
 | `APPLE` | `deps/deps-macos.cmake` | macOS deployment target (defaults to 11.3), SDK/framework search behavior, availability warnings treated as errors, cross-architecture handling |
-| `MINGW` | `deps/deps-mingw.cmake` | GCC Boost toolset, 64-bit dependency setting, MinGW-specific TBB workaround |
+| `MINGW` | `deps/deps-mingw.cmake` | GCC Boost toolset, 64-bit dependency setting, TBB-related variable set (consumer unverified) |
 | Otherwise | `deps/deps-linux.cmake` | Linux dependency path; position-independent code |
 
 Linux and macOS include `deps/deps-unix-common.cmake`. MinGW also includes that common file. It probes for system ZLIB and warns if it is absent. The EXPAT probe in that common file is commented out, although the main dependency CMake later performs its own EXPAT discovery.
@@ -160,6 +160,6 @@ This is a separate binary-provenance and redistribution review, not covered by t
 
 ## 8. Conclusion
 
-The v2.4.2 build shares a broad dependency set across platforms, but it is not one uniform dependency graph. Platform selection changes compiler flags, source acquisition paths, patches, architecture handling, system-package substitution, and binary packaging. In particular, MSVC has a distinct prebuilt GMP/MPFR and DLL packaging path; macOS cross-compilation changes PNG and OpenEXR handling; Linux applies an OpenEXR GCC patch; and MinGW has its own compiler/TBB settings.
+The v2.4.2 build shares a broad dependency set across platforms, but it is not one uniform dependency graph. Platform selection changes compiler flags, source acquisition paths, patches, architecture handling, system-package substitution, and binary packaging. In particular, MSVC has a distinct prebuilt GMP/MPFR and DLL packaging path; macOS cross-compilation changes PNG and OpenEXR handling; Linux applies an OpenEXR GCC patch; and MinGW sets a TBB-related variable whose consumption remains unverified.
 
 This matrix improves the source-level inventory but does not approve any dependency for import or settle the project's license. The next meaningful gate is independent archive/binary verification and a reproducible per-platform configure/build record.
