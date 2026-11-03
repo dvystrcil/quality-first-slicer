@@ -35,7 +35,7 @@ class VerifySourceArchivesTests(unittest.TestCase):
     def test_sha256_file_returns_digest_and_size(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "payload.bin"
-            payload = b"known fixture\x00bytes"
+            payload = b"known fixture\\x00bytes"
             path.write_bytes(payload)
             digest, size = MODULE.sha256_file(path)
         self.assertEqual(digest, hashlib.sha256(payload).hexdigest())
@@ -81,6 +81,29 @@ class VerifySourceArchivesTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             result = MODULE.verify_artifact(artifact, Path(directory))
             self.assertFalse((Path(directory) / "fixture.archive").exists())
+        self.assertEqual(result["status"], "FAIL")
+        self.assertEqual(result["attempts"][0]["status"], "HASH_MISMATCH")
+
+    @patch.object(MODULE.urllib.request, "urlopen")
+    def test_hash_mismatch_can_be_preserved_for_diagnostics(self, urlopen):
+        payload = b"unexpected archive bytes"
+        urlopen.return_value = FakeResponse(payload)
+        artifact = {
+            "id": "nanosvg",
+            "urls": ["https://example.test/archive"],
+            "sha256": hashlib.sha256(b"expected bytes").hexdigest(),
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            mismatch_dir = root / "mismatches"
+            result = MODULE.verify_artifact(
+                artifact, root / "cache", preserve_mismatches_dir=mismatch_dir
+            )
+            preserved = mismatch_dir / "nanosvg.1.mismatch.archive"
+            self.assertTrue(preserved.is_file())
+            self.assertEqual(preserved.read_bytes(), payload)
+            self.assertEqual(result["attempts"][0]["preserved_path"], str(preserved))
+            self.assertFalse((root / "cache" / "nanosvg.archive").exists())
         self.assertEqual(result["status"], "FAIL")
         self.assertEqual(result["attempts"][0]["status"], "HASH_MISMATCH")
 
