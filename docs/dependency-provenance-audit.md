@@ -73,7 +73,7 @@ A successful build on one Linux distribution would not establish the same depend
 
 ## 5. Next audit work
 
-- [ ] Complete the dependency matrix for Linux, macOS, MinGW, and Windows.
+- [x] Complete the first source-level dependency matrix for Linux, macOS, MinGW, and Windows; see [platform dependency matrix](platform-dependency-matrix.md). This is not a completed SBOM, independent hash verification, or build validation.
 - [ ] Extract every active URL, Git repository/tag, commit, hash, patch, and conditional from all dependency CMake files.
 - [ ] Resolve Git tags and branch archives to immutable commits; inspect the SoftFever-maintained dependency forks against their upstreams.
 - [ ] Inspect vendored `deps_src` projects and all nested license/notice files.
