@@ -1,0 +1,30 @@
+name: Audit tooling
+
+on:
+  pull_request:
+    paths:
+      - "tools/verify-source-archives.py"
+      - "tests/test_verify_source_archives.py"
+      - "audit/orcaslicer-v2.4.2-source-archives.json"
+      - ".github/workflows/audit-tools.yml"
+  push:
+    branches: ["main"]
+    paths:
+      - "tools/verify-source-archives.py"
+      - "tests/test_verify_source_archives.py"
+      - "audit/orcaslicer-v2.4.2-source-archives.json"
+      - ".github/workflows/audit-tools.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Validate manifest JSON
+        run: python3 -m json.tool audit/orcaslicer-v2.4.2-source-archives.json >/dev/null
+      - name: Run audit-tool unit tests
+        run: python3 -m unittest discover -s tests -v
