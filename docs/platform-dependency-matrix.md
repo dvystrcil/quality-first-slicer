@@ -49,7 +49,7 @@ The following are active source declarations found in the v2.4.2 dependency CMak
 | OpenVDB | tamasmeszaros/openvdb commit `a68fd58d0e2b85f01adeb8b13d7555183ab10aa5` | SHA-256 `f353e7b99bd0cbfc27ac9082de51acf32a8bc0b3e21ff9661ecca6f205ec1d81` | Fork plus local clang19 patch |
 | PNG | libpng v1.6.35 | SHA-256 `3d22d46c566b1761a0e15ea397589b3a5f36ac09b7c785382e6470156c04247f` | Apple cross-compile branch uses Git tag instead of this archive path |
 | Qhull | qhull v8.0.2 | SHA-256 `a378e9a39e718e289102c20d45632f873bfdc58a7a5f924246ea4b176e185f1e` | Added to dependency target except for MSVC |
-| TBB | oneTBB v2021.5.0 | SHA-256 `83ea786c964a384dd72534f9854b419716f412f9d43c0be88d41874763e7bb47` | MinGW-specific workaround flag |
+| TBB | oneTBB v2021.5.0 | SHA-256 `83ea786c964a384dd72534f9854b419716f412f9d43c0be88d41874763e7bb47` | MinGW-specific workaround variable is set; consumption not verified |
 | wxWidgets | SoftFever Orca-deps-wxWidgets tag v3.3.2 | Shallow Git tag; no commit SHA in declaration | Linux GTK2/GTK3 selection; MSVC Edge WebView enabled |
 | zlib | zlib v1.2.13 | SHA-256 `c2856951bbf30e30861ace3765595d86ba13f2cf01279d901f6c62258c57f4ff` | System package is probed first on Unix-like dependency path |
 | curl | curl tag curl-7_75_0 | SHA-256 `a63ae025bb0a14f119e73250f2c923f4bf89aa93b8d4fafa4a9f5353a96a765a` | Configured with optional protocols/backends disabled; tied to OpenSSL |
@@ -108,7 +108,7 @@ The following conditions were visible in the source:
 - **OpenVDB:** applies `0001-clang19.patch`.
 - **GMP:** applies `0001-GMP_GCC15.patch` on the source-build path.
 - **OpenCSG:** copies a project-local `CMakeLists.txt.in` into the downloaded source tree.
-- **TBB:** MinGW sets a `-flifetime-dse=1` workaround.
+- **TBB:** MinGW sets `TBB_MINGW_WORKAROUND=-flifetime-dse=1` in `deps-unix-common.cmake`; this pass did not establish where (or whether) that variable is consumed.
 
 The presence of a patch is part of the dependency's effective source and must be represented in the provenance record and SBOM reconciliation.
 
