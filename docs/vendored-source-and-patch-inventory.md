@@ -8,7 +8,7 @@
 ## 1. Executive findings
 
 - `deps_src/CMakeLists.txt` explicitly adds **27 vendored components**: 7 header-only/interface libraries and 20 static-library or utility subprojects, as classified by the upstream CMake comments.
-- The tree contains identifiable license/notice files for 13 of those components, but this is only a filename inventory. It does not establish that the files cover every nested component or that all required notices are present.
+- The tree contains identifiable license/notice files for 12 of those components, but this is only a filename inventory. It does not establish that the files cover every nested component or that all required notices are present.
 - **MCUT is a high-priority licensing gate:** its own CMake file states GPL-3.0-or-later by default and mentions a commercial license option. Its tree also contains a separate GPL license and a license for the bundled internal CDT component. No import decision should be made until the exact linked/compiled MCUT feature set and applicable license obligations are reviewed.
 - The tree also contains a number of projects with no obvious top-level license/notice filename in the tree scan. Absence from this filename scan is not proof that a project is unlicensed; license declarations may be embedded in source headers or nested deeper.
 - The dependency build contains **13 patch/diff-like files** under `deps/`. Their existence is not equivalent to application: some are conditional, some are copy/replacement steps rather than patches, and the Blosc patch command is commented out in the inspected v2.4.2 CMake.
@@ -16,7 +16,7 @@
 
 ## 2. Vendored component inventory
 
-The following 25 directories are explicitly included by `deps_src/CMakeLists.txt`.
+The following 27 directories are explicitly included by `deps_src/CMakeLists.txt`.
 
 | Component | CMake classification | License/notice filename found in tree scan | Initial review note |
 |---|---|---|---|
@@ -59,7 +59,7 @@ The upstream CMake comments classify `agg`, `ankerl`, `earcut`, `fast_float`, `n
 
 ## 3. Local patch and modification inventory
 
-The fixed v2.4.2 tree contains these patch/diff-like files under `deps/`.
+The fixed v2.4.2 tree contains 14 patch/diff-like files under `deps/`:
 
 | Patch / modification file | Target | Initial purpose indicated by patch | Applicability caveat |
 |---|---|---|---|
@@ -76,11 +76,11 @@ The fixed v2.4.2 tree contains these patch/diff-like files under `deps/`.
 | `deps/PNG/PNG.patch` | libpng | Removes conditional Adler-32 validation behavior | Confirm exact source branch and security/behavior implications |
 | `deps/PNG/macos-arm64.patch` | libpng | Apple ARM64 cross-compilation and architecture handling | Conditional cross-compile path; includes related PNG behavior changes |
 | `deps/TBB/0001-TBB-GCC13.patch` | oneTBB | Qualifies `task` type as `tbb::task` | Confirm exact compiler and build condition |
+| `deps/ZLIB/0001-Respect-BUILD_SHARED_LIBS.patch` | zlib | Changes target construction to respect `BUILD_SHARED_LIBS` | Confirm exact application condition and target zlib source revision |
 
-Additional source modification not represented as a `.patch`/ `.diff` file:
+Additional maintained source/build-file replacement not named as a `.patch`/`.diff` file:
 
-- `deps/ZLIB/0001-Respect-BUILD_SHARED_LIBS.patch` changes zlib target construction to respect `BUILD_SHARED_LIBS`; included in the patch list above.
-- `deps/OpenCSG/CMakeLists.txt.in` is copied into the downloaded source tree by the dependency build. Treat this as a maintained build-file replacement and review its provenance/diff, even though it is not named as a patch.
+- `deps/OpenCSG/CMakeLists.txt.in` is copied into the downloaded source tree by the dependency build. Treat this as a maintained build-file replacement and review its provenance/diff.
 - Some dependency CMake files use copy commands or direct source modifications. The full effective source delta must be derived from each active `ExternalProject_Add` configuration, not from filename extensions alone.
 
 ## 4. Important build-time behavior discovered
@@ -103,7 +103,7 @@ Additional source modification not represented as a `.patch`/ `.diff` file:
 ## 6. Evidence and limitations
 
 - Verified by remote GitHub tree inspection at OrcaSlicer v2.4.2 commit `8500fcdccaa10b5099ac20d252af3a7c560046f1`.
-- Verified that the top-level `deps_src/CMakeLists.txt` includes the 25 named directories.
+- Verified that the top-level `deps_src/CMakeLists.txt` includes all 27 named directories.
 - Verified the presence/absence of license-like filenames using a tree-path scan. This is not a full content/license scan.
 - Verified the existence and sampled content of the patch files listed above. Full patch applicability and complete platform conditions remain to be traced.
 - No local source checkout, source archive extraction for these components, build, SBOM generation, complete license review, or legal review was performed.
