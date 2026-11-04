@@ -46,6 +46,7 @@ The following 25 directories are explicitly included by `deps_src/CMakeLists.txt
 | qhull | Static library | `COPYING.txt` | Inspect bundled source and notices |
 | qoi | Static library | Not found | README exists; inspect source headers |
 | semver | Static library | Not found | Determine exact origin and license |
+| stb_dxt | Header-only/interface | Not found | Inspect source header for license and origin |
 
 The upstream CMake comments classify `agg`, `ankerl`, `earcut`, `fast_float`, `nanosvg`, `nlohmann`, and `stb_dxt` as header-only/interface libraries. The remaining entries are in the static-library/utility group. This classification describes the upstream CMake organization, not necessarily every target emitted by each subdirectory.
 
