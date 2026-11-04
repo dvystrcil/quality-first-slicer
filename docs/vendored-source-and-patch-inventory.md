@@ -7,7 +7,7 @@
 
 ## 1. Executive findings
 
-- `deps_src/CMakeLists.txt` explicitly adds **25 vendored components**: 7 header-only/interface libraries and 18 static-library or utility subprojects, as classified by the upstream CMake comments.
+- `deps_src/CMakeLists.txt` explicitly adds **27 vendored components**: 7 header-only/interface libraries and 20 static-library or utility subprojects, as classified by the upstream CMake comments.
 - The tree contains identifiable license/notice files for 13 of those components, but this is only a filename inventory. It does not establish that the files cover every nested component or that all required notices are present.
 - **MCUT is a high-priority licensing gate:** its own CMake file states GPL-3.0-or-later by default and mentions a commercial license option. Its tree also contains a separate GPL license and a license for the bundled internal CDT component. No import decision should be made until the exact linked/compiled MCUT feature set and applicable license obligations are reviewed.
 - The tree also contains a number of projects with no obvious top-level license/notice filename in the tree scan. Absence from this filename scan is not proof that a project is unlicensed; license declarations may be embedded in source headers or nested deeper.
