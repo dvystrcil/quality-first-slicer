@@ -41,8 +41,8 @@ The following 27 directories are explicitly included by `deps_src/CMakeLists.txt
 | mdns | Static library | `NOTICE.md` | Notice is not necessarily the complete license text |
 | minilzo | Static library | `COPYING` | Inspect license terms and any exceptions |
 | miniz | Static library | `LICENSE` | Also has upstream README attribution |
-| nanosvg | Header-only/interface | Not found as a separate file; custom permissive grant in headers | Custom three-condition license; embedded upstream attributions and exact fork commit still need review |
-| nlohmann | Header-only/interface | Not found as a separate file; MIT/SPDX in `json.hpp` | MIT; exact upstream version/commit still needs resolution |
+| nanosvg | Header-only/interface | Not found as a separate file; custom permissive grant in headers | SoftFever fork commit `863f6aa97ef62028126fa2c19bd4350394c2e15e` pinned. `nanosvgrast.h` matches upstream exactly; `nanosvg.h` has a local zero-initialization change that must be marked as altered. Embedded Anti-Grain Geometry and stb_truetype-derived code still need license review; see [source provenance review](nanosvg-nlohmann-provenance.md) |
+| nlohmann | Header-only/interface | Not found as a separate file; MIT/SPDX in `json.hpp` | Exact match of all 41 vendored files to upstream nlohmann/json 3.10.4 commit `fec56a1a16c6e1c1b1f4e116a20e79398282626c`; MIT; see [source provenance review](nanosvg-nlohmann-provenance.md) |
 | qhull | Static library | `COPYING.txt` | Inspect bundled source and notices |
 | qoi | Static library | Not found as a separate file; MIT text in `qoi.h` | MIT; `qoilib.c` includes PrusaSlicer-specific integration changes |
 | semver | Static library | Not found as a separate file; MIT notice in `semver.c` | MIT; exact upstream revision still needs resolution |
