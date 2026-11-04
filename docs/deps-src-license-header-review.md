@@ -19,7 +19,7 @@ This review resolves license evidence for a first group of components whose lice
 - semver: MIT.
 - stb_dxt: BSD 2-Clause.
 
-**HIDAPI remains unresolved.** Its checked-in headers say the source may be licensed under GPLv3, a BSD-style license, or the original HIDAPI license, and point to three license files in the original source distribution. Those license files are absent from the vendored subset inspected here. The actual license option selected for this copy cannot be inferred from the header's list.
+**HIDAPI remains unresolved.** Its checked-in headers say the source may be licensed under GPLv3, a BSD-style license, or the original HIDAPI license, and point to four license documents in the original source distribution (one selection guide and three alternative license texts). All four are absent from the vendored subset inspected here. The actual license option selected for this copy cannot be inferred from the header's list.
 
 This review also found two provenance issues:
 - Clipper2's local CMake project declares version 1.5.2, while its checked-in `clipper.version.h` declares 2.0.1. This mismatch needs reconciliation against the upstream source revision.
