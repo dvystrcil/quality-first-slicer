@@ -8,9 +8,9 @@
 ## 1. Executive findings
 
 - `deps_src/CMakeLists.txt` explicitly adds **27 vendored components**: 7 header-only/interface libraries and 20 static-library or utility subprojects, as classified by the upstream CMake comments.
-- The tree contains identifiable license/notice files for 12 of those components, but this is only a filename inventory. It does not establish that the files cover every nested component or that all required notices are present.
+- The tree contains identifiable license/notice files for 12 of those components. A later targeted source-header review found license declarations embedded in several additional components; see [selected source-header review](deps-src-license-header-review.md). This remains incomplete and does not establish that all nested components or required notices are covered.
 - **MCUT is an active, high-priority licensing gate:** its own CMake file states GPL-3.0-or-later by default and mentions a commercial license option. OrcaSlicer's `MeshBoolean.cpp` calls the MCUT API and the application CMake links `mcut`. Its tree also contains a separate GPL license and a license for the bundled internal CDT component. See the [targeted MCUT/libigl license review](mcut-libigl-license-review.md); the exact combined license obligations still require review.
-- The tree also contains a number of projects with no obvious top-level license/notice filename in the tree scan. Absence from this filename scan is not proof that a project is unlicensed; license declarations may be embedded in source headers or nested deeper.
+- The tree also contains projects with no obvious top-level license/notice filename. Absence from a filename scan is not proof that a project is unlicensed; some declarations are embedded in source headers. HIDAPI's exact license selection and the `hints` utility's license remain unresolved.
 - The dependency build contains **14 patch/diff-like files** under `deps/`. Their existence is not equivalent to application: some are conditional, some are copy/replacement steps rather than patches, and the Blosc patch command is commented out in the inspected v2.4.2 CMake.
 - This is an inventory, not approval to import any component or patch.
 
@@ -20,18 +20,18 @@ The following 27 directories are explicitly included by `deps_src/CMakeLists.txt
 
 | Component | CMake classification | License/notice filename found in tree scan | Initial review note |
 |---|---|---|---|
-| Shiny | Static library | Not found | Origin, revision, and embedded notices unresolved |
-| admesh | Static library | Not found | Origin, revision, and embedded notices unresolved |
+| Shiny | Static library | Not found as a separate file; MIT text in `Shiny.h` | MIT header found; see [selected source-header review](deps-src-license-header-review.md) |
+| admesh | Static library | Not found as a separate file; GPL notice in source headers | GPL-2.0-or-later; linked into `libslic3r_cgal`; see [selected source-header review](deps-src-license-header-review.md) |
 | agg | Header-only/interface | `copying` | Inspect exact license text and provenance |
 | ankerl | Header-only/interface | Not found | README exists; license/provenance unresolved |
-| clipper | Static library | Not found | Origin, revision, and embedded notices unresolved |
-| clipper2 | Static library | Not found | Origin, revision, and embedded notices unresolved |
+| clipper | Static library | Not found as a separate file; Boost license in `clipper.hpp` | Boost Software License 1.0; actual compiled/consumed legacy subset needs tracing |
+| clipper2 | Static library | Not found as a separate file; Boost license in source headers | Boost Software License 1.0; CMake version 1.5.2 conflicts with `clipper.version.h` 2.0.1 |
 | earcut | Header-only/interface | `LICENSE` | Inspect license text and upstream revision |
 | expat | Static library | `COPYING` | Also check source fallback and build selection |
-| fast_float | Header-only/interface | Not found | README exists; inspect source headers for license |
-| glu-libtess | Static library | Not found | README files exist; inspect origin and notices |
-| hidapi | Static library | Not found | README exists; inspect embedded notices/platform files |
-| hints | Static library / utility per upstream comment | Not found | Project-specific component; determine authorship and license |
+| fast_float | Header-only/interface | Not found as a separate file; MIT text in `fast_float.h` | MIT; README records 2.0.0 / commit `fe1ce58` |
+| glu-libtess | Static library | Not found as a separate file; SGI license in implementation files | SGI Free Software License B 2.0; README records Mesa GLU source commit |
+| hidapi | Static library | Referenced license files absent from vendored subset | **Unresolved multi-license selection** (GPLv3, BSD-style, or original HIDAPI); see [selected source-header review](deps-src-license-header-review.md) |
+| hints | Static library / utility per upstream comment | Not found | Authorship, origin, and license unresolved; see [selected source-header review](deps-src-license-header-review.md) |
 | imgui | Static library | `LICENSE.txt` | Check bundled extensions and attribution |
 | imguizmo | Static library | `LICENSE` | Check upstream relationship and bundled files |
 | libigl | Static library | Not found | Has upstream and Orca-specific READMEs; inspect nested/copyleft content |
@@ -41,12 +41,12 @@ The following 27 directories are explicitly included by `deps_src/CMakeLists.txt
 | mdns | Static library | `NOTICE.md` | Notice is not necessarily the complete license text |
 | minilzo | Static library | `COPYING` | Inspect license terms and any exceptions |
 | miniz | Static library | `LICENSE` | Also has upstream README attribution |
-| nanosvg | Header-only/interface | Not found | README exists; compare vendored copy to separately downloaded NanoSVG source |
-| nlohmann | Header-only/interface | Not found | Inspect source headers and exact version |
+| nanosvg | Header-only/interface | Not found as a separate file; custom permissive grant in headers | Custom three-condition license; embedded upstream attributions and exact fork commit still need review |
+| nlohmann | Header-only/interface | Not found as a separate file; MIT/SPDX in `json.hpp` | MIT; exact upstream version/commit still needs resolution |
 | qhull | Static library | `COPYING.txt` | Inspect bundled source and notices |
-| qoi | Static library | Not found | README exists; inspect source headers |
-| semver | Static library | Not found | Determine exact origin and license |
-| stb_dxt | Header-only/interface | Not found | Inspect source header for license and origin |
+| qoi | Static library | Not found as a separate file; MIT text in `qoi.h` | MIT; `qoilib.c` includes PrusaSlicer-specific integration changes |
+| semver | Static library | Not found as a separate file; MIT notice in `semver.c` | MIT; exact upstream revision still needs resolution |
+| stb_dxt | Header-only/interface | Not found as a separate file; BSD notice in `stb_dxt.h` | BSD 2-Clause; exact upstream revision still needs resolution |
 
 The upstream CMake comments classify `agg`, `ankerl`, `earcut`, `fast_float`, `nanosvg`, `nlohmann`, and `stb_dxt` as header-only/interface libraries. The remaining entries are in the static-library/utility group. This classification describes the upstream CMake organization, not necessarily every target emitted by each subdirectory.
 
@@ -93,7 +93,7 @@ Additional maintained source/build-file replacement not named as a `.patch`/`.di
 ## 5. Required follow-up evidence
 
 1. For every component, resolve canonical upstream repository, exact release/tag/commit, source tree relationship, and any Orca/Prusa/vendor modifications.
-2. Inspect every license and notice file, all nested license files, source headers, and bundled subcomponents. Record SPDX identifiers only when supported by the actual text.
+2. Inspect every license and notice file, all nested license files, source headers, and bundled subcomponents. Record SPDX identifiers only when supported by the actual text; the [selected source-header review](deps-src-license-header-review.md) is a partial first pass.
 3. Trace which targets and source files are built for Linux, macOS, MinGW, and MSVC; distinguish compiled, header-included, optional, disabled, and packaged components.
 4. For each patch or replacement, record target source revision, exact application command, platform/compiler condition, patch hash, patch result, and rationale.
 5. Reconcile MCUT and libigl/copyleft licensing before considering import. Obtain qualified legal review where the project's intended distribution model makes the license consequences uncertain.
