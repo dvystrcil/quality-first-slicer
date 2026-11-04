@@ -78,7 +78,7 @@ A successful build on one Linux distribution would not establish the same depend
 - [ ] Resolve Git tags and branch archives to immutable commits; inspect the SoftFever-maintained dependency forks against their upstreams.
 - [ ] Inspect vendored `deps_src` projects and all nested license/notice files.
 - [ ] Inspect the local patches and platform binary bundles; the first Windows GMP/MPFR/WebView2 binary inventory is documented in [Windows binary provenance](windows-binary-provenance.md).
-- [ ] Verify all source archive hashes independently. The first manual run verified 24 of 25 entries; NanoSVG remains an unresolved mismatch documented in [the verification procedure](archive-verification.md). The repeatable inputs and verifier are available in [the source archive manifest](../audit/orcaslicer-v2.4.2-source-archives.json) and [verification script](../tools/verify-source-archives.py).
+- [x] Independently verify all 25 source archive entries against their recorded SHA-256 values. NanoSVG's former mismatch was traced to GitHub's repository rename redirect; all 16 files in the preserved archive match the exact pinned Git tree. The manifest now records the canonical URL and corrected archive digest. See [the verification procedure](archive-verification.md), [source archive manifest](../audit/orcaslicer-v2.4.2-source-archives.json), and [verification script](../tools/verify-source-archives.py).
 - [ ] Generate an SBOM from the exact checked-out source/build configuration, then manually reconcile it with the CMake declarations.
 - [ ] Complete license and notice review before importing any source or assets.
 
@@ -86,4 +86,4 @@ A successful build on one Linux distribution would not establish the same depend
 
 The v2.4.2 build is not a simple list of upstream packages. It combines system package discovery, vendored code, pinned archives, forked dependency sources, local patches, and platform-specific binary redistribution. A reproducible and legally reviewable fork baseline therefore needs a platform-specific dependency manifest and a provenance review of the maintained forks and copied binaries.
 
-**No dependencies are approved for import by this document.** No local source checkout, SBOM generation, build, or legal review has been performed. Archive verification is partial as described above.
+**No dependencies are approved for import by this document.** No local source checkout, SBOM generation, build, or legal review has been performed. Archive verification now has byte-level matches for all 25 manifest entries, including the corrected NanoSVG archive pin. This remains distinct from authenticity, license, build, and legal review.

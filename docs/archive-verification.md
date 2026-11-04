@@ -43,12 +43,12 @@ The manifest contains 25 source archive entries. MPFR has two mirror URLs for th
 
 Manual workflow run [41740959467](https://github.com/dvystrcil/quality-first-slicer/actions/runs/41740959467), completed 2026-11-03, downloaded all 25 manifest entries:
 
-- **24 passed:** each downloaded archive matched the SHA-256 declared in the manifest.
-- **1 unresolved mismatch:** NanoSVG. The workflow report records expected SHA-256 `8d9c1624ad6518dd6dfa31e4f8dc7da9ec243d88bae595c7a037450617fec851`, but the downloaded archive was `299320` bytes with SHA-256 `1e3f94a052dd2abb139993ed3496c90ed4458d6f907027bf03cbaed889fe2567`.
-- The requested URL in upstream `deps/NanoSVG/NanoSVG.cmake` is `https://github.com/SoftFever/nanosvg/archive/863f6aa97ef62028126fa2c19bd4350394c2e15e.zip`. GitHub redirected the download to `https://codeload.github.com/SoftFever/Orca-deps-nanosvg/zip/863f6aa97ef62028126fa2c19bd4350394c2e15e`.
-- The redirected repository resolves the requested commit SHA `863f6aa97ef62028126fa2c19bd4350394c2e15e`. The repository rename/redirect is a plausible explanation for the archive digest difference (for example, a changed archive root directory), but archive contents have not yet been compared to establish that explanation.
+- **24 original matches:** each archive matched the SHA-256 declared in the original manifest.
+- **NanoSVG redirect mismatch diagnosed:** the old URL `https://github.com/SoftFever/nanosvg/archive/863f6aa97ef62028126fa2c19bd4350394c2e15e.zip` redirected to the renamed repository `SoftFever/Orca-deps-nanosvg`. The resulting archive was 299320 bytes with SHA-256 `1e3f94a052dd2abb139993ed3496c90ed4458d6f907027bf03cbaed889fe2567`, rather than the former declared digest `8d9c1624ad6518dd6dfa31e4f8dc7da9ec243d88bae595c7a037450617fec851`.
+- **Content comparison passed:** the preserved ZIP contained 16 files. Each file's size and Git blob SHA-1 matched the recursive Git tree for exact commit `863f6aa97ef62028126fa2c19bd4350394c2e15e`. The archive's top-level directory uses the renamed repository name, explaining why the whole ZIP digest changed while its file payload remained identical.
+- The manifest now uses the canonical renamed repository URL and the independently observed SHA-256 for that archive.
 
-**Disposition:** keep NanoSVG as a failed verification. Do not replace the expected digest or mark it verified until the archive contents and the exact upstream source intent have been independently reconciled. The 24 successful matches are evidence of byte-for-byte agreement with the upstream CMake declarations, not independent proof of source authenticity or licensing.
+**Disposition:** NanoSVG archive bytes now match the corrected manifest pin, and the file payload is verified against the exact Git commit. This resolves the redirect-induced mismatch. It does not establish commit authenticity (the commit is unsigned), license compliance, or archive safety. Hash verification remains byte-integrity evidence only.
 
 ## Current limitations
 
