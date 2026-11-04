@@ -20,6 +20,14 @@ To verify a subset:
 python3 tools/verify-source-archives.py --artifact boost --artifact openvdb
 ```
 
+To retain archives that fail their expected digest for isolated diagnostics, add:
+
+```sh
+--preserve-mismatches-dir /tmp/orcaslicer-v2.4.2-mismatches
+```
+
+The option is deliberately opt-in. Without it, mismatched temporary downloads are deleted as before. Retained files are named by artifact and URL-attempt number, and their paths are recorded in the JSON report. They remain failed/untrusted inputs: do not extract or execute them as part of verification. The manual GitHub Actions workflow enables this option and uploads any retained files as a separate, 30-day artifact named `orcaslicer-v2.4.2-mismatched-archives`; the JSON report remains a separate 90-day artifact.
+
 The manifest contains 25 source archive entries. MPFR has two mirror URLs for the same expected archive digest. A failed URL is recorded and the next mirror is attempted.
 
 ## Evidence handling
@@ -27,7 +35,7 @@ The manifest contains 25 source archive entries. MPFR has two mirror URLs for th
 - Preserve the generated JSON report; it records the UTC timestamp, manifest, expected and observed digests, byte counts, final URL, and mirror attempts.
 - Review any mismatch against the exact CMake declaration at upstream commit `8500fcdccaa10b5099ac20d252af3a7c560046f1`. Do not silently update the manifest to match downloaded bytes.
 - A successful match verifies only that the downloaded bytes match the declared SHA-256. It does not establish the source's authenticity, license, provenance, or safety.
-- Do not extract archives as part of this hash-only step. Archive inspection should happen in a separate, isolated process after digest verification.
+- Do not extract archives as part of this hash-only step. Archive inspection should happen in a separate, isolated process after digest verification or as a deliberately isolated investigation of an untrusted mismatch.
 - The manifest explicitly excludes the shallow wxWidgets tag, the Apple cross-compile PNG Git checkout, and prebuilt Windows GMP/MPFR/WebView2 binaries. Those need separate immutable-source or binary verification.
 - The tool uses only the Python standard library. It does not modify the manifest and does not commit generated reports automatically.
 

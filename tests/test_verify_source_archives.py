@@ -85,6 +85,29 @@ class VerifySourceArchivesTests(unittest.TestCase):
         self.assertEqual(result["attempts"][0]["status"], "HASH_MISMATCH")
 
     @patch.object(MODULE.urllib.request, "urlopen")
+    def test_hash_mismatch_can_be_preserved_for_diagnostics(self, urlopen):
+        payload = b"unexpected archive bytes"
+        urlopen.return_value = FakeResponse(payload)
+        artifact = {
+            "id": "nanosvg",
+            "urls": ["https://example.test/archive"],
+            "sha256": hashlib.sha256(b"expected bytes").hexdigest(),
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            mismatch_dir = root / "mismatches"
+            result = MODULE.verify_artifact(
+                artifact, root / "cache", preserve_mismatches_dir=mismatch_dir
+            )
+            preserved = mismatch_dir / "nanosvg.1.mismatch.archive"
+            self.assertTrue(preserved.is_file())
+            self.assertEqual(preserved.read_bytes(), payload)
+            self.assertEqual(result["attempts"][0]["preserved_path"], str(preserved))
+            self.assertFalse((root / "cache" / "nanosvg.archive").exists())
+        self.assertEqual(result["status"], "FAIL")
+        self.assertEqual(result["attempts"][0]["status"], "HASH_MISMATCH")
+
+    @patch.object(MODULE.urllib.request, "urlopen")
     def test_cached_archive_is_reverified_without_network(self, urlopen):
         payload = b"cached archive"
         artifact = {
