@@ -9,9 +9,9 @@
 
 - `deps_src/CMakeLists.txt` explicitly adds **27 vendored components**: 7 header-only/interface libraries and 20 static-library or utility subprojects, as classified by the upstream CMake comments.
 - The tree contains identifiable license/notice files for 12 of those components, but this is only a filename inventory. It does not establish that the files cover every nested component or that all required notices are present.
-- **MCUT is a high-priority licensing gate:** its own CMake file states GPL-3.0-or-later by default and mentions a commercial license option. Its tree also contains a separate GPL license and a license for the bundled internal CDT component. No import decision should be made until the exact linked/compiled MCUT feature set and applicable license obligations are reviewed.
+- **MCUT is an active, high-priority licensing gate:** its own CMake file states GPL-3.0-or-later by default and mentions a commercial license option. OrcaSlicer's `MeshBoolean.cpp` calls the MCUT API and the application CMake links `mcut`. Its tree also contains a separate GPL license and a license for the bundled internal CDT component. See the [targeted MCUT/libigl license review](mcut-libigl-license-review.md); the exact combined license obligations still require review.
 - The tree also contains a number of projects with no obvious top-level license/notice filename in the tree scan. Absence from this filename scan is not proof that a project is unlicensed; license declarations may be embedded in source headers or nested deeper.
-- The dependency build contains **13 patch/diff-like files** under `deps/`. Their existence is not equivalent to application: some are conditional, some are copy/replacement steps rather than patches, and the Blosc patch command is commented out in the inspected v2.4.2 CMake.
+- The dependency build contains **14 patch/diff-like files** under `deps/`. Their existence is not equivalent to application: some are conditional, some are copy/replacement steps rather than patches, and the Blosc patch command is commented out in the inspected v2.4.2 CMake.
 - This is an inventory, not approval to import any component or patch.
 
 ## 2. Vendored component inventory
