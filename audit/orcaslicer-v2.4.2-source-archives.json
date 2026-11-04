@@ -5,7 +5,7 @@
     "ref": "v2.4.2",
     "commit": "8500fcdccaa10b5099ac20d252af3a7c560046f1"
   },
-  "description": "Archive URLs and expected SHA-256 values transcribed from active OrcaSlicer v2.4.2 dependency CMake declarations. Hashes have not yet been independently verified.",
+  "description": "Archive URLs and expected SHA-256 values transcribed from active OrcaSlicer v2.4.2 dependency CMake declarations, with NanoSVG corrected to the canonical renamed repository URL and independently verified archive digest after file-by-file comparison.",
   "artifacts": [
     {
       "id": "blosc",
@@ -119,9 +119,10 @@
       "id": "nanosvg",
       "source_file": "deps/NanoSVG/NanoSVG.cmake",
       "urls": [
-        "https://github.com/SoftFever/nanosvg/archive/863f6aa97ef62028126fa2c19bd4350394c2e15e.zip"
+        "https://github.com/SoftFever/Orca-deps-nanosvg/archive/863f6aa97ef62028126fa2c19bd4350394c2e15e.zip"
       ],
-      "sha256": "8d9c1624ad6518dd6dfa31e4f8dc7da9ec243d88bae595c7a037450617fec851"
+      "sha256": "1e3f94a052dd2abb139993ed3496c90ed4458d6f907027bf03cbaed889fe2567",
+      "notes": "Corrected after GitHub redirected the former SoftFever/nanosvg repository to SoftFever/Orca-deps-nanosvg. All 16 files in the downloaded archive match the exact pinned Git tree; the canonical URL and observed archive digest are now recorded."
     },
     {
       "id": "occt",
