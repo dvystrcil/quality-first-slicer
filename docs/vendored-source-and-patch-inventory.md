@@ -7,10 +7,10 @@
 
 ## 1. Executive findings
 
-- `deps_src/CMakeLists.txt` explicitly adds **27 vendored components**: 7 header-only/interface libraries and 20 static-library or utility subprojects, as classified by the upstream CMake comments.
+- `deps_src/CMakeLists.txt` adds **27 subdirectories**: 7 header-only/interface libraries and 20 static-library/utility subprojects, as classified by upstream CMake comments. One of these, `hints`, is an internal BambuStudio translation-template utility rather than a third-party dependency; the remaining 26 are the third-party component inventory.
 - The tree contains identifiable license/notice files for 12 of those components. A later targeted source-header review found license declarations embedded in several additional components; see [selected source-header review](deps-src-license-header-review.md). This remains incomplete and does not establish that all nested components or required notices are covered.
 - **MCUT is an active, high-priority licensing gate:** its own CMake file states GPL-3.0-or-later by default and mentions a commercial license option. OrcaSlicer's `MeshBoolean.cpp` calls the MCUT API and the application CMake links `mcut`. Its tree also contains a separate GPL license and a license for the bundled internal CDT component. See the [targeted MCUT/libigl license review](mcut-libigl-license-review.md); the exact combined license obligations still require review.
-- The tree also contains projects with no obvious top-level license/notice filename. Absence from a filename scan is not proof that a project is unlicensed; some declarations are embedded in source headers. HIDAPI's upstream 0.9.0 commit and available license choices are now pinned, but OrcaSlicer's selected license and omitted notices remain unresolved; the `hints` utility's license also remains unknown.
+- The tree also contains projects with no obvious top-level license/notice filename. Absence from a filename scan is not proof that a project is unlicensed; some declarations are embedded in source headers. HIDAPI's upstream 0.9.0 commit and available license choices are now pinned, but OrcaSlicer's selected license and omitted notices remain unresolved. The `hints` utility's history is traced to the BambuStudio 1.0.10 source import; its individual copyright attribution remains unconfirmed.
 - The dependency build contains **14 patch/diff-like files** under `deps/`. Their existence is not equivalent to application: some are conditional, some are copy/replacement steps rather than patches, and the Blosc patch command is commented out in the inspected v2.4.2 CMake.
 - This is an inventory, not approval to import any component or patch.
 
@@ -25,13 +25,13 @@ The following 27 directories are explicitly included by `deps_src/CMakeLists.txt
 | agg | Header-only/interface | `copying` | Inspect exact license text and provenance |
 | ankerl | Header-only/interface | Not found | README exists; license/provenance unresolved |
 | clipper | Static library | Not found as a separate file; Boost license in `clipper.hpp` | Boost Software License 1.0; actual compiled/consumed legacy subset needs tracing |
-| clipper2 | Static library | Not found as a separate file; Boost license in source headers | Boost Software License 1.0; CMake version 1.5.2 conflicts with `clipper.version.h` 2.0.1 |
+| clipper2 | Static library | Not found as a separate file; Boost license in source headers | Boost Software License 1.0; CMake and version header both report 1.5.2, matching upstream release commit `6901921c4be75126d1de60bfd24bd86a61319fd0` |
 | earcut | Header-only/interface | `LICENSE` | Inspect license text and upstream revision |
 | expat | Static library | `COPYING` | Also check source fallback and build selection |
 | fast_float | Header-only/interface | Not found as a separate file; MIT text in `fast_float.h` | MIT; README records 2.0.0 / commit `fe1ce58` |
 | glu-libtess | Static library | Not found as a separate file; SGI license in implementation files | SGI Free Software License B 2.0; README records Mesa GLU source commit |
 | hidapi | Static library | Four upstream license files absent from vendored subset | Upstream 0.9.0 commit `7da5cc91fc0d2dbe4df4f08cd31f6ca1a262418f` offers GPLv3, BSD-style, or original HIDAPI license at user's discretion; OrcaSlicer's selection is unrecorded. Header blob matches upstream exactly; see [selected source-header review](deps-src-license-header-review.md) |
-| hints | Static library / utility per upstream comment | Not found | Authorship, origin, and license unresolved; see [selected source-header review](deps-src-license-header-review.md) |
+| hints | Internal utility (not third-party) | No file-level notice found | `HintsToPot.cpp` first appears in the BambuStudio 1.0.10 source import; it builds a translation-template generator and an interface target. File-level copyright attribution still needs confirmation; see [hints utility provenance review](hints-utility-provenance.md) |
 | imgui | Static library | `LICENSE.txt` | Check bundled extensions and attribution |
 | imguizmo | Static library | `LICENSE` | Check upstream relationship and bundled files |
 | libigl | Static library | Not found | Has upstream and Orca-specific READMEs; inspect nested/copyleft content |
