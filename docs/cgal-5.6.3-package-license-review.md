@@ -97,7 +97,60 @@ Sources:
 - [CGAL official license explanation](https://www.cgal.org/license.html)
 - [CGAL 5.6.3 installation manual](https://doc.cgal.org/5.6.3/Manual/installation.html)
 
-## 5. Scope, remaining evidence, and limitations
+## 5. Build and package notice propagation — static workflow review
+
+This section reviews the build and packaging configuration at the same pinned OrcaSlicer revision. It is static source inspection; no platform build artifact was downloaded or unpacked.
+
+### 5.1 What CGAL's own install target provides
+
+The matching CGAL source commit is `3654f780ae0c64675cabaef0e5ddaf904c48b4b7` (`releases/CGAL-5.6.3`). Its `Installation/CMakeLists.txt`:
+
+- Uses `GNUInstallDirs` and sets the documentation destination from `CMAKE_INSTALL_DOCDIR`.
+- Installs `AUTHORS`, `CHANGES.md`, `LICENSE`, `LICENSE.GPL`, and `LICENSE.LGPL` into that documentation directory when documentation installation is enabled.
+- Describes CGAL as a collection of parts whose individual source files specify GPL or LGPL licensing, and identifies the GPL/LGPL license texts as the corresponding license documents.
+- The source archive also contains package-specific `package_info/<package>/license.txt` files, including GPL classifications for Polygon Mesh Processing and Surface Mesh Segmentation, and an LGPL classification for the Installation package. These package metadata files are not among the five files named by the generic installation rule above.
+
+Pinned upstream evidence:
+
+- [CGAL 5.6.3 Installation/CMakeLists.txt](https://github.com/CGAL/cgal/blob/3654f780ae0c64675cabaef0e5ddaf904c48b4b7/Installation/CMakeLists.txt)
+- [CGAL 5.6.3 Installation/LICENSE](https://github.com/CGAL/cgal/blob/3654f780ae0c64675cabaef0e5ddaf904c48b4b7/Installation/LICENSE)
+- [Polygon Mesh Processing package license metadata](https://github.com/CGAL/cgal/blob/3654f780ae0c64675cabaef0e5ddaf904c48b4b7/Polygon_mesh_processing/package_info/Polygon_mesh_processing/license.txt)
+- [Surface Mesh Segmentation package license metadata](https://github.com/CGAL/cgal/blob/3654f780ae0c64675cabaef0e5ddaf904c48b4b7/Surface_mesh_segmentation/package_info/Surface_mesh_segmentation/license.txt)
+
+### 5.2 OrcaSlicer packaging behavior
+
+At the reviewed OrcaSlicer commit:
+
+- The ordinary dependency build installs dependencies beneath the generated dependency prefix, normally `deps/build/OrcaSlicer_dep/usr/local`. The CGAL ExternalProject uses that dependency install prefix. CGAL's documentation/license files therefore have an install destination in the dependency tree; that is separate from the application install tree.
+- The top-level application install rule explicitly installs only the repository's `LICENSE.txt` as its generic license file. That file is the OrcaSlicer AGPLv3 text, not CGAL's separate GPL/LGPL texts.
+- Windows packaging invokes CPack NSIS. `CPACK_RESOURCE_FILE_LICENSE` points to the same root `LICENSE.txt`; the install rule also places that file in the application install tree. The workflow separately uploads a portable application folder.
+- The Linux AppImage helper constructs its image from the application install tree and adds desktop/metainfo assets. It contains no explicit step to copy CGAL's dependency-prefix documentation directory into the AppImage.
+- The macOS workflow archives the built `OrcaSlicer` app bundle and later creates a universal DMG. The inspected packaging script contains no explicit CGAL documentation-copy step.
+- The Flatpak manifest is a meaningful distinction: its dependency build uses `/app` as the install prefix and does not remove documentation directories in its cleanup list; the application post-install step separately installs OrcaSlicer's AGPL `LICENSE.txt` under `/app/share/licenses/com.orcaslicer.OrcaSlicer/`. The manifest does not explicitly stage CGAL's package-specific metadata into that license directory.
+
+These findings show that the build system knows how to install CGAL's GPL/LGPL texts into a dependency documentation directory, while the ordinary application packaging rules explicitly stage the OrcaSlicer AGPL text. They do **not** prove that a given released binary omits CGAL's texts: a platform's dependency layout, CMake install behavior, bundle assembly, or artifact contents could preserve additional files. No release artifact was inspected, and the Flatpak dependency prefix differs from the normal platform layout.
+
+Pinned OrcaSlicer evidence:
+
+- [Dependency install-prefix configuration](https://github.com/OrcaSlicer/OrcaSlicer/blob/8500fcdccaa10b5099ac20d252af3a7c560046f1/deps/CMakeLists.txt)
+- [CGAL dependency recipe](https://github.com/OrcaSlicer/OrcaSlicer/blob/8500fcdccaa10b5099ac20d252af3a7c560046f1/deps/CGAL/CGAL.cmake)
+- [Application install and CPack license configuration](https://github.com/OrcaSlicer/OrcaSlicer/blob/8500fcdccaa10b5099ac20d252af3a7c560046f1/CMakeLists.txt)
+- [Windows/macOS/Linux build and packaging workflow](https://github.com/OrcaSlicer/OrcaSlicer/blob/8500fcdcc10b5099ac20d252af3a7c560046f1/.github/workflows/build_orca.yml)
+- [Release artifact assembly workflow](https://github.com/OrcaSlicer/OrcaSlicer/blob/8500fcdcc10b5099ac20d252af3a7c560046f1/.github/workflows/publish_release.yml)
+- [AppImage assembly helper](https://github.com/OrcaSlicer/OrcaSlicer/blob/8500fcdcc10b5099ac20d252af3a7c560046f1/src/dev-utils/platform/unix/build_appimage.sh.in)
+- [Flatpak manifest](https://github.com/OrcaSlicer/OrcaSlicer/blob/8500fcdcc10b5099ac20d252af3a7c560046f1/scripts/flatpak/com.orcaslicer.OrcaSlicer.yml)
+
+### 5.3 Required artifact-level verification
+
+For each supported release platform, retain the actual build configuration and inspect the final distributable (not just the build directory):
+
+1. Record the selected `CGAL_DIR`, `CGAL_VERSION`, and resolved package config path.
+2. Record the CGAL dependency install destination and whether `LICENSE`, `LICENSE.GPL`, and `LICENSE.LGPL` are present there.
+3. Inspect the final Windows installer and portable ZIP, macOS app/DMG, Linux AppImage, and Flatpak bundle for those files and any applicable third-party notices.
+4. For Flatpak, separately verify whether `/app/share/doc/CGAL` survives the build and appears in the exported bundle.
+5. Preserve file listings or archive manifests as repeatable evidence. Do not treat the root OrcaSlicer AGPL license as a substitute for the dependency's distinct license texts.
+
+## 6. Scope, remaining evidence, and limitations
 
 This review establishes the dependency recipe's pinned archive and the active use of GPL-classified CGAL packages. It does **not** establish:
 
