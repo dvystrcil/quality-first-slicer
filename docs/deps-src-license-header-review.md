@@ -19,7 +19,7 @@ This review resolves license evidence for a first group of components whose lice
 - semver: MIT.
 - stb_dxt: BSD 2-Clause.
 
-**HIDAPI remains unresolved.** Its checked-in headers say the source may be licensed under GPLv3, a BSD-style license, or the original HIDAPI license, and point to four license documents in the original source distribution (one selection guide and three alternative license texts). All four are absent from the vendored subset inspected here. The actual license option selected for this copy cannot be inferred from the header's list.
+**HIDAPI remains unresolved.** Its checked-in headers identify three alternative license elections (GPLv3, BSD-style, or the original HIDAPI license), while the vendored subset omits the selection guide and all three license texts. The upstream source distribution confirms the three choices are at the user's discretion, but neither the source headers nor the downstream CMake build record which choice OrcaSlicer made. The source identity, omitted documents, and active platform-specific GUI integration are documented in [HIDAPI provenance and license-election review](hidapi-provenance-license-election.md).
 
 This review also found two provenance issues:
 - The `hints` utility is not an external third-party library: Git history traces it to the initial BambuStudio 1.0.10 source import. Its file has no individual copyright/license header, so file-level attribution and the precise relationship to the repository-level AGPLv3 notice remain to be documented.
@@ -46,14 +46,14 @@ This review also found two provenance issues:
 
 The vendored `hidapi/include/hidapi.h` is byte-for-byte represented by the same Git blob SHA (`1819f8de0912f225373f0390dbe582434d9c9dac`) as `hidapi/hidapi.h` in the canonical `libusb/hidapi` repository at commit `7da5cc91fc0d2dbe4df4f08cd31f6ca1a262418f`. The OrcaSlicer README independently identifies its source as the hidapi 0.9.0 distribution at abbreviated commit `7da5cc9`.
 
-The exact upstream commit contains all four referenced files: `LICENSE.txt`, `LICENSE-gpl3.txt`, `LICENSE-bsd.txt`, and `LICENSE-orig.txt`. `LICENSE.txt` expressly says HIDAPI can be used under one of three licenses and that the choice is at the user's discretion. The upstream `Makefile.am` includes all four license documents in `dist_doc_DATA`. This establishes the available choices and the source release's intended distribution of the notices; it does **not** establish which choice OrcaSlicer selected for its copy.
+The exact upstream commit contains all four referenced files: `LICENSE.txt`, `LICENSE-gpl3.txt`, `LICENSE-bsd.txt`, and `LICENSE-orig.txt`. The selection guide says the user chooses among three alternatives; the upstream `Makefile.am` includes the guide and all three license texts in `dist_doc_DATA`. The BSD text identifies Alan Ott / Signal 11 Software (2010), while the original license requires retaining the source-file copyright notice. The GPLv3 text includes section 13's express permission for combination with an AGPLv3-covered work, subject to that section's terms. These details describe the available alternatives, not OrcaSlicer's election.
 
-OrcaSlicer's vendored `deps_src/hidapi` subset omits all four license files. Its `CMakeLists.txt` builds one static `hidapi` target and chooses `win/hid.c`, `mac/hid.c`, or `linux/hid.c` according to platform. No license-selection metadata or explicit license choice appears in that CMake file. The evidence therefore narrows the issue: the upstream origin and version are now pinned, but the selected license and omitted notice texts remain unresolved.
+OrcaSlicer's vendored `deps_src/hidapi` subset omits all four license files. Its `CMakeLists.txt` builds one static `hidapi` target and chooses `win/hid.c`, `mac/hid.c`, or `linux/hid.c` according to platform. The GUI target links HIDAPI, and `Mouse3DController.cpp` consumes it. No license-selection metadata or explicit license choice appears in the CMake file. The source origin and active use are verified, but the selected license and omitted notice texts remain unresolved. See [HIDAPI provenance and license-election review](hidapi-provenance-license-election.md) for fixed-revision references and the exact upstream license blob identifiers.
 
 Required evidence:
-1. Determine which licensing alternative OrcaSlicer selected for the vendored source, using distribution metadata, release notices, or written confirmation—not guesswork.
-2. Confirm that the selected alternative applies to the complete vendored platform source set.
-3. Restore/preserve the corresponding license text and required notices in any derivative source distribution.
+1. Determine which alternative was elected using contemporaneous release/source-distribution metadata or written maintainer/rights-holder confirmation—not guesswork.
+2. Confirm that the election applies to the complete platform source set.
+3. Restore/preserve the selected license text and required notices in source distributions and release third-party notices.
 
 Until resolved, mark HIDAPI licensing as unknown rather than assigning a convenient permissive license.
 
