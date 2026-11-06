@@ -46,7 +46,7 @@ The following 27 directories are explicitly included by `deps_src/CMakeLists.txt
 | qhull | Static library | `COPYING.txt` | Inspect bundled source and notices |
 | qoi | Static library | Not found as a separate file; MIT text in `qoi.h` | MIT; `qoilib.c` includes PrusaSlicer-specific integration changes |
 | semver | Static library | Not found as a separate file; MIT notice in `semver.c` | MIT; exact upstream revision still needs resolution |
-| stb_dxt | Header-only/interface | Not found as a separate file; BSD notice in `stb_dxt.h` | BSD 2-Clause; exact upstream revision still needs resolution |
+| stb_dxt | Header-only/interface | No separate upstream license file found; BSD 2-Clause text in `stb_dxt.h` | RygsDXTc mirror commit `8b983d43c85f84c1c16665c1661b16acd1f6f429` pinned; Orca header is a close derivative with a small wrapper delta and matches the inspected BambuStudio header blob exactly. Copyright-holder/year notice remains unresolved; see [stb_dxt provenance review](stb-dxt-provenance-review.md) |
 
 The upstream CMake comments classify `agg`, `ankerl`, `earcut`, `fast_float`, `nanosvg`, `nlohmann`, and `stb_dxt` as header-only/interface libraries. The remaining entries are in the static-library/utility group. This classification describes the upstream CMake organization, not necessarily every target emitted by each subdirectory.
 
@@ -96,6 +96,7 @@ Additional maintained source/build-file replacement not named as a `.patch`/`.di
 2. Inspect every license and notice file, all nested license files, source headers, and bundled subcomponents. Record SPDX identifiers only when supported by the actual text; the [selected source-header review](deps-src-license-header-review.md) is a partial first pass.
 3. Trace which targets and source files are built for Linux, macOS, MinGW, and MSVC; distinguish compiled, header-included, optional, disabled, and packaged components.
 4. For each patch or replacement, record target source revision, exact application command, platform/compiler condition, patch hash, patch result, and rationale.
+5. Resolve the concrete copyright notice/holder/year for stb_dxt before treating its BSD-2-Clause source and binary notice obligations as complete; see [stb_dxt provenance review](stb-dxt-provenance-review.md).
 5. Reconcile MCUT and libigl/copyleft licensing before considering import. Obtain qualified legal review where the project's intended distribution model makes the license consequences uncertain.
 6. Generate an SBOM from a reproducible checkout/build configuration and manually reconcile it with this source inventory.
 7. Preserve all upstream notices and Orca/Prusa attribution; do not copy any source or asset into this project until its individual provenance and license obligations are cleared.

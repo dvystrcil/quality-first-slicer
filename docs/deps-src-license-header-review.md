@@ -39,7 +39,7 @@ This review also found two provenance issues:
 | nlohmann/json | `json.hpp` embeds SPDX MIT and full MIT permission/disclaimer text. | Vendored header-only source; exact upstream version/commit not established by this review. |
 | QOI | `qoi.h` embeds the MIT license and copyright notice. | `qoi` target is linked by `libslic3r`; `Thumbnails.cpp` includes QOI. `qoilib.c` notes a PrusaSlicer-specific integration change. |
 | semver | `semver.c` identifies Tomas Aparicio and says MIT licensed. | `semver` target is linked by `libslic3r`; application has semver integration. |
-| stb_dxt | `stb_dxt.h` embeds BSD 2-Clause terms and disclaimer. | Header-only/interface component; exact upstream revision not established by this review. |
+| stb_dxt | `stb_dxt.h` embeds BSD 2-Clause terms and disclaimer, but no concrete copyright-holder/year line appears in the inspected text. | Exact RygsDXTc mirror snapshot pinned; Orca's header is a close derivative with a small wrapper delta and is byte-identical to the inspected BambuStudio header snapshot. Copyright notice/holder remains unresolved; see [stb_dxt provenance review](stb-dxt-provenance-review.md). |
 | hints | No file-level license or copyright declaration in `HintsToPot.cpp`. | Internal translation-template utility, not a third-party library. Git history traces it to the BambuStudio 1.0.10 source import; subsequent changes are recorded under Zhaofeng Li. See [hints utility provenance review](hints-utility-provenance.md). Exact file-level copyright attribution remains unconfirmed. |
 
 ## 3. HIDAPI is a specific unresolved blocker
@@ -61,7 +61,7 @@ Until resolved, mark HIDAPI licensing as unknown rather than assigning a conveni
 
 - **NanoSVG:** its SoftFever source commit and both header comparisons are documented in [NanoSVG and nlohmann provenance](nanosvg-nlohmann-provenance.md). Embedded Anti-Grain Geometry, stb_truetype-derived rasterization, and FLTK modification attributions are assessed in [NanoSVG embedded-code attribution review](nanosvg-embedded-attribution-review.md); copied-code boundaries and license elections remain unresolved. The parser's local zero-initialization change is not visibly marked at its source location in the reviewed revision, leaving a concrete NanoSVG altered-source condition to address.
 - **nlohmann/json:** all 41 vendored files match upstream release 3.10.4 by Git blob SHA; see [NanoSVG and nlohmann provenance](nanosvg-nlohmann-provenance.md).
-- **stb_dxt:** exact upstream revision and origin of the Yann Collet custom BSD-2-Clause version remain unresolved.
+- **stb_dxt:** the Cyan4973/RygsDXTc source snapshot is pinned and the small Orca wrapper delta is documented. The BSD-2-Clause text is present, but the concrete copyright notice/holder/year remains unresolved; see [stb_dxt provenance review](stb-dxt-provenance-review.md).
 - **hints:** source origin is traced to the BambuStudio 1.0.10 import, but individual copyright attribution and the exact file-level licensing basis remain to be confirmed.
 - **ADMesh:** verify all component source files carry consistent GPL notices and determine whether any exception or additional permission exists. Do not treat a linked target as proof that every object is used at runtime.
 - **HIDAPI:** resolve the multi-license selection and restore the applicable notice text.
