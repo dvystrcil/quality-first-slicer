@@ -60,6 +60,21 @@ Evidence links, all pinned:
 - [Upstream original license](https://github.com/libusb/hidapi/blob/7da5cc91fc0d2dbe4df4f08cd31f6ca1a262418f/LICENSE-orig.txt)
 - [Upstream distribution manifest](https://github.com/libusb/hidapi/blob/7da5cc91fc0d2dbe4df4f08cd31f6ca1a262418f/Makefile.am)
 
+## 2.1 Historical integration and license-election search
+
+The repository history provides a longer integration timeline, but does not resolve the license election:
+
+- Commit `f958cfd2ff88ab788f458b6149aa30fb982d7a4a` (2019-09-27) introduced 3Dconnexion support using HIDAPI and explicitly linked to `libusb/hidapi`.
+- Commit `82fed1790a5ec9f0803aaa70ecce719c636a1e2c` (2019-09-30) added the HIDAPI CMake target, selected Windows/macOS/Linux implementation files, and linked the static library into `libslic3r_gui`. It also replaced the Linux implementation with the hidraw backend and added the udev rules.
+- Commit `06c9d3ad560146ec6d3de19683c6a8b6075b148b` (2019-12-13) added the README identifying the vendored source as HIDAPI 0.9.0 at upstream short commit `7da5cc9`.
+- The current OrcaSlicer tree carries this vendored component under `deps_src/hidapi`; the v2.4.2 CMake integration still builds a platform-specific static target and links it into the GUI.
+
+The historical commit messages and inspected patches establish the integration's purpose, platform backend selection, and upstream project reference. They do **not** record an election among the three licenses. The original import predates the 0.9.0 README pin, and the subsequent README/CMake history inspected here does not add a selected license file or an explicit license declaration. The tracked source headers continue to preserve the three-way choice language.
+
+This history also means that the current Linux implementation is not merely a neutral copy of an upstream file: the 2019 integration commit deliberately selected/replaced the Linux backend with the hidraw variant. That implementation choice is separate from the license election and does not resolve it.
+
+No contemporaneous release source archive, third-party notice bundle, maintainer statement, or rights-holder confirmation establishing the selected alternative was found in this repository-history pass. This is a bounded negative finding, not proof that such evidence does not exist elsewhere.
+
 ## 3. Build integration and active use
 
 At the reviewed OrcaSlicer revision:
