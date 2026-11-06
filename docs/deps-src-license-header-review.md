@@ -9,7 +9,7 @@
 This review resolves license evidence for a first group of components whose license-named files were not found in the initial tree scan. Several declare their license directly in source headers:
 
 - Shiny: MIT.
-- ADMesh: GNU GPL version 2 or, at the recipient's option, any later version (GPL-2.0-or-later).
+- ADMesh: GNU GPL version 2 or, at the recipient's option, any later version (GPL-2.0-or-later); all seven target source/header files preserve the notice, but the vendored subset omits upstream `COPYING` and the referenced `AUTHORS` file. No ADMesh-specific linking exception was found; see [ADMesh GPL notice review](admesh-gpl-notice-review.md).
 - Clipper and Clipper2: Boost Software License 1.0.
 - fast_float: MIT.
 - GLU tessellator subset: SGI Free Software License B, version 2.0.
@@ -19,7 +19,7 @@ This review resolves license evidence for a first group of components whose lice
 - semver: MIT.
 - stb_dxt: BSD 2-Clause.
 
-**HIDAPI remains unresolved.** Its checked-in headers say the source may be licensed under GPLv3, a BSD-style license, or the original HIDAPI license, and point to four license documents in the original source distribution (one selection guide and three alternative license texts). All four are absent from the vendored subset inspected here. The actual license option selected for this copy cannot be inferred from the header's list.
+**HIDAPI remains unresolved.** Its checked-in headers identify three alternative license elections (GPLv3, BSD-style, or the original HIDAPI license), while the vendored subset omits the selection guide and all three license texts. The upstream source distribution confirms the three choices are at the user's discretion, but neither the source headers nor the downstream CMake build record which choice OrcaSlicer made. The source identity, omitted documents, and active platform-specific GUI integration are documented in [HIDAPI provenance and license-election review](hidapi-provenance-license-election.md).
 
 This review also found two provenance issues:
 - The `hints` utility is an internal build-time localization tool, not a third-party library. Its file has no individual copyright/license header. The bulk-import commit and two later downstream changes are attributable in Git history, but the original author and copyright holder remain unverified; the repository-level AGPLv3 text is context, not a substitute for an evidenced file-level attribution. See [hints attribution review](hints-attribution-review.md).
@@ -29,7 +29,7 @@ This review also found two provenance issues:
 | Component | Source-level license evidence | Use evidence / status |
 |---|---|---|
 | Shiny | `Shiny.h` embeds the MIT license and copyright notice for Aidin Abedi. | `GCodeReader.cpp` includes `Shiny/Shiny.h`; active source use. |
-| ADMesh | `stl.h` and other implementation files identify ADMesh and state GPL version 2 or (at your option) any later version. | `admesh` is built as a static target and linked into `libslic3r_cgal`; active build-graph dependency. Actual symbol-level use and complete object/link closure still need confirmation. |
+| ADMesh | All seven files in the static target preserve the GPL-2-or-later notice; full upstream `COPYING` and referenced `AUTHORS` are absent from the vendored subset. | Active use is confirmed: linked into `libslic3r` and `libslic3r_cgal`; `TriangleMesh.cpp` calls ADMesh APIs. No component-specific linking exception found. See [ADMesh GPL notice review](admesh-gpl-notice-review.md). |
 | Clipper (legacy) | `clipper.hpp` identifies Boost Software License 1.0. | CMake comments out `clipper.cpp`/`clipper.hpp` in this target but builds `clipper_z.cpp`; inspect consumers and actual link use before treating the full legacy source set as compiled. |
 | Clipper2 | Checked-in implementation/header notices identify Boost Software License 1.0. | `Clipper2` is linked by `libslic3r`. Both local CMake (`project(Clipper2 VERSION 1.5.2)`) and `clipper.version.h` (`CLIPPER2_VERSION = "1.5.2"`) agree with upstream Clipper2 release commit `6901921c4be75126d1de60bfd24bd86a61319fd0`; the previously reported 2.0.1 discrepancy was incorrect. |
 | fast_float | `fast_float.h` includes the MIT permission and disclaimer text. | README identifies source distribution as fast_float 2.0.0, commit `fe1ce58`; application files include its header. |
@@ -44,18 +44,19 @@ This review also found two provenance issues:
 
 ## 3. HIDAPI is a specific unresolved blocker
 
-The vendored `hidapi/include/hidapi.h` is byte-for-byte represented by the same Git blob SHA (`1819f8de0912f225373f0390dbe582434d9c9dac`) as `hidapi/hidapi.h` in the canonical `libusb/hidapi` repository at commit `7da5cc91fc0d2dbe4df4f08cd31f6ca1a262418f`. The OrcaSlicer README independently identifies its source as the hidapi 0.9.0 distribution at abbreviated commit `7da5cc9`.
+The vendored `hidapi/include/hidapi.h` has the same Git blob SHA (`1819f8de0912f225373f0390dbe582434d9c9dac`) as the canonical `libusb/hidapi` header at commit `7da5cc91fc0d2dbe4df4f08cd31f6ca1a262418f`. The OrcaSlicer README identifies the vendored source as hidapi 0.9.0 at that abbreviated commit.
 
-The exact upstream commit contains all four referenced files: `LICENSE.txt`, `LICENSE-gpl3.txt`, `LICENSE-bsd.txt`, and `LICENSE-orig.txt`. `LICENSE.txt` expressly says HIDAPI can be used under one of three licenses and that the choice is at the user's discretion. The upstream `Makefile.am` includes all four license documents in `dist_doc_DATA`. This establishes the available choices and the source release's intended distribution of the notices; it does **not** establish which choice OrcaSlicer selected for its copy.
+The pinned upstream commit contains all four referenced files: `LICENSE.txt`, `LICENSE-gpl3.txt`, `LICENSE-bsd.txt`, and `LICENSE-orig.txt`. The selection guide says the user chooses among three alternatives; the upstream `Makefile.am` includes the guide and all three license texts in `dist_doc_DATA`. The BSD text identifies Alan Ott / Signal 11 Software (2010), the original license requires retaining the source-file copyright notice, and the GPLv3 text includes section 13's express permission for combination with an AGPLv3-covered work, subject to that section's terms. These facts describe the alternatives, not OrcaSlicer's election.
 
-OrcaSlicer's vendored `deps_src/hidapi` subset omits all four license files. Its `CMakeLists.txt` builds one static `hidapi` target and chooses `win/hid.c`, `mac/hid.c`, or `linux/hid.c` according to platform. No license-selection metadata or explicit license choice appears in that CMake file. The evidence therefore narrows the issue: the upstream origin and version are now pinned, but the selected license and omitted notice texts remain unresolved.
+OrcaSlicer's vendored subset omits all four license files. Its CMake file creates a static `hidapi` target and selects `win/hid.c`, `mac/hid.c`, or `linux/hid.c` by platform. The GUI target links HIDAPI, and `Mouse3DController.cpp` consumes it. No license-selection metadata or explicit election appears in the CMake file. The source origin and active use are verified, but the selected license and omitted notice texts remain unresolved.
 
 Required evidence:
-1. Determine which licensing alternative OrcaSlicer selected for the vendored source, using distribution metadata, release notices, or written confirmation—not guesswork.
-2. Confirm that the selected alternative applies to the complete vendored platform source set.
-3. Restore/preserve the corresponding license text and required notices in any derivative source distribution.
 
-Until resolved, mark HIDAPI licensing as unknown rather than assigning a convenient permissive license.
+1. Determine which alternative was elected using contemporaneous release/source-distribution metadata or written maintainer/rights-holder confirmation—not guesswork.
+2. Confirm that the election applies to the complete platform source set.
+3. Restore/preserve the selected license text and required notices in source distributions and release third-party notices.
+
+Until resolved, mark HIDAPI licensing as unknown rather than assigning a convenient permissive license. The complete fixed-revision evidence and follow-up procedure are recorded in [HIDAPI provenance and license-election review](hidapi-provenance-license-election.md).
 
 ## 4. Version and provenance follow-up
 
@@ -63,7 +64,7 @@ Until resolved, mark HIDAPI licensing as unknown rather than assigning a conveni
 - **nlohmann/json:** all 41 vendored files match upstream release 3.10.4 by Git blob SHA; see [NanoSVG and nlohmann provenance](nanosvg-nlohmann-provenance.md).
 - **stb_dxt:** the Cyan4973/RygsDXTc source snapshot is pinned and the small Orca wrapper delta is documented. The BSD-2-Clause text is present, but the concrete copyright notice/holder/year remains unresolved; see [stb_dxt provenance review](stb-dxt-provenance-review.md).
 - **hints:** source origin is traced to the BambuStudio 1.0.10 import, but individual copyright attribution and the exact file-level licensing basis remain to be confirmed.
-- **ADMesh:** verify all component source files carry consistent GPL notices and determine whether any exception or additional permission exists. Do not treat a linked target as proof that every object is used at runtime.
+- **ADMesh:** all seven target files carry consistent GPL-2-or-later notices and active API use is confirmed. The vendored subset omits upstream `COPYING` and the referenced `AUTHORS` file; no ADMesh-specific linking exception was found. Restore/verify distribution notices and trace the local C++/Eigen delta; see [ADMesh GPL notice review](admesh-gpl-notice-review.md).
 - **HIDAPI:** resolve the multi-license selection and restore the applicable notice text.
 
 ## 5. Fixed-revision evidence
