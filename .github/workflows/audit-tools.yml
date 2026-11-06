@@ -45,7 +45,7 @@ jobs:
             --report "$RUNNER_TEMP/archive-verification-report.json"
       - name: Upload verification report
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: orcaslicer-v2.4.2-archive-verification-report
           path: ${{ runner.temp }}/archive-verification-report.json
@@ -53,7 +53,7 @@ jobs:
           retention-days: 90
       - name: Upload hash-mismatched archives for diagnostics
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: orcaslicer-v2.4.2-mismatched-archives
           path: ${{ runner.temp }}/orcaslicer-v2.4.2-mismatches/
