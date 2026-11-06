@@ -34,7 +34,7 @@ Both vendored headers retain the NanoSVG copyright, warranty disclaimer, and thr
 
 The vendored `nanosvgrast.h` also preserves its attribution to FLTK for the non-square X/Y scaling modification and its stb_truetype rasterizer basis. The parser header attributes its SVG parser basis to Anti-Grain Geometry 2.4 and its arc calculation to canvg.
 
-**Open notice/provenance work:** The embedded Anti-Grain Geometry and stb_truetype-derived portions need a focused review of the corresponding upstream license/attribution requirements and the exact extent of copied code. The current headers' attribution is evidence of derivation, not a completed license analysis. The local parser modification should be clearly marked in any derivative source distribution to satisfy the NanoSVG altered-source condition.
+**Open notice/provenance work:** The embedded Anti-Grain Geometry and stb_truetype-derived portions, plus the FLTK rasterizer modification, are reviewed in [NanoSVG embedded-code attribution review](nanosvg-embedded-attribution-review.md). That review records the upstream attributions and license alternatives but does not settle the copied-code boundary or license election. The local parser modification should be clearly marked in any derivative source distribution to satisfy the NanoSVG altered-source condition.
 
 ## 3. Fixed-revision references
 

@@ -59,7 +59,7 @@ Until resolved, mark HIDAPI licensing as unknown rather than assigning a conveni
 
 ## 4. Version and provenance follow-up
 
-- **NanoSVG:** its SoftFever source commit and both header comparisons are now documented in [NanoSVG and nlohmann provenance](nanosvg-nlohmann-provenance.md). The parser header contains a local initialization change; preserve it as a clearly marked alteration. Embedded Anti-Grain Geometry and stb_truetype-derived portions still need focused license/attribution review.
+- **NanoSVG:** its SoftFever source commit and both header comparisons are documented in [NanoSVG and nlohmann provenance](nanosvg-nlohmann-provenance.md). Embedded Anti-Grain Geometry, stb_truetype-derived rasterization, and FLTK modification attributions are assessed in [NanoSVG embedded-code attribution review](nanosvg-embedded-attribution-review.md); copied-code boundaries and license elections remain unresolved. The parser's local zero-initialization change is not visibly marked at its source location in the reviewed revision, leaving a concrete NanoSVG altered-source condition to address.
 - **nlohmann/json:** all 41 vendored files match upstream release 3.10.4 by Git blob SHA; see [NanoSVG and nlohmann provenance](nanosvg-nlohmann-provenance.md).
 - **stb_dxt:** exact upstream revision and origin of the Yann Collet custom BSD-2-Clause version remain unresolved.
 - **hints:** source origin is traced to the BambuStudio 1.0.10 import, but individual copyright attribution and the exact file-level licensing basis remain to be confirmed.
