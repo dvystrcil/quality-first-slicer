@@ -1,6 +1,6 @@
 # Hints utility provenance review
 
-**Status:** Source-history trace; not a legal determination of file-level copyright or license  
+**Status:** Source lineage and recorded downstream changes documented; original authorship and copyright ownership remain unverified  
 **Reviewed OrcaSlicer revision:** `8500fcdccaa10b5099ac20d252af3a7c560046f1` (v2.4.2)
 
 ## Finding
@@ -21,9 +21,10 @@ The directory was moved under `deps_src/` during a 2025 source-tree reorganizati
 
 - Classify `hints` as an **internal project utility**, not a third-party dependency, in the dependency inventory.
 - Do not count it as one of the third-party libraries merely because it is listed under `deps_src/CMakeLists.txt`.
-- The file has no individual copyright or license header in the reviewed revision.
-- The Git history establishes where the file entered the public source tree and records subsequent contributors, but does not by itself establish the complete authorship, employer rights, or file-level licensing basis.
-- Keep the project-level AGPLv3 context recorded, but do not invent a separate SPDX identifier or copyright holder for this file without stronger evidence.
+- The file has no individual copyright, author, SPDX, or license header in the reviewed revision.
+- The initial import commit is authored by account `lanewei120`; two later changes are authored by `zhaofengli` and committed by `SoftFever`. These are commit-history attributions, not proof of original authorship or copyright ownership.
+- The repository root contains the GNU AGPLv3 text at the initial import commit, but the precise file-level attribution/licensing statement still requires confirmation. Do not invent an SPDX identifier or copyright holder.
+- The initial, reviewed, and later BambuStudio file blob IDs and the observed source changes are recorded in [hints attribution review](hints-attribution-review.md).
 
 ## Fixed-revision references
 

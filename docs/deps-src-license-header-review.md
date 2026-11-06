@@ -22,7 +22,7 @@ This review resolves license evidence for a first group of components whose lice
 **HIDAPI remains unresolved.** Its checked-in headers identify three alternative license elections (GPLv3, BSD-style, or the original HIDAPI license), while the vendored subset omits the selection guide and all three license texts. The upstream source distribution confirms the three choices are at the user's discretion, but neither the source headers nor the downstream CMake build record which choice OrcaSlicer made. The source identity, omitted documents, and active platform-specific GUI integration are documented in [HIDAPI provenance and license-election review](hidapi-provenance-license-election.md).
 
 This review also found two provenance issues:
-- The `hints` utility is not an external third-party library: Git history traces it to the initial BambuStudio 1.0.10 source import. Its file has no individual copyright/license header, so file-level attribution and the precise relationship to the repository-level AGPLv3 notice remain to be documented.
+- The `hints` utility is an internal build-time localization tool, not a third-party library. Its file has no individual copyright/license header. The bulk-import commit and two later downstream changes are attributable in Git history, but the original author and copyright holder remain unverified; the repository-level AGPLv3 text is context, not a substitute for an evidenced file-level attribution. See [hints attribution review](hints-attribution-review.md).
 
 ## 2. Component findings
 
