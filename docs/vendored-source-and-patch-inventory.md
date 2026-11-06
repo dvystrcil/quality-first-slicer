@@ -34,9 +34,9 @@ The following 27 directories are explicitly included by `deps_src/CMakeLists.txt
 | hints | Internal utility (not third-party) | No file-level notice found | `HintsToPot.cpp` first appears in the BambuStudio 1.0.10 source import; it builds a translation-template generator and an interface target. File-level copyright attribution still needs confirmation; see [hints utility provenance review](hints-utility-provenance.md) |
 | imgui | Static library | `LICENSE.txt` | Check bundled extensions and attribution |
 | imguizmo | Static library | `LICENSE` | Check upstream relationship and bundled files |
-| libigl | Static library | Not found | Has upstream and Orca-specific READMEs; inspect nested/copyleft content |
+| libigl | Static library | Not found | Active `igl::copyleft::cgal::mesh_boolean` use; entry-point files are MPL-2.0, but several helper files lack visible file notices, exact upstream revision is unpinned, and the recursive include closure is incomplete. See [MCUT/libigl license review](mcut-libigl-license-review.md) and [source-closure follow-up](mcut-libigl-transitive-closure-review.md) |
 | libnest2d | Static library | `LICENSE.txt` | Inspect bundled dependencies and notices |
-| mcut | Static library | `LICENSE.txt`, `LICENSE.GPL.txt`, nested CDT `LICENSE.txt` | **GPL/commercial dual-licensing gate; nested CDT license also applies** |
+| mcut | Static library | `LICENSE.txt`, `LICENSE.GPL.txt`, nested CDT `LICENSE.txt` | **GPL-3.0-or-later default; commercial option not evidenced as obtained. Upstream v1.2.0 substantially pinned; local CMake, `math.cpp`, and `shewchuk.c` differ. CDT is actively included and dual-licensed MPL-2.0/GPL; modified Shewchuk predicates preserve a public-domain attribution. See [MCUT/libigl license review](mcut-libigl-license-review.md) and [source-closure follow-up](mcut-libigl-transitive-closure-review.md)** |
 | md4c | Static library | `LICENSE.md` | Inspect license and bundled files |
 | mdns | Static library | `NOTICE.md` | Notice is not necessarily the complete license text |
 | minilzo | Static library | `COPYING` | Inspect license terms and any exceptions |
