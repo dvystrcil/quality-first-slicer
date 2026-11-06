@@ -98,7 +98,7 @@ At PrusaSlicer commit `b8b3cccb40f14f582e2e1272543de080543bfd3c`:
 
 - OrcaSlicer v2.4.2 `clipper.cpp` is byte-identical to PrusaSlicer's `src/clipper/clipper.cpp` (Git blob `1f16446ac8da1f0b9c802d8a9dee33f766919f6b`).
 - The headers are not byte-identical. The reviewed Orca header differs from that PrusaSlicer header in two observed places: Orca comments out `CLIPPERLIB_INT32`, and it has the additional `!pg.empty()` guard in the path-processing loop (the latter is also recorded in OrcaSlicer commit `107cd3edb05ef7327d6925aa352082f1168473e0`, “fix a crash bug when generating support”).
-- The macro remains `6.2.6` in the Orca header, while the PrusaSlicer 6.4.2 header uses `6.4.2`. This is a further confirmation that Orca's macro was not synchronized during the upgrade.
+- The macro remains `6.2.6` in both the Orca and PrusaSlicer 6.4.2 headers. This confirms that the stale macro was carried through the upgrade lineage rather than synchronized to the banner.
 
 The public `skyrpex/clipper` mirror contains a 6.4.2 header dated 27 February 2017 and a separate `License.txt` with the Boost Software License 1.0 text. It is a useful corroborating copy, not proof that it is the exact archive used by PrusaSlicer or OrcaSlicer. Its header is not byte-identical to the Orca version.
 
