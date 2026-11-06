@@ -21,7 +21,7 @@ The following 27 directories are explicitly included by `deps_src/CMakeLists.txt
 | Component | CMake classification | License/notice filename found in tree scan | Initial review note |
 |---|---|---|---|
 | Shiny | Static library | Not found as a separate file; MIT text in `Shiny.h` | MIT header found; see [selected source-header review](deps-src-license-header-review.md) |
-| admesh | Static library | Not found as a separate file; GPL notice in source headers | GPL-2.0-or-later; linked into `libslic3r_cgal`; see [selected source-header review](deps-src-license-header-review.md) |
+| admesh | Static library | Not found as a separate file; GPL notice in source headers | GPL-2.0-or-later; all seven target files preserve the notice, but upstream `COPYING` and the referenced `AUTHORS` are absent from the vendored subset. Active API use is confirmed in `TriangleMesh.cpp`; no ADMesh-specific linking exception found. See [ADMesh GPL notice review](admesh-gpl-notice-review.md) and [selected source-header review](deps-src-license-header-review.md) |
 | agg | Header-only/interface | `copying` | Inspect exact license text and provenance |
 | ankerl | Header-only/interface | Not found | README exists; license/provenance unresolved |
 | clipper | Static library | Not found as a separate file; Boost license in `clipper.hpp` | Boost Software License 1.0; actual compiled/consumed legacy subset needs tracing |

@@ -9,7 +9,7 @@
 This review resolves license evidence for a first group of components whose license-named files were not found in the initial tree scan. Several declare their license directly in source headers:
 
 - Shiny: MIT.
-- ADMesh: GNU GPL version 2 or, at the recipient's option, any later version (GPL-2.0-or-later).
+- ADMesh: GNU GPL version 2 or, at the recipient's option, any later version (GPL-2.0-or-later); all seven target source/header files preserve the notice, but the vendored subset omits upstream `COPYING` and the referenced `AUTHORS` file. No ADMesh-specific linking exception was found; see [ADMesh GPL notice review](admesh-gpl-notice-review.md).
 - Clipper and Clipper2: Boost Software License 1.0.
 - fast_float: MIT.
 - GLU tessellator subset: SGI Free Software License B, version 2.0.
@@ -29,7 +29,7 @@ This review also found two provenance issues:
 | Component | Source-level license evidence | Use evidence / status |
 |---|---|---|
 | Shiny | `Shiny.h` embeds the MIT license and copyright notice for Aidin Abedi. | `GCodeReader.cpp` includes `Shiny/Shiny.h`; active source use. |
-| ADMesh | `stl.h` and other implementation files identify ADMesh and state GPL version 2 or (at your option) any later version. | `admesh` is built as a static target and linked into `libslic3r_cgal`; active build-graph dependency. Actual symbol-level use and complete object/link closure still need confirmation. |
+| ADMesh | All seven files in the static target preserve the GPL-2-or-later notice; full upstream `COPYING` and referenced `AUTHORS` are absent from the vendored subset. | Active use is confirmed: linked into `libslic3r` and `libslic3r_cgal`; `TriangleMesh.cpp` calls ADMesh APIs. No component-specific linking exception found. See [ADMesh GPL notice review](admesh-gpl-notice-review.md). |
 | Clipper (legacy) | `clipper.hpp` identifies Boost Software License 1.0. | CMake comments out `clipper.cpp`/`clipper.hpp` in this target but builds `clipper_z.cpp`; inspect consumers and actual link use before treating the full legacy source set as compiled. |
 | Clipper2 | Checked-in implementation/header notices identify Boost Software License 1.0. | `Clipper2` is linked by `libslic3r`. Both local CMake (`project(Clipper2 VERSION 1.5.2)`) and `clipper.version.h` (`CLIPPER2_VERSION = "1.5.2"`) agree with upstream Clipper2 release commit `6901921c4be75126d1de60bfd24bd86a61319fd0`; the previously reported 2.0.1 discrepancy was incorrect. |
 | fast_float | `fast_float.h` includes the MIT permission and disclaimer text. | README identifies source distribution as fast_float 2.0.0, commit `fe1ce58`; application files include its header. |
@@ -64,7 +64,7 @@ Until resolved, mark HIDAPI licensing as unknown rather than assigning a conveni
 - **nlohmann/json:** all 41 vendored files match upstream release 3.10.4 by Git blob SHA; see [NanoSVG and nlohmann provenance](nanosvg-nlohmann-provenance.md).
 - **stb_dxt:** the Cyan4973/RygsDXTc source snapshot is pinned and the small Orca wrapper delta is documented. The BSD-2-Clause text is present, but the concrete copyright notice/holder/year remains unresolved; see [stb_dxt provenance review](stb-dxt-provenance-review.md).
 - **hints:** source origin is traced to the BambuStudio 1.0.10 import, but individual copyright attribution and the exact file-level licensing basis remain to be confirmed.
-- **ADMesh:** verify all component source files carry consistent GPL notices and determine whether any exception or additional permission exists. Do not treat a linked target as proof that every object is used at runtime.
+- **ADMesh:** all seven target files carry consistent GPL-2-or-later notices and active API use is confirmed. The vendored subset omits upstream `COPYING` and the referenced `AUTHORS` file; no ADMesh-specific linking exception was found. Restore/verify distribution notices and trace the local C++/Eigen delta; see [ADMesh GPL notice review](admesh-gpl-notice-review.md).
 - **HIDAPI:** resolve the multi-license selection and restore the applicable notice text.
 
 ## 5. Fixed-revision evidence
