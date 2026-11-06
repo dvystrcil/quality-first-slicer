@@ -135,10 +135,10 @@ Pinned OrcaSlicer evidence:
 - [Dependency install-prefix configuration](https://github.com/OrcaSlicer/OrcaSlicer/blob/8500fcdccaa10b5099ac20d252af3a7c560046f1/deps/CMakeLists.txt)
 - [CGAL dependency recipe](https://github.com/OrcaSlicer/OrcaSlicer/blob/8500fcdccaa10b5099ac20d252af3a7c560046f1/deps/CGAL/CGAL.cmake)
 - [Application install and CPack license configuration](https://github.com/OrcaSlicer/OrcaSlicer/blob/8500fcdccaa10b5099ac20d252af3a7c560046f1/CMakeLists.txt)
-- [Windows/macOS/Linux build and packaging workflow](https://github.com/OrcaSlicer/OrcaSlicer/blob/8500fcdcc10b5099ac20d252af3a7c560046f1/.github/workflows/build_orca.yml)
-- [Release artifact assembly workflow](https://github.com/OrcaSlicer/OrcaSlicer/blob/8500fcdcc10b5099ac20d252af3a7c560046f1/.github/workflows/publish_release.yml)
-- [AppImage assembly helper](https://github.com/OrcaSlicer/OrcaSlicer/blob/8500fcdcc10b5099ac20d252af3a7c560046f1/src/dev-utils/platform/unix/build_appimage.sh.in)
-- [Flatpak manifest](https://github.com/OrcaSlicer/OrcaSlicer/blob/8500fcdcc10b5099ac20d252af3a7c560046f1/scripts/flatpak/com.orcaslicer.OrcaSlicer.yml)
+- [Windows/macOS/Linux build and packaging workflow](https://github.com/OrcaSlicer/OrcaSlicer/blob/8500fcdccaa10b5099ac20d252af3a7c560046f1/.github/workflows/build_orca.yml)
+- [Release artifact assembly workflow](https://github.com/OrcaSlicer/OrcaSlicer/blob/8500fcdccaa10b5099ac20d252af3a7c560046f1/.github/workflows/publish_release.yml)
+- [AppImage assembly helper](https://github.com/OrcaSlicer/OrcaSlicer/blob/8500fcdccaa10b5099ac20d252af3a7c560046f1/src/dev-utils/platform/unix/build_appimage.sh.in)
+- [Flatpak manifest](https://github.com/OrcaSlicer/OrcaSlicer/blob/8500fcdccaa10b5099ac20d252af3a7c560046f1/scripts/flatpak/com.orcaslicer.OrcaSlicer.yml)
 
 ### 5.3 Required artifact-level verification
 
