@@ -22,7 +22,7 @@ This review resolves license evidence for a first group of components whose lice
 **HIDAPI remains unresolved.** Its checked-in headers say the source may be licensed under GPLv3, a BSD-style license, or the original HIDAPI license, and point to four license documents in the original source distribution (one selection guide and three alternative license texts). All four are absent from the vendored subset inspected here. The actual license option selected for this copy cannot be inferred from the header's list.
 
 This review also found two provenance issues:
-- The `hints` utility is not an external third-party library: Git history traces it to the initial BambuStudio 1.0.10 source import. Its file has no individual copyright/license header, so file-level attribution and the precise relationship to the repository-level AGPLv3 notice remain to be documented.
+- The `hints` utility is an internal build-time localization tool, not a third-party library. Its file has no individual copyright/license header. The bulk-import commit and two later downstream changes are attributable in Git history, but the original author and copyright holder remain unverified; the repository-level AGPLv3 text is context, not a substitute for an evidenced file-level attribution. See [hints attribution review](hints-attribution-review.md).
 
 ## 2. Component findings
 
