@@ -108,3 +108,66 @@ No GPL/LGPL file was identified in the direct include list and selected helper h
 ## 5. Scope and limitations
 
 This is a documentation-only follow-up. No source or license file was changed or imported; no MCUT commercial license was assumed; no complete libigl recursive closure, local build, binary/package inspection, SBOM, or legal determination was performed.
+
+
+## 6. MCUT v1.2.0 local-delta review
+
+A direct line-level comparison was performed for the three previously identified files against upstream `cutdigital/mcut` tag `v1.2.0`. Git blob IDs confirm that all three are modified relative to that tag. The comparison is limited to these files and does not establish the full history or authorship of each change.
+
+### 6.1 `CMakeLists.txt`: Orca build-policy adaptations
+
+The local file changes the upstream CMake configuration in these material ways:
+
+- Raises the minimum CMake requirement from `3.12...3.13 FATAL_ERROR` to `3.13`.
+- Changes the default `MCUT_BUILD_AS_SHARED_LIB` option from `ON` to `OFF`, making the local default target static.
+- Adds several MSVC warning suppressions/options (`/wd4131`, `/wd4704`, `/wd4245`, `/wd4297`, `/wd4505`, and `/wd4701`).
+- Marks MCUT's private include directory as `SYSTEM`.
+- Comments out upstream install rules for the library, public headers, and text files, including the install of `LICENSE.txt` and `README.md`.
+- Comments out the upstream CPack configuration and `include(CPack)`.
+
+The local source file list remains the same eight files as upstream v1.2.0. These are integration/build-policy changes, not evidence of a different upstream code release or a different license grant. The commented-out license install rule is a concrete packaging-notice gap in MCUT's own CMake install path; it does not establish whether OrcaSlicer's separate application packaging stages equivalent notices elsewhere.
+
+### 6.2 `source/math.cpp`: small source edits
+
+The direct comparison found three differences:
+
+- Adds `#include <cstdint>`.
+- Removes one whitespace-only line.
+- Removes trailing whitespace from a function parameter line.
+
+The only semantic-looking change is the additional standard header include; the other two are formatting. No algorithmic or behavioral change was identified in this comparison.
+
+### 6.3 `source/shewchuk.c`: predicate implementation changes
+
+The comparison found these changes against upstream MCUT v1.2.0:
+
+- Comments out two complete legacy implementations of the `compress` expansion routine (one in each of the file's alternative/preprocessor-separated code sections).
+- Initializes six local length variables to zero in the 2D orientation predicate path:
+  `axtbclen`, `aytbclen`, `bxtcalen`, `bytcalen`, `cxtablen`, and `cytablen`.
+
+The second change is an explicit initialization change and may affect behavior on paths where those variables would otherwise be read before assignment. The commented routines remove source text from compilation, but the inspected comparison alone does not establish why they were disabled or whether any caller depended on them. The exact active preprocessor branch and the runtime impact of both edits have not been tested.
+
+The file retains Jonathan Richard Shewchuk's public-domain dedication and its Cinolib-modification attribution. This review does not treat those notices as proof of the provenance of the local edits: the commit/author lineage from the Cinolib copy through MCUT and OrcaSlicer remains untraced.
+
+### 6.4 Reproducible comparison identifiers
+
+| File | OrcaSlicer v2.4.2 blob | MCUT v1.2.0 blob |
+|---|---|---|
+| `deps_src/mcut/CMakeLists.txt` | `69c42610c9ba8a272c83a2182c7a68afa751a208` | `464854dc54ca96c1a75d2959ed1d91f6b28ecd4c` |
+| `deps_src/mcut/source/math.cpp` | `8d6fe59b3250b6f7a940ab637bd31c0cd6c7d43b` | `cdb5c70eca2a9ee341080de82462e911b62c2993` |
+| `deps_src/mcut/source/shewchuk.c` | `b23c3bea9dbf70dd00d812af7424a39a8688a141` | `67c01955a51c1b45bda8dc37bd826ca42deca807` |
+
+Pinned comparison sources:
+- [OrcaSlicer v2.4.2 MCUT CMakeLists](https://github.com/OrcaSlicer/OrcaSlicer/blob/8500fcdccaa10b5099ac20d252af3a7c560046f1/deps_src/mcut/CMakeLists.txt)
+- [MCUT v1.2.0 CMakeLists](https://github.com/cutdigital/mcut/blob/v1.2.0/CMakeLists.txt)
+- [OrcaSlicer v2.4.2 math.cpp](https://github.com/OrcaSlicer/OrcaSlicer/blob/8500fcdccaa10b5099ac20d252af3a7c560046f1/deps_src/mcut/source/math.cpp)
+- [MCUT v1.2.0 math.cpp](https://github.com/cutdigital/mcut/blob/v1.2.0/source/math.cpp)
+- [OrcaSlicer v2.4.2 shewchuk.c](https://github.com/OrcaSlicer/OrcaSlicer/blob/8500fcdccaa10b5099ac20d252af3a7c560046f1/deps_src/mcut/source/shewchuk.c)
+- [MCUT v1.2.0 shewchuk.c](https://github.com/cutdigital/mcut/blob/v1.2.0/source/shewchuk.c)
+
+### 6.5 Remaining evidence required
+
+1. Trace the Git commit and author history for the three local files, including any intermediate BambuStudio/Cinolib source snapshots; the blob comparison identifies changes but not their origin.
+2. Confirm the active `shewchuk.c` preprocessor branch for each supported compiler/platform and test the six-variable initialization change under sanitizers or a focused regression test.
+3. Establish whether the commented-out MCUT install/CPack rules are compensated by OrcaSlicer's third-party notice and source-package processes.
+4. Do not treat any of these local changes as resolving the MCUT GPL-3.0-or-later default or establishing a commercial license. The license election and distribution model remain separate unresolved questions.
