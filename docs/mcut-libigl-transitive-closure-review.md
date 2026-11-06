@@ -102,7 +102,7 @@ No GPL/LGPL file was identified in the direct include list and selected helper h
 4. Preserve the Shewchuk public-domain attribution and Cinolib-modification notice; complete the source delta/provenance record for this modified predicate file.
 5. Pin the exact libigl upstream revision and resolve the differences from v2.5.0. Record whether each supported build uses system libigl or the vendored tree.
 6. Finish the recursive include/template-instantiation closure for `igl::copyleft::cgal::mesh_boolean`; resolve the missing file-level notices listed above with upstream provenance evidence.
-7. Review the exact CGAL package/version and effective build configuration. A directory name or a README warning is not a substitute for file-level and dependency-closure evidence.
+7. Review the exact CGAL package/version and effective build configuration. The pinned default recipe and active GPL package APIs are documented in [the CGAL 5.6.3 package-license review](cgal-5.6.3-package-license-review.md); still capture the effective provider and complete build-time header closure for supported configurations.
 8. Configure supported build presets and inspect the resulting linked targets and release artifacts before making any distribution conclusion.
 
 ## 5. Scope and limitations
