@@ -41,22 +41,24 @@ The fork's `LICENSE` file contains the Mozilla Public License 2.0 text. Its READ
 
 **Finding:** The dependency is pinned to an immutable source commit and a declared archive hash. Preserve the fork commit and OrcaSlicer's additional patch as distinct provenance layers. Do not treat the GitHub `NOASSERTION` field as evidence that the source is unlicensed.
 
-## 3. wxWidgets — forked Git tag
+## 3. wxWidgets — forked branch with documented upstream base
 
-OrcaSlicer's CMake uses:
+The v2.4.2 CMake declaration uses the SoftFever repository URL, `GIT_TAG v3.3.2`, and `GIT_SHALLOW ON`, but does not record an immutable commit or archive digest. The URL now resolves to [OrcaSlicer/Orca-deps-wxWidgets](https://github.com/OrcaSlicer/Orca-deps-wxWidgets). The resolved repository has `refs/heads/v3.3.2`, but no `refs/tags/v3.3.2`; the CMake ref is therefore a mutable branch, not a release tag.
 
-- Repository: [SoftFever/Orca-deps-wxWidgets](https://github.com/SoftFever/Orca-deps-wxWidgets)
-- Git ref: `v3.3.2`
-- `GIT_SHALLOW ON`
-- No resolved commit SHA or archive hash recorded in this dependency declaration.
+The current branch tip observed on 2026-11-06 is `b44c39c100975a0ac0e46f937aa3f3eae5e18631`. Its merge base is `db1005db3dea2c37a46fb455a9a02e37aa360751`, which GitHub confirms is identical to upstream `wxWidgets/wxWidgets` ref `v3.3.2`. The fork branch is four commits ahead and zero behind that upstream base.
 
-The repository is a fork of `wxWidgets/wxWidgets`. The GitHub repository endpoint currently redirects, which prevented resolving the `v3.3.2` tag directly through the repository API in this pass.
+The current fork delta affects four files:
 
-As an independent packaging cross-check, the Flathub OrcaSlicer manifest uses the same SoftFever fork but pins a different ref name, `orca-3.3.2`, to commit `db1005db3dea2c37a46fb455a9a02e37aa360751`. This is useful evidence that an immutable pin is available in a packaging context, but it does **not** establish that this commit is the same object as the `v3.3.2` ref used by the v2.4.2 CMake file. Do not substitute it without checking the source history and expected contents.
+- `build/cmake/wxWidgetsConfig.cmake.in`: compiler-prefix fallback so MSVC and clang-cl can consume compatible library layouts.
+- `src/osx/cocoa/colour.mm`: use sRGB color components.
+- `src/msw/webview_edge.cpp`: keep WebView2 rasterization aligned with monitor DPI.
+- `src/gtk/wayland.cpp`: bind Wayland seats at protocol v5 and add handlers for v5 pointer events.
 
-wxWidgets describes its license as a modified LGPL with an exception permitting use in proprietary applications, including static linking. The exact license text and notices in the fork revision still need to be checked.
+The branch history includes the compiler-prefix fix, its merge, the OrcaSlicer macOS/Windows patches (with two other proposed changes later reverted), and the Wayland backport. The three modified source files retain wxWindows license headers. OrcaSlicer's dependency CMake also copies selected wxWidgets private headers after install; this is a consumer-side customization, separate from the fork delta.
 
-**Finding:** This is currently the weakest of the reviewed source pins. A shallow Git tag without a recorded commit is not enough for an auditable, reproducible dependency manifest. Resolve the exact tag object/commit, record its submodule state, and preserve the source revision used for each supported platform.
+License evidence is now available in the fork tree: `docs/licence.txt` contains the wxWindows Library Licence 3.1 and its LGPL-based exception; `docs/wine/COPYING.LIB` contains GNU Library GPL v2 text; and `misc/languages/data/unicode/unicode-license.txt` is an additional notice to account for if its data is shipped. The LGPL text's placement under `docs/wine` needs notice-packaging review rather than an assumption that it is the intended primary license copy. The recursive tree also contains 12 Git submodules; their initialization and consumption by the Orca dependency build have not been established.
+
+**Finding:** The upstream base and current fork delta are now substantially resolved, but the source pin remains non-reproducible because the build follows a mutable branch. The current branch tip does not prove which commit historical release builds fetched. See [wxWidgets 3.3.2 fork provenance and license review](wxwidgets-3.3.2-fork-provenance-review.md) for commit-level evidence, license details, submodule SHAs, and remaining work.
 
 ## 4. GMP — release asset from SoftFever
 
@@ -78,13 +80,13 @@ The release API reports no asset-level digest. The CMake file does declare a SHA
 |---|---|---|---|
 | Blosc | Branch archive + SHA-256 | Archive content can be hash-checked; source ref is mutable | Independently verify archive hash; record immutable commit and all notices |
 | OpenVDB | Commit archive + SHA-256 | Stronger immutable source reference | Review full fork delta and local patch; reconcile file-level notices |
-| wxWidgets | Shallow Git tag | Insufficient without resolved commit | Resolve exact tag, commit, and submodule commits; inspect fork license |
+| wxWidgets | Mutable shallow branch `v3.3.2` | Current branch tip and upstream base resolved; historical build commit remains unknown | Pin immutable commit; verify submodule use and release notice packaging; see [wxWidgets fork review](wxwidgets-3.3.2-fork-provenance-review.md) |
 | GMP | Release asset + SHA-256 | Archive can be hash-checked; source preparation unclear | Verify archive against GNU source; inspect patch and release provenance |
 
 ## 6. Follow-up requirements
 
 - [ ] Independently download and verify each declared SHA-256; this remote review did not recalculate hashes.
-- [ ] Resolve wxWidgets `v3.3.2` to an immutable commit and record all required submodule revisions.
+- [ ] Replace wxWidgets `v3.3.2` branch with an immutable commit or retained hash-verified archive; establish historical release commit, submodule initialization, and notice packaging. See [wxWidgets fork review](wxwidgets-3.3.2-fork-provenance-review.md).
 - [ ] Inspect the full OpenVDB fork delta against the exact upstream base relevant to the 2022 source revision; the single commit inspected here is not the entire fork delta.
 - [ ] Review the Blosc component notices and determine exactly which codec implementations are enabled by OrcaSlicer's build options.
 - [ ] Compare the GMP release archive against GNU GMP 6.2.1, inspect its local patch, and identify the release build/source process.
@@ -94,6 +96,6 @@ The release API reports no asset-level digest. The CMake file does declare a SHA
 
 ## 7. Conclusion
 
-The forked dependencies are not interchangeable with their upstream projects without review. Blosc carries portability and decompression changes; OpenVDB has a specific Windows/MinGW-oriented fork and an additional Orca patch; wxWidgets is sourced from a fork using a shallow tag; and GMP comes from a SoftFever release asset with a separate local patch.
+The forked dependencies are not interchangeable with their upstream projects without review. Blosc carries portability and decompression changes; OpenVDB has a specific Windows/MinGW-oriented fork and an additional Orca patch; wxWidgets is sourced from a fork using a mutable shallow branch with a now-documented upstream base and four-commit delta; and GMP comes from a SoftFever release asset with a separate local patch.
 
 These observations help explain why OrcaSlicer uses these sources, but they do not approve them for import. No source has been copied into this project, no dependency has been accepted, and no final project license decision is made here.
