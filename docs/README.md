@@ -3,6 +3,7 @@
 Project documentation is organized by purpose:
 
 - [Product vision](product-vision.md) — goals, principles, scope, and non-goals.
+- [Goals and success criteria](goals.md): measurable criteria, the first milestone, and open scope decisions.
 - `architecture/` — system architecture and technical design.
 - `decisions/` — architecture and product decision records.
 - `development/` — contributor workflows and implementation guidance.
