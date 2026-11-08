@@ -22,6 +22,10 @@ OrcaSlicer is becoming bloated and is putting up walls around user data: synced 
 - Keep the core slicer useful offline; network and vendor integrations remain optional.
 - Preserve upstream attribution and license obligations.
 
+## Supported platforms
+
+Linux x86_64 (AppImage) and Windows x64. macOS is not supported, because the project cannot test it. Linux arm64 (e.g. Raspberry Pi) and Flatpak may come later. See [decision 0001](docs/decisions/0001-supported-platforms.md).
+
 ## Development status
 
 **Project foundation.** The repository is being established. No slicer source has been imported yet. The upstream architecture, licensing, dependency inventory, and reproducible baseline build must be reviewed before source changes begin.

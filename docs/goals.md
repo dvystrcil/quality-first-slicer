@@ -53,15 +53,16 @@ These are candidates, written to be measurable. Each needs a yes, an edit, or a 
 
 ## 4. Platform matrix
 
-**Q8:** Which platforms are supported, and when?
+**Q8: DECIDED** in [0001: Supported platforms](decisions/0001-supported-platforms.md).
 
-| Platform | Options | Effect on current work |
-|---|---|---|
-| Linux x86_64 | supported now / later / never | The only platform configured and built so far |
-| Linux aarch64 | | |
-| Windows x64 | | R2 (vendored Expat) and the vendored-Qhull decision need a Windows configure; the OpenCV IPP-ICV item (O5) applies only here |
-| macOS (arm64/x86_64) | | `Mouse3DHandlerMac.mm` and macOS-only sources stay or go with this answer |
-| Flatpak | | Separate packaging and dependency path |
+| Platform | Status |
+|---|---|
+| Linux x86_64 AppImage | **Supported** |
+| Windows x64 | **Supported**, hand-tested; CI build path still open |
+| Linux x86_64 Flatpak | Future |
+| Linux aarch64 (arm64) | Future (testable on a Raspberry Pi or a Chromebook) |
+| Windows ARM64 | Not supported |
+| macOS | **Not supported** (cannot be tested); code stays as inherited upstream code, nothing removed |
 
 ## 5. Feature scope decisions
 
@@ -98,6 +99,7 @@ These come straight from the use map's ranked list. Each one blocks a removal or
 | Q5 | Which UI problems matter most | G5 |
 | Q6 | v0.1 contents, G3 in or out | Milestone |
 | Q7 | Base: 2.4.2 or 2.5.0 | Milestone, every source PR |
-| Q8 | Platform matrix | R2, Qhull, O5, macOS sources |
+| ~~Q8~~ | Platform matrix: **DECIDED**, [0001](decisions/0001-supported-platforms.md) | — |
+| Q8a | Windows x64 CI build path (GitHub-hosted vs self-hosted runner) | Automated Windows builds; R2 and Qhull evidence |
 | Q9–Q15 | Feature scope | O1–O5 PRs |
 | Q16 | Licensing objective | Framing of #47 |
