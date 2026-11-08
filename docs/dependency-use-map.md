@@ -159,6 +159,8 @@ Columns:
 
 ## 4. Ranked decision list
 
+> **Update (2026-11-08):** maintainer decisions now apply to several items. The base moves to OrcaSlicer 2.5.0 ([0002](decisions/0002-base-on-orcaslicer-2.5.0.md)), where R1 is already done upstream and this map must be re-run. SLA (O3) is to be removed ([0003](decisions/0003-remove-sla.md)), Creality discovery (O1) is to be removed ([0004](decisions/0004-remove-creality-lan-discovery.md)), and the 3D mouse (O2) becomes an option that is off in project builds ([0005](decisions/0005-3d-mouse-optional-off.md)). The table below is the original v2.4.2 analysis.
+
 Ranking puts licensing/provenance burden removed per unit of risk first. Feature-impact statements describe effects on users. Every entry still needs the validation listed before any removal PR merges.
 
 ### Remove: no consumer in the analysed configuration

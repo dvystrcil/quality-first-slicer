@@ -49,7 +49,7 @@ These are candidates, written to be measurable. Each needs a yes, an edit, or a 
 
 **Q6:** Is that the right v0.1? In particular, should G3 (user-owned profiles) come into v0.1? It is the most user-visible difference from OrcaSlicer.
 
-**Q7:** Which base should v0.1 use: stay on 2.4.2, or rebase on 2.5.0 (released 2026-11-07)? 2.5.0 brings the arc-fitting enum change. The Orca Cloud client exists in both versions.
+**Q7: DECIDED.** The base is OrcaSlicer v2.5.0; see [0002](decisions/0002-base-on-orcaslicer-2.5.0.md). M1 must be redone on 2.5.0. R1 (OpenCSG + GLEW) is already removed upstream in 2.5.0, and six new dependency projects arrive with it.
 
 ## 4. Platform matrix
 
@@ -70,9 +70,9 @@ These come straight from the use map's ranked list. Each one blocks a removal or
 
 | ID | Feature | Options | What follows from each |
 |---|---|---|---|
-| **Q9** | SLA (resin) | keep / optional build / remove | Optional or remove → OpenVDB, Blosc and OpenEXR leave the default build (O3). No bundled profile is SLA today (239/239 FFF) |
-| **Q10** | Creality K-series LAN auto-discovery | keep / optional (default off) / remove | Off or remove → the AGPL mDNS wrapper leaves the build (O1). Manual IP entry is unaffected |
-| **Q11** | 3D mouse (3Dconnexion / spacenavd) | keep / optional / remove | Optional or remove → hidapi and libspnav leave the build (O2) |
+| ~~Q9~~ | SLA (resin) | **DECIDED: remove**; see [0003](decisions/0003-remove-sla.md) | OpenVDB, Blosc and OpenEXR leave the build; code under `SLA/` shared with FDM stays |
+| ~~Q10~~ | Creality K-series LAN auto-discovery | **DECIDED: remove**; see [0004](decisions/0004-remove-creality-lan-discovery.md) | The AGPL mDNS wrapper leaves the build; manual IP entry stays |
+| ~~Q11~~ | 3D mouse (3Dconnexion / spacenavd) | **DECIDED: optional, off in project builds**; see [0005](decisions/0005-3d-mouse-optional-off.md) | hidapi and libspnav are absent from released binaries |
 | **Q12** | Bambu networking plugin (proprietary, loaded at runtime) | keep the loader / optional / remove | The vision's non-goal says no proprietary vendor libraries in core; Bambu compatibility is in scope. This decides how both hold together |
 | **Q13** | OrcaSlicer Cloud client | keep / optional / remove, and replace with G3 | Decides whether `OrcaCloudServiceAgent` stays next to the user-owned sync |
 | **Q14** | Printer web UI, camera view, cloud login (webkit2gtk, GStreamer, libsecret) | keep / optional | Linked by the GUI. Optional makes a no-network build possible (vision principle 6) |
@@ -98,8 +98,10 @@ These come straight from the use map's ranked list. Each one blocks a removal or
 | Q4 | Profile sync backends | G3 |
 | Q5 | Which UI problems matter most | G5 |
 | Q6 | v0.1 contents, G3 in or out | Milestone |
-| Q7 | Base: 2.4.2 or 2.5.0 | Milestone, every source PR |
+| ~~Q7~~ | Base: **DECIDED, 2.5.0**; see [0002](decisions/0002-base-on-orcaslicer-2.5.0.md) | — |
 | ~~Q8~~ | Platform matrix: **DECIDED**, [0001](decisions/0001-supported-platforms.md) | — |
-| Q8a | Windows x64 CI build path (GitHub-hosted vs self-hosted runner) | Automated Windows builds; R2 and Qhull evidence |
-| Q9–Q15 | Feature scope | O1–O5 PRs |
+| ~~Q8a~~ | Windows CI: **DECIDED**, GitHub-hosted, right after the 2.5.0 rebase; see [0006](decisions/0006-windows-ci-after-rebase.md) | — |
+| ~~Q9–Q11~~ | Feature scope: **DECIDED**; see [0003](decisions/0003-remove-sla.md), [0004](decisions/0004-remove-creality-lan-discovery.md), [0005](decisions/0005-3d-mouse-optional-off.md) | — |
+| Q12–Q15 | Feature scope: Bambu plugin, Orca Cloud client, printer web UI/camera, MCUT | O4–O6 |
+| Q17 | Review and keep/remove decisions for the six dependency projects added in 2.5.0 (Assimp, DataChannel, FFMPEG, SLVS, python3 + pybind11, wxInspector) | 2.5.0 baseline approval, G4 |
 | Q16 | Licensing objective | Framing of #47 |
