@@ -1,5 +1,19 @@
 # Product Vision
 
+## Why this project exists
+
+OrcaSlicer and PrusaSlicer are two of the best FDM slicers available. Both give granular control over the G-code they produce. Each has a different weakness that pushed this project into existence:
+
+| | Strength worth keeping | Problem this project exists to fix |
+|---|---|---|
+| **OrcaSlicer** | Modern, practical workflow; broad printer ecosystem; calibration tools | **Growing bloat** in the form of features, vendor integrations and dependencies that do not serve print quality. **Walls around user data:** synced profile storage is offered only through Orca's own hosted service (`OrcaCloudServiceAgent`, defaulting to `api.orcaslicer.com`/`cloud.orcaslicer.com` in v2.5.0), with no open or self-hosted alternative |
+| **PrusaSlicer** | Fast, accurate G-code | A dated, awkward user interface |
+| **Both** | Fine-grained control | **Questionable defaults** that users must discover and undo |
+
+**Worked example of a questionable default: arc fitting.** Arc fitting converts line segments into `G2`/`G3` arcs. It mainly helps older firmware and controllers that are short on G-code bandwidth or storage. On Klipper, `G2`/`G3` needs the optional `[gcode_arcs]` module, and that module [splits every arc back into line segments](https://github.com/Klipper3d/klipper/blob/master/docs/Config_Reference.md#gcode_arcs) of a fixed resolution (default 1 mm). The printer therefore gains nothing from the arc, while the path has passed through an extra approximation step. Even so, OrcaSlicer's bundled vendor process profiles turn it on: 207 profile entries in v2.4.2 and 218 in v2.5.0, mostly Creality, Flashforge, Anycubic and Qidi. In v2.5.0 the option became a three-way choice, and the [release notes](https://github.com/OrcaSlicer/OrcaSlicer/releases/tag/v2.5.0) record that a fix ([OrcaSlicer#17047](https://github.com/OrcaSlicer/OrcaSlicer/pull/17047)) re-enabled it from profiles for Creality, Prusa and 11 other vendors after the alpha had briefly turned it off. A user upgrading through 2.5 could see arc fitting switch itself back on without having changed anything. A default like this should follow the target firmware and be backed by evidence, not inherited from older hardware.
+
+This project therefore aims for **OrcaSlicer's workflow, PrusaSlicer-grade G-code, and defaults that a user can trust**. It should be lean, keep the user's data under the user's control, and justify every default.
+
 ## Positioning
 
 A quality-first, general-purpose FDM slicer that combines OrcaSlicer's practical workflow and broad ecosystem with a conservative, evidence-driven approach to slicing quality, reliability, and defaults.
