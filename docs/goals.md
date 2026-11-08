@@ -60,7 +60,8 @@ These are candidates, written to be measurable. Each needs a yes, an edit, or a 
 | Linux x86_64 AppImage | **Supported** |
 | Windows x64 | **Supported**, hand-tested; CI build path still open |
 | Linux x86_64 Flatpak | Future |
-| Linux aarch64, Windows ARM64 | Not supported |
+| Linux aarch64 (arm64) | Future (testable on a Raspberry Pi or a Chromebook) |
+| Windows ARM64 | Not supported |
 | macOS | **Not supported** (cannot be tested); code stays as inherited upstream code, nothing removed |
 
 ## 5. Feature scope decisions

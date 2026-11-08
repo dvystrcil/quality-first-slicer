@@ -23,7 +23,7 @@ The vision requires honest validation labels (principle 5; [AGENTS.md](../../AGE
 | **Linux x86_64, AppImage** | **Supported** | Built on the fork's CI (`linux-arc-baseline.yml`); maintainer can run it |
 | **Windows x64** | **Supported** | Maintainer tests by hand. **How it is built in CI is undecided** and tracked separately |
 | Linux x86_64, Flatpak | **Future**, not supported yet | — |
-| Linux aarch64 | Not supported | — |
+| **Linux aarch64** (arm64) | **Future** | Testable by the maintainer on a Raspberry Pi or a Chromebook (Linux container) |
 | Windows ARM64 | Not supported | — |
 | macOS (arm64 and x86_64) | **Not supported** | Maintainer has no way to test macOS |
 
@@ -33,6 +33,7 @@ The vision requires honest validation labels (principle 5; [AGENTS.md](../../AGE
 
 - **macOS builds in CI, labelled unverified.** This would catch compile breakage cheaply, but the project would ship a product nobody has run, against the validation-honesty principle. It would also need GitHub-hosted macOS runners. Rejected.
 - **macOS deferred with a revisit trigger.** Today's work would be the same as "not supported". The revisit triggers below cover this case anyway.
+- **Linux aarch64 now.** The maintainer can test it, but CI would need an arm64 runner (the project's self-hosted runners are amd64), and it does not serve v0.1. Recorded as future, not rejected.
 - **Flatpak now.** It is a separate packaging and dependency path (`build_flatpak.sh`), and it adds CI work that does not serve v0.1. Left for the future.
 
 ## Consequences
@@ -47,4 +48,4 @@ The vision requires honest validation labels (principle 5; [AGENTS.md](../../AGE
 
 - someone with macOS hardware commits to testing releases;
 - Flatpak packaging is requested, or becomes the better way to ship on Linux;
-- an aarch64 Linux user base appears (for example Raspberry Pi 5 desktops) and an arm runner is available.
+- **Linux aarch64:** an arm64 CI runner is available; hand-testing is already possible on a Raspberry Pi or a Chromebook. The upstream build script already has an aarch64 leg (`build_orca.yml`), so the starting point is known.
