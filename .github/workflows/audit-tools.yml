@@ -6,6 +6,9 @@ on:
       - "tools/verify-source-archives.py"
       - "tests/test_verify_source_archives.py"
       - "audit/orcaslicer-v2.4.2-source-archives.json"
+      - "tools/dependency-use-map/**"
+      - "tests/test_dependency_use_map.py"
+      - "audit/dependency-use-map-linux-x86_64.json"
       - ".github/workflows/audit-tools.yml"
   push:
     branches: ["main"]
@@ -13,6 +16,9 @@ on:
       - "tools/verify-source-archives.py"
       - "tests/test_verify_source_archives.py"
       - "audit/orcaslicer-v2.4.2-source-archives.json"
+      - "tools/dependency-use-map/**"
+      - "tests/test_dependency_use_map.py"
+      - "audit/dependency-use-map-linux-x86_64.json"
       - ".github/workflows/audit-tools.yml"
   workflow_dispatch:
 
@@ -25,8 +31,12 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: Validate manifest JSON
-        run: python3 -m json.tool audit/orcaslicer-v2.4.2-source-archives.json >/dev/null
+      - name: Validate audit JSON
+        run: |
+          python3 -m json.tool audit/orcaslicer-v2.4.2-source-archives.json >/dev/null
+          python3 -m json.tool audit/dependency-use-map-linux-x86_64.json >/dev/null
+      - name: Check dependency-use-map shell syntax
+        run: bash -n tools/dependency-use-map/run.sh
       - name: Run audit-tool unit tests
         run: python3 -m unittest discover -s tests -v
 
