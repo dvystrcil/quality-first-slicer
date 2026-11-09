@@ -9,6 +9,7 @@ on:
       - "tools/dependency-use-map/**"
       - "tests/test_dependency_use_map.py"
       - "audit/dependency-use-map-linux-x86_64.json"
+      - "audit/dependency-use-map-linux-x86_64-v2.4.2.json"
       - ".github/workflows/audit-tools.yml"
   push:
     branches: ["main"]
@@ -19,6 +20,7 @@ on:
       - "tools/dependency-use-map/**"
       - "tests/test_dependency_use_map.py"
       - "audit/dependency-use-map-linux-x86_64.json"
+      - "audit/dependency-use-map-linux-x86_64-v2.4.2.json"
       - ".github/workflows/audit-tools.yml"
   workflow_dispatch:
 
@@ -35,6 +37,7 @@ jobs:
         run: |
           python3 -m json.tool audit/orcaslicer-v2.4.2-source-archives.json >/dev/null
           python3 -m json.tool audit/dependency-use-map-linux-x86_64.json >/dev/null
+          python3 -m json.tool audit/dependency-use-map-linux-x86_64-v2.4.2.json >/dev/null
       - name: Check dependency-use-map shell syntax
         run: bash -n tools/dependency-use-map/run.sh
       - name: Run audit-tool unit tests
