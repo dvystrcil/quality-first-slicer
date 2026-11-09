@@ -1,5 +1,7 @@
 # Vendored source and local patch inventory — OrcaSlicer v2.4.2
 
+> **Pinned to v2.4.2.** The 2.5.0 baseline changes this picture; what changed is listed in the [2.4.2 → 2.5.0 dependency delta](dependency-delta-2.4.2-to-2.5.0.md). This document is updated for 2.5.0 in slice D4 of [#55](https://github.com/dvystrcil/quality-first-slicer/issues/55); until then, read it as the v2.4.2 record.
+
 **Status:** First-pass remote tree inventory; incomplete origin, revision, nested-license, and patch applicability review  
 **Reviewed upstream revision:** `8500fcdccaa10b5099ac20d252af3a7c560046f1` (`v2.4.2`)  
 **Scope:** `deps_src/` tree, its top-level CMake inclusion list, and patch/diff-like files under `deps/`  

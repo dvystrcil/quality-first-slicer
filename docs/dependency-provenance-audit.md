@@ -1,5 +1,7 @@
 # OrcaSlicer v2.4.2 dependency provenance — first pass
 
+> **Pinned to v2.4.2.** The 2.5.0 baseline changes this picture; what changed is listed in the [2.4.2 → 2.5.0 dependency delta](dependency-delta-2.4.2-to-2.5.0.md). This document is updated for 2.5.0 in slice D1 of [#55](https://github.com/dvystrcil/quality-first-slicer/issues/55); until then, read it as the v2.4.2 record.
+
 **Status:** Partial remote-source audit; not a complete SBOM or license review  
 **Reviewed revision:** `8500fcdccaa10b5099ac20d252af3a7c560046f1` (`v2.4.2`)  
 **Scope:** Linux dependency path plus selected cross-platform dependency declarations  

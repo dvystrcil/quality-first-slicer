@@ -1,5 +1,7 @@
 # Legacy Clipper 6.x license and active-use review
 
+> **Historical (v2.4.2 only).** Upstream removed `deps_src/clipper` in OrcaSlicer 2.5.0; the 2.5.0 baseline (`665552c1`) uses Clipper2 only. This review is kept unchanged as the record for v2.4.2 and the `baseline-2.4.2` branch. Its open items do not carry over to 2.5.0. See the [2.4.2 → 2.5.0 dependency delta](dependency-delta-2.4.2-to-2.5.0.md#4-removed) and the [use map](dependency-use-map.md#0-what-changed-since-the-v242-map).
+
 **Status:** Targeted source/build-path review; exact upstream revision and complete source delta remain unresolved  
 **OrcaSlicer revision:** `8500fcdccaa10b5099ac20d252af3a7c560046f1` (`v2.4.2`)  
 **Initial source-history reference:** OrcaSlicer/BambuStudio bulk source import `1555904beffef41195003f184dec0af46b308eee` (BambuStudio 1.0.10)  

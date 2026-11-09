@@ -1,5 +1,7 @@
 # Windows binary dependency provenance inventory
 
+> **Pinned to v2.4.2.** The 2.5.0 baseline changes this picture; what changed is listed in the [2.4.2 → 2.5.0 dependency delta](dependency-delta-2.4.2-to-2.5.0.md). This document is updated for 2.5.0 in slice C4 of [#55](https://github.com/dvystrcil/quality-first-slicer/issues/55); until then, read it as the v2.4.2 record.
+
 **Status:** Remote Git-tree and metadata inventory only; binaries have not been downloaded or inspected  
 **Upstream baseline:** OrcaSlicer v2.4.2, commit `8500fcdccaa10b5099ac20d252af3a7c560046f1`  
 **Reviewed:** 2026-11-03
