@@ -15,7 +15,7 @@
 |---|---|---|
 | **Source pin changed** | CGAL, GMP, libjpeg-turbo, OCCT, OpenCV, libpng, wxWidgets | slice D |
 | **Build flags or patches only** (same source pin) | Boost, curl, Draco, Eigen, NLopt, OpenSSL, oneTBB, EXPAT (comment only) | slice D |
-| **Added: source** | Assimp, libdatachannel, FFmpeg (source build), SLVS, CPython 3.12.13 (+ Windows build externals), pybind11 (`deps_src`), wxInspector | slice B |
+| **Added: source** | Assimp, libdatachannel, FFmpeg (source build), SLVS, CPython 3.12.13 (+ Windows build externals), pybind11 (`deps_src`), wxInspector | slice B: reviewed, **not approved** (links in §3) |
 | **Added: binary** | FFmpeg Windows prebuilt zips, CPython Windows `bin-deps`, nuget host Python (build-time), `uv` 0.11.21 (root `CMakeLists.txt`) | slice C |
 | **Removed** | OpenCSG, GLEW, FreeType (`deps/`), legacy Clipper (`deps_src/clipper`) | historical banners here (A6); tables in slice D |
 | **Vendored source changed** | clipper2 1.5.2 → 2.0.1, libigl, libnest2d, imgui, imguizmo, admesh, mcut, miniz, qhull, semver | slice D4 |
@@ -59,23 +59,23 @@ All are in `_dep_list` (`deps/CMakeLists.txt:462-496`). Consumers and link mode 
 
 | Project | Pin as declared | Integrity | Evidence | Slice |
 |---|---|---|---|---|
-| Assimp | `assimp/assimp` tag archive **v5.4.3** (`66dfbaee…`); **v5.3.1** (`a07666be…`) when CMake < 3.22 | SHA-256 | `deps/Assimp/Assimp.cmake:1-7`; included at `deps/CMakeLists.txt:416` | B1 |
-| ↳ Assimp `contrib/zlib` | Built on non-Apple platforms (`ASSIMP_BUILD_ZLIB=ON`, `:14-18`). The use map found the Linux app's zlib resolves to it (1.2.13) | inside the Assimp archive | [use map §3.4](dependency-use-map.md#34-system-libraries-duplicates-and-new-provenance-observations) | B1 |
-| libdatachannel | `paullouisageneau/libdatachannel.git` **tag v0.24.5**, `GIT_SHALLOW`, `GIT_SUBMODULES_RECURSE` (the comment names plog, usrsctp, libjuice) | **none**: Git tag, no commit or hash | `deps/DataChannel/DataChannel.cmake:11-22`; `deps/CMakeLists.txt:418` | B2 |
-| FFmpeg (source) | `FFmpeg/FFmpeg` tag archive **n7.0.3** (`deedcabe…`), non-MSVC | SHA-256 | `deps/FFMPEG/FFMPEG.cmake:70-71`; configure flags `:73-97` (neither `--enable-gpl`, `--enable-version3` nor `--enable-nonfree` appears in the file) | B3 |
+| Assimp | `assimp/assimp` tag archive **v5.4.3** (`66dfbaee…`); **v5.3.1** (`a07666be…`) when CMake < 3.22 | SHA-256 | `deps/Assimp/Assimp.cmake:1-7`; included at `deps/CMakeLists.txt:416` | [B1](assimp-provenance-license-review.md) |
+| ↳ Assimp `contrib/zlib` | Built on non-Apple platforms (`ASSIMP_BUILD_ZLIB=ON`, `:14-18`). The use map found the Linux app's zlib resolves to it (1.2.13) | inside the Assimp archive | [use map §3.4](dependency-use-map.md#34-system-libraries-duplicates-and-new-provenance-observations) | [B1](assimp-provenance-license-review.md) |
+| libdatachannel | `paullouisageneau/libdatachannel.git` **tag v0.24.5**, `GIT_SHALLOW`, `GIT_SUBMODULES_RECURSE` (the comment names plog, usrsctp, libjuice) | **none**: Git tag, no commit or hash | `deps/DataChannel/DataChannel.cmake:11-22`; `deps/CMakeLists.txt:418` | [B2](libdatachannel-provenance-license-review.md) |
+| FFmpeg (source) | `FFmpeg/FFmpeg` tag archive **n7.0.3** (`deedcabe…`), non-MSVC | SHA-256 | `deps/FFMPEG/FFMPEG.cmake:70-71`; configure flags `:73-97` (neither `--enable-gpl`, `--enable-version3` nor `--enable-nonfree` appears in the file) | [B3](ffmpeg-source-build-license-review.md) |
 | FFmpeg (Windows) | Prebuilt **shared** zips from `Noisyfox/FFmpeg-Builds-Orca` release `autobuild-2026-09-18-16-50`, x64 and arm64 | SHA-256 | `deps/FFMPEG/FFMPEG.cmake:14-33` | **C1** |
-| SLVS | `JacobStoren/SolveSpaceLib` **commit archive `4d870452…`** (`1c4bdde9…`); upstream CMakeLists replaced by `deps/SLVS/CMakeLists.txt.in` | SHA-256 | `deps/SLVS/SLVS.cmake:1-9`; only with `SLIC3R_CAD` (`deps/CMakeLists.txt:383-387`). The file's comment says "GPLv3, compatible with this fork's licence" — recorded as the file's claim, not checked | B4 |
-| CPython | `python.org` **Python-3.12.13.tar.xz** (`c08bc65a…`), all platforms | SHA-256 | `deps/python3/python3.cmake:4-8`, `:349-351` | B5 |
+| SLVS | `JacobStoren/SolveSpaceLib` **commit archive `4d870452…`** (`1c4bdde9…`); upstream CMakeLists replaced by `deps/SLVS/CMakeLists.txt.in` | SHA-256 | `deps/SLVS/SLVS.cmake:1-9`; only with `SLIC3R_CAD` (`deps/CMakeLists.txt:383-387`). The file's comment says "GPLv3, compatible with this fork's licence" — recorded as the file's claim, not checked | [B4](slvs-provenance-license-review.md) |
+| CPython | `python.org` **Python-3.12.13.tar.xz** (`c08bc65a…`), all platforms | SHA-256 | `deps/python3/python3.cmake:4-8`, `:349-351` | [B5](cpython-pybind11-provenance-license-review.md) |
 | ↳ CPython Windows `source-deps` | `python/cpython-source-deps` commit archives: bzip2-1.0.8, sqlite-3.49.1.0, xz-5.2.5, zlib-1.3.1 | SHA-256 | `deps/python3/python3.cmake:93-98`, `:113-122` | C3 |
 | ↳ CPython Windows `bin-deps` | `python/cpython-bin-deps` commit archives: **libffi-3.4.4**, **openssl-bin-3.0.16.2** (prebuilt libraries) | SHA-256 | `deps/python3/python3.cmake:99-100` | **C3** |
 | ↳ Windows host Python | nuget.org `pythonx86`/`pythonarm64` **3.13.16** `.nupkg`, build-time only, skipped if `DEP_PYTHON_HOST` is set | SHA-256 | `deps/python3/python3.cmake:11-46` | C3 |
-| wxInspector | `Noisyfox/wxInspector` tag archive **v1.0.0** (`0ba16395…`) | SHA-256 | `deps/wxInspector/wxInspector.cmake:24-33`; `deps/CMakeLists.txt:460` | B6 |
+| wxInspector | `Noisyfox/wxInspector` tag archive **v1.0.0** (`0ba16395…`) | SHA-256 | `deps/wxInspector/wxInspector.cmake:24-33`; `deps/CMakeLists.txt:460` | [B6](wxinspector-provenance-license-review.md) |
 
 ### 3.2 New vendored source (`deps_src/`)
 
 | Component | What the tree holds | Evidence | Slice |
 |---|---|---|---|
-| pybind11 | 54 files: `LICENSE`, `README.rst`, `include/`. Header reports **3.0.1** (`PYBIND11_VERSION_MAJOR/MINOR/MICRO` = 3/0/1, final) | `deps_src/pybind11/include/pybind11/detail/common.h:20-28`; consumed via a minimal `pybind11::embed` target in the root `CMakeLists.txt:1041-1044` | B5 |
+| pybind11 | 54 files: `LICENSE`, `README.rst`, `include/`. Header reports **3.0.1** (`PYBIND11_VERSION_MAJOR/MINOR/MICRO` = 3/0/1, final) | `deps_src/pybind11/include/pybind11/detail/common.h:20-28`; consumed via a minimal `pybind11::embed` target in the root `CMakeLists.txt:1041-1044` | [B5](cpython-pybind11-provenance-license-review.md) |
 
 ### 3.3 Binary pin outside `deps/`
 
