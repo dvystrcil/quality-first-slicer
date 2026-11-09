@@ -1,0 +1,388 @@
+{
+  "schema_version": 1,
+  "upstream": {
+    "repository": "https://github.com/OrcaSlicer/OrcaSlicer",
+    "ref": "v2.5.0",
+    "commit": "40ecc66f78ed72dc368e0c1ebe40d77f00cc8a19",
+    "fork_baseline": {
+      "repository": "https://github.com/dvystrcil/OrcaSlicer",
+      "ref": "baseline-2.5.0",
+      "commit": "665552c1e4b950b32707953cbca67e178e219366",
+      "note": "No differences from v2.5.0 under deps/, deps_src/, cmake/, the root CMakeLists.txt or src/CMakeLists.txt."
+    }
+  },
+  "description": "Source archive URLs and expected SHA-256 values transcribed from the active OrcaSlicer v2.5.0 build files (all platforms). Coverage against the tree is checked by tools/check-archive-manifest-coverage.py. Binary and Git pins are listed in excluded_pins with the slice of issue #55 that reviews them.",
+  "artifacts": [
+    {
+      "id": "assimp",
+      "source_file": "deps/Assimp/Assimp.cmake",
+      "urls": [
+        "https://github.com/assimp/assimp/archive/refs/tags/v5.4.3.tar.gz"
+      ],
+      "sha256": "66dfbaee288f2bc43172440a55d0235dfc7bf885dda6435c038e8000e79582cb",
+      "notes": "New in 2.5.0. Used when CMake >= 3.22. Bundled contrib/zlib is built on non-Apple platforms (ASSIMP_BUILD_ZLIB=ON). Review: issue #55 slice B1."
+    },
+    {
+      "id": "assimp-cmake-lt-3-22",
+      "source_file": "deps/Assimp/Assimp.cmake",
+      "urls": [
+        "https://github.com/assimp/assimp/archive/refs/tags/v5.3.1.tar.gz"
+      ],
+      "sha256": "a07666be71afe1ad4bc008c2336b7c688aca391271188eb9108d0c6db1be53f1",
+      "notes": "New in 2.5.0. Fallback used only when CMake < 3.22. Review: issue #55 slice B1."
+    },
+    {
+      "id": "blosc",
+      "source_file": "deps/Blosc/Blosc.cmake",
+      "urls": [
+        "https://github.com/tamasmeszaros/c-blosc/archive/refs/heads/v1.17.0_tm.zip"
+      ],
+      "sha256": "dcb48bf43a672fa3de6a4b1de2c4c238709dad5893d1e097b8374ad84b1fc3b3",
+      "notes": "Unchanged from v2.4.2. Still a mutable branch archive; resolve and pin the source commit separately."
+    },
+    {
+      "id": "boost",
+      "source_file": "deps/Boost/Boost.cmake",
+      "urls": [
+        "https://github.com/boostorg/boost/releases/download/boost-1.84.0/boost-1.84.0.tar.gz"
+      ],
+      "sha256": "4d27e9efed0f6f152dc28db6430b9d3dfb40c0345da7342eaa5a987dde57bd95",
+      "notes": "Unchanged from v2.4.2. Build flags changed (clang-cl only); source pin identical."
+    },
+    {
+      "id": "cgal",
+      "source_file": "deps/CGAL/CGAL.cmake",
+      "urls": [
+        "https://github.com/CGAL/cgal/releases/download/v6.2.1/CGAL-6.2.1.zip"
+      ],
+      "sha256": "eebd737d9b7f0199647ba5c1f9f6c7a3d0651aacef9c2fd4dedc52da6c25edbe",
+      "notes": "Changed in 2.5.0: 5.6.3 -> 6.2.1. Review: issue #55 slices D1/D3."
+    },
+    {
+      "id": "curl",
+      "source_file": "deps/CURL/CURL.cmake",
+      "urls": [
+        "https://github.com/curl/curl/archive/refs/tags/curl-7_75_0.zip"
+      ],
+      "sha256": "a63ae025bb0a14f119e73250f2c923f4bf89aa93b8d4fafa4a9f5353a96a765a",
+      "notes": "Unchanged from v2.4.2. Build flags changed (clang-cl only); source pin identical."
+    },
+    {
+      "id": "cereal",
+      "source_file": "deps/Cereal/Cereal.cmake",
+      "urls": [
+        "https://github.com/USCiLab/cereal/archive/refs/tags/v1.3.0.zip"
+      ],
+      "sha256": "71642cb54658e98c8f07a0f0d08bf9766f1c3771496936f6014169d3726d9657",
+      "notes": "Unchanged from v2.4.2."
+    },
+    {
+      "id": "draco",
+      "source_file": "deps/Draco/Draco.cmake",
+      "urls": [
+        "https://github.com/google/draco/archive/refs/tags/1.5.7.zip"
+      ],
+      "sha256": "27b72ba2d5ff3d0a9814ad40d4cb88f8dc89a35491c0866d952473f8f9416b77",
+      "notes": "Unchanged from v2.4.2. Build options changed (FORWARD_CONFIG, lld flag); source pin identical."
+    },
+    {
+      "id": "eigen",
+      "source_file": "deps/Eigen/Eigen.cmake",
+      "urls": [
+        "https://gitlab.com/libeigen/eigen/-/archive/5.0.1/eigen-5.0.1.zip"
+      ],
+      "sha256": "0dbb1f9e3aaad66f352c03227d8c983f6f0b49e0b07e71a7300f4abcc01aee12",
+      "notes": "Unchanged from v2.4.2. Build options changed (tests/BLAS/LAPACK off); source pin identical."
+    },
+    {
+      "id": "ffmpeg-source",
+      "source_file": "deps/FFMPEG/FFMPEG.cmake",
+      "urls": [
+        "https://github.com/FFmpeg/FFmpeg/archive/refs/tags/n7.0.3.tar.gz"
+      ],
+      "sha256": "deedcabe339165214a3637df4c86a507aef0d793cf8774ff68735f4737e8ddbc",
+      "notes": "New in 2.5.0. Source build on non-MSVC platforms; MSVC uses the prebuilt zips listed in excluded_pins. Review: issue #55 slice B3."
+    },
+    {
+      "id": "glfw",
+      "source_file": "deps/GLFW/GLFW.cmake",
+      "urls": [
+        "https://github.com/glfw/glfw/archive/refs/tags/3.4.zip"
+      ],
+      "sha256": "a133ddc3d3c66143eba9035621db8e0bcf34dba1ee9514a9e23e96afd39fd57a",
+      "notes": "Unchanged from v2.4.2."
+    },
+    {
+      "id": "gmp-source",
+      "source_file": "deps/GMP/GMP.cmake",
+      "urls": [
+        "https://ftp.gnu.org/gnu/gmp/gmp-6.3.0.tar.xz",
+        "https://github.com/SoftFever/OrcaSlicer_deps/releases/download/gmp-6.3.0/gmp-6.3.0.tar.xz"
+      ],
+      "sha256": "a3c2b80201b89e68616f4ad30bc66aee4927c3ce50e33929ca819d5c43538898",
+      "notes": "Changed in 2.5.0: 6.2.1 (SoftFever release asset only) -> 6.3.0 with the GNU URL first and the SoftFever asset as mirror; both must match the same digest. Non-MSVC source build; does not cover the prebuilt MSVC GMP binaries. Review: issue #55 slice D1."
+    },
+    {
+      "id": "jpeg-turbo",
+      "source_file": "deps/JPEG/JPEG.cmake",
+      "urls": [
+        "https://github.com/libjpeg-turbo/libjpeg-turbo/archive/refs/tags/3.2.0.zip"
+      ],
+      "sha256": "1b4c2cb6cba1ca5e53b9e85eeeab02154cab4b70894c96e97a9c747a26d19d63",
+      "notes": "Changed in 2.5.0: 3.0.1 -> 3.2.0. Review: issue #55 slice D1."
+    },
+    {
+      "id": "mpfr-source",
+      "source_file": "deps/MPFR/MPFR.cmake",
+      "urls": [
+        "https://ftp.gnu.org/gnu/mpfr/mpfr-4.2.2.tar.bz2",
+        "https://www.mpfr.org/mpfr-4.2.2/mpfr-4.2.2.tar.bz2"
+      ],
+      "sha256": "9ad62c7dc910303cd384ff8f1f4767a655124980bb6d8650fe62c815a231bb7b",
+      "notes": "Unchanged from v2.4.2. Does not cover the separate prebuilt MSVC MPFR binaries."
+    },
+    {
+      "id": "nlopt",
+      "source_file": "deps/NLopt/NLopt.cmake",
+      "urls": [
+        "https://github.com/stevengj/nlopt/archive/v2.5.0.tar.gz"
+      ],
+      "sha256": "c6dd7a5701fff8ad5ebb45a3dc8e757e61d52658de3918e38bab233e7fd3b4ae",
+      "notes": "Unchanged from v2.4.2. Build options changed (lld flag); source pin identical."
+    },
+    {
+      "id": "nanosvg",
+      "source_file": "deps/NanoSVG/NanoSVG.cmake",
+      "urls": [
+        "https://github.com/SoftFever/Orca-deps-nanosvg/archive/863f6aa97ef62028126fa2c19bd4350394c2e15e.zip"
+      ],
+      "sha256": "1e3f94a052dd2abb139993ed3496c90ed4458d6f907027bf03cbaed889fe2567",
+      "notes": "Unchanged from v2.4.2. Upstream still declares the former URL https://github.com/SoftFever/nanosvg/archive/863f6aa97ef62028126fa2c19bd4350394c2e15e.zip with SHA-256 declared_sha256; GitHub redirects it to the renamed repository and serves different archive bytes. The URL and sha256 here are the canonical pair verified file-by-file against the same commit for v2.4.2 (docs/archive-verification.md). deps/NanoSVG/NanoSVG.cmake is not included by deps/CMakeLists.txt in v2.4.2 or 2.5.0, so this pin is not built; the application uses deps_src/nanosvg.",
+      "declared_sha256": "8d9c1624ad6518dd6dfa31e4f8dc7da9ec243d88bae595c7a037450617fec851"
+    },
+    {
+      "id": "occt",
+      "source_file": "deps/OCCT/OCCT.cmake",
+      "urls": [
+        "https://github.com/Open-Cascade-SAS/OCCT/archive/refs/tags/V8_0_1.zip"
+      ],
+      "sha256": "7c033d917ee8f040c0512d289dcc5f02c148889d5bac17c3e25639accb44f0da",
+      "notes": "Changed in 2.5.0: V7_6_0 -> V8_0_1; patch 0001-OCCT-fix.patch replaced by 0001-BRepMesh-seam-pcurve-at-edge-parameter.patch. Review: issue #55 slices D1/D3."
+    },
+    {
+      "id": "opencv",
+      "source_file": "deps/OpenCV/OpenCV.cmake",
+      "urls": [
+        "https://github.com/opencv/opencv/archive/refs/tags/4.14.0.tar.gz"
+      ],
+      "sha256": "ee8fb9b30eb60850431b4656447080e3737b56e45719c92b67f245950609f86e",
+      "notes": "Changed in 2.5.0: 4.6.0 -> 4.14.0; both local patches removed; bundled JPEG/PNG off. Review: issue #55 slice D1."
+    },
+    {
+      "id": "openexr",
+      "source_file": "deps/OpenEXR/OpenEXR.cmake",
+      "urls": [
+        "https://github.com/AcademySoftwareFoundation/openexr/archive/refs/tags/v2.5.5.zip"
+      ],
+      "sha256": "0307a3d7e1fa1e77e9d84d7e9a8694583fbbbfd50bdc6884e2c96b8ef6b902de",
+      "notes": "Unchanged from v2.4.2. The file also carries a stray GIT_TAG v2.5.5 next to the URL; the GIT_REPOSITORY line is commented out, so the URL is the source."
+    },
+    {
+      "id": "openssl",
+      "source_file": "deps/OpenSSL/OpenSSL.cmake",
+      "urls": [
+        "https://github.com/openssl/openssl/archive/OpenSSL_1_1_1w.tar.gz"
+      ],
+      "sha256": "2130E8C2FB3B79D1086186F78E59E8BC8D1A6AEDF17AB3907F4CB9AE20918C41",
+      "notes": "Unchanged from v2.4.2. Configure flags changed (hidden visibility on Linux, --libdir=lib, MSVC env); source pin identical."
+    },
+    {
+      "id": "openvdb",
+      "source_file": "deps/OpenVDB/OpenVDB.cmake",
+      "urls": [
+        "https://github.com/tamasmeszaros/openvdb/archive/a68fd58d0e2b85f01adeb8b13d7555183ab10aa5.zip"
+      ],
+      "sha256": "f353e7b99bd0cbfc27ac9082de51acf32a8bc0b3e21ff9661ecca6f205ec1d81",
+      "notes": "Unchanged from v2.4.2."
+    },
+    {
+      "id": "png",
+      "source_file": "deps/PNG/PNG.cmake",
+      "urls": [
+        "https://github.com/glennrp/libpng/archive/refs/tags/v1.6.59.zip"
+      ],
+      "sha256": "6fd97a1e5e2ac55cec0a538a9800a351eb3844086736291844ebd12db72ba433",
+      "notes": "Changed in 2.5.0: v1.6.35 -> v1.6.59; the Apple cross-compile Git checkout and all three PNG patches were removed, so every platform uses this archive. Review: issue #55 slice D1."
+    },
+    {
+      "id": "python3-source",
+      "source_file": "deps/python3/python3.cmake",
+      "urls": [
+        "https://www.python.org/ftp/python/3.12.13/Python-3.12.13.tar.xz"
+      ],
+      "sha256": "c08bc65a81971c1dd5783182826503369466c7e67374d1646519adf05207b684",
+      "notes": "New in 2.5.0: CPython 3.12.13, all platforms. Review: issue #55 slice B5."
+    },
+    {
+      "id": "python3-win-bzip2",
+      "source_file": "deps/python3/python3.cmake",
+      "urls": [
+        "https://github.com/python/cpython-source-deps/archive/05301997b2f9590f49c672cf3dfd3d3dfa7ad521.zip"
+      ],
+      "sha256": "44b15bede52b32f8673a2976621a847258b041243c003e30f4d9a05214785fe5",
+      "notes": "New in 2.5.0. Windows CPython build external (source-deps bzip2-1.0.8). Review: issue #55 slice C3."
+    },
+    {
+      "id": "python3-win-sqlite",
+      "source_file": "deps/python3/python3.cmake",
+      "urls": [
+        "https://github.com/python/cpython-source-deps/archive/cb7a3997059739fe9c63b2819aeda7c6907510ef.zip"
+      ],
+      "sha256": "586fe469463f5b27b749f9eef1938baa8e8a12030341e96160a371356c2d6759",
+      "notes": "New in 2.5.0. Windows CPython build external (source-deps sqlite-3.49.1.0). Review: issue #55 slice C3."
+    },
+    {
+      "id": "python3-win-xz",
+      "source_file": "deps/python3/python3.cmake",
+      "urls": [
+        "https://github.com/python/cpython-source-deps/archive/c6bc0c612605622aaef101a33a751f9de2ecc193.zip"
+      ],
+      "sha256": "d99882a8f9fd48be0e605e27e3c077e5eaab370f6f52ebcc8ff754480ffdf0bc",
+      "notes": "New in 2.5.0. Windows CPython build external (source-deps xz-5.2.5). Review: issue #55 slice C3."
+    },
+    {
+      "id": "python3-win-zlib",
+      "source_file": "deps/python3/python3.cmake",
+      "urls": [
+        "https://github.com/python/cpython-source-deps/archive/4dc98e1909830e2bdc2a9cc2236e3c5d5037335b.zip"
+      ],
+      "sha256": "39d867c083ebc37c77cf03a442f87c0f83db006eb64343bd4a19f1c84c26f50c",
+      "notes": "New in 2.5.0. Windows CPython build external (source-deps zlib-1.3.1). Review: issue #55 slice C3."
+    },
+    {
+      "id": "qhull",
+      "source_file": "deps/Qhull/Qhull.cmake",
+      "urls": [
+        "https://github.com/qhull/qhull/archive/v8.0.2.zip"
+      ],
+      "sha256": "a378e9a39e718e289102c20d45632f873bfdc58a7a5f924246ea4b176e185f1e",
+      "notes": "Unchanged from v2.4.2. Not built on MSVC (dep_qhull commented out there)."
+    },
+    {
+      "id": "slvs",
+      "source_file": "deps/SLVS/SLVS.cmake",
+      "urls": [
+        "https://github.com/JacobStoren/SolveSpaceLib/archive/4d8704523e4bf212fadf5189f92484244f670fea.zip"
+      ],
+      "sha256": "1c4bdde9c3c6ef20ea4b50b73601de56769f2eb131b36927d7c6489f102e6c30",
+      "notes": "New in 2.5.0. Commit archive; built only with SLIC3R_CAD=ON (default). Upstream CMakeLists replaced by deps/SLVS/CMakeLists.txt.in. Review: issue #55 slice B4."
+    },
+    {
+      "id": "tbb",
+      "source_file": "deps/TBB/TBB.cmake",
+      "urls": [
+        "https://github.com/oneapi-src/oneTBB/archive/refs/tags/v2021.5.0.zip"
+      ],
+      "sha256": "83ea786c964a384dd72534f9854b419716f412f9d43c0be88d41874763e7bb47",
+      "notes": "Unchanged from v2.4.2. Build options changed (hwloc search and IPO off; MSVC compiler file copied in); source pin identical."
+    },
+    {
+      "id": "wxinspector",
+      "source_file": "deps/wxInspector/wxInspector.cmake",
+      "urls": [
+        "https://github.com/Noisyfox/wxInspector/archive/refs/tags/v1.0.0.zip"
+      ],
+      "sha256": "0ba163956f2d468b19a91b96c5aba66ee9610843ea41dda628ea44cdafde7db7",
+      "notes": "New in 2.5.0. Tag archive from the Noisyfox GitHub user account (not an organisation). Review: issue #55 slice B6."
+    },
+    {
+      "id": "zlib",
+      "source_file": "deps/ZLIB/ZLIB.cmake",
+      "urls": [
+        "https://github.com/madler/zlib/archive/refs/tags/v1.2.13.zip"
+      ],
+      "sha256": "c2856951bbf30e30861ace3765595d86ba13f2cf01279d901f6c62258c57f4ff",
+      "notes": "Unchanged from v2.4.2. Built only when no system zlib is found."
+    },
+    {
+      "id": "libnoise",
+      "source_file": "deps/libnoise/libnoise.cmake",
+      "urls": [
+        "https://github.com/SoftFever/Orca-deps-libnoise/archive/refs/tags/1.0.zip"
+      ],
+      "sha256": "96ffd6cc47898dd8147aab53d7d1b1911b507d9dbaecd5613ca2649468afd8b6",
+      "notes": "Unchanged from v2.4.2."
+    }
+  ],
+  "excluded_pins": [
+    {
+      "id": "wxwidgets",
+      "source_file": "deps/wxWidgets/wxWidgets.cmake",
+      "git_repository": "https://github.com/OrcaSlicer/Orca-deps-wxWidgets",
+      "reason": "Git clone, not an archive. 2.5.0 moved from SoftFever/Orca-deps-wxWidgets tag v3.3.2 to OrcaSlicer/Orca-deps-wxWidgets at commit b44c39c100975a0ac0e46f937aa3f3eae5e18631 (GIT_SHALLOW ON) with submodules 3rdparty/catch, 3rdparty/pcre and 3rdparty/libwebp. Review: issue #55 slice D2."
+    },
+    {
+      "id": "datachannel",
+      "source_file": "deps/DataChannel/DataChannel.cmake",
+      "git_repository": "https://github.com/paullouisageneau/libdatachannel.git",
+      "reason": "Git clone of tag v0.24.5 (GIT_SHALLOW ON, GIT_SUBMODULES_RECURSE ON: plog, usrsctp, libjuice); no commit or archive hash declared. Flatpak builds use a pre-cloned SOURCE_DIR instead. Needs tag-to-commit resolution and per-submodule revisions. Review: issue #55 slice B2."
+    },
+    {
+      "id": "ffmpeg-windows-prebuilt",
+      "source_file": "deps/FFMPEG/FFMPEG.cmake",
+      "sha256": [
+        "da480cbb39680056de824c57ec4dc3bd577b479ebbc310ff1f9dc55cf014b4c1",
+        "85da19daf198f5548259d8aabb349db84997a3f6e6886d8d7764114add9c6dae"
+      ],
+      "reason": "MSVC only: prebuilt shared FFmpeg zips (winarm64, win64) from release autobuild-2026-09-18-16-50 of Noisyfox/FFmpeg-Builds-Orca; DLLs are copied into the prefix. Binary, not source. Review: issue #55 slice C1."
+    },
+    {
+      "id": "python3-windows-bin-deps",
+      "source_file": "deps/python3/python3.cmake",
+      "sha256": [
+        "6b0f53490e0dd958708bff32df689cf2163c214147fcb8edb76a403fa6a877ca",
+        "b741fd1411a36cb899fee2c39b70a4492f4bc1c6e2301d67df32e9754118a63b"
+      ],
+      "reason": "MSVC only: python/cpython-bin-deps archives libffi-3.4.4 (commit 94cb9a1c) and openssl-bin-3.0.16.2 (commit 1174fd43) contain prebuilt libraries linked into the bundled CPython. Binary inputs. Review: issue #55 slice C3."
+    },
+    {
+      "id": "python3-windows-host",
+      "source_file": "deps/python3/python3.cmake",
+      "sha256": [
+        "bfd77aa5b0edff4a7936a3220e8b79e7c78f864ce13e8fa2c835d9946e11694a",
+        "c65cf47664b33286dfc5f2a17303668dd59e057869815ed9b270fb3866c1dd15"
+      ],
+      "reason": "Windows only, build-time only: nuget.org pythonarm64/pythonx86 3.13.16 packages that run CPython's PCbuild scripts, skipped when DEP_PYTHON_HOST is set. Binary tool, not shipped according to the build file. Review: issue #55 slice C3."
+    },
+    {
+      "id": "uv",
+      "source_file": "CMakeLists.txt",
+      "sha256": [
+        "1f921d491ba5ffeea774eb04d6681ecee379101341cbb1500394993b541bf3f4",
+        "f3c8e5708a84b920c18b691214d54d2b0da6b984789caae95d47c95120cb7765",
+        "88e800834007cc5efd4675f166eb2a51e7e3ad19876d85fa8805a6fb5c922397",
+        "8c88519b0ef0af9801fcdee419bbb12116bd9e6b18e162ae093c932d8b264050",
+        "74e443f8004022dde57a1bd0d10c097830f9ea8feb4ec927db52cd5d805c2f48",
+        "ace861f360c6de2babedc1607d0f454b6b09a820dbc8182dc15af927e4df9589"
+      ],
+      "reason": "Prebuilt astral-sh/uv 0.11.21 release archives for six target triples, downloaded at configure time and installed into the application. Binary that ships. The Flatpak manifest pins the same version separately (not scanned). Review: issue #55 slice C2."
+    },
+    {
+      "id": "windows-gmp-mpfr-webview2",
+      "source_file": "deps/GMP/GMP.cmake, deps/MPFR/MPFR.cmake and Windows packaging CMake",
+      "reason": "Prebuilt architecture-specific binaries are copied into packages; not covered by source archive URLs. Unchanged in kind from v2.4.2. Review: issue #55 slice C4."
+    },
+    {
+      "id": "mcut-tests-libigl",
+      "source_file": "deps_src/mcut/CMakeLists.txt",
+      "git_repository": "https://github.com/libigl/libigl.git",
+      "reason": "FetchContent of libigl v2.3.0 inside if(MCUT_BUILD_TESTS OR MCUT_BUILD_TUTORIALS). Those options default ON only when MCUT is the top-level project; OrcaSlicer adds it with add_subdirectory (deps_src/CMakeLists.txt:27), so this does not run in the OrcaSlicer build. Recorded so the coverage check accounts for it. Present in v2.4.2 too."
+    },
+    {
+      "id": "mcut-tests-eigen",
+      "source_file": "deps_src/mcut/CMakeLists.txt",
+      "git_repository": "https://gitlab.com/libeigen/eigen.git",
+      "reason": "FetchContent of Eigen in the same MCUT tests/tutorials block as mcut-tests-libigl; not run in the OrcaSlicer build. Present in v2.4.2 too."
+    }
+  ]
+}
