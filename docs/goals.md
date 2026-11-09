@@ -43,7 +43,7 @@ These are candidates, written to be measurable. Each needs a yes, an edit, or a 
 |---|---|---|
 | M1 | Reproducible baseline build of the fork on CI (`baseline-2.5.0`) | **Done** on Linux x86_64 (fork workflow `linux-arc-baseline.yml`, [dvystrcil/OrcaSlicer#3](https://github.com/dvystrcil/OrcaSlicer/pull/3)). Was done first on `baseline-2.4.2`, which stays as the audit reference |
 | M2 | G-code regression corpus + harness (G2), with recorded baselines from stock 2.4.2 and PrusaSlicer | Not started |
-| M3 | Remove the four no-consumer components (R1–R4 in the [use map](dependency-use-map.md)) | Not started |
+| M3 | Remove the no-consumer components (R2–R4 in the [use map](dependency-use-map.md); R1 was removed upstream in 2.5.0) | Not started |
 | M4 | First evidence-backed default: arc fitting off for Klipper/Kalico process profiles, with corpus diff + test prints | Not started |
 | M5 | Validation-level labels on the reference printer's profile | Not started |
 

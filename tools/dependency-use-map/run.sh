@@ -36,6 +36,16 @@ docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp \
       -DCMAKE_PREFIX_PATH=$WS/deps/build/OrcaSlicer_dep/usr/local \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
       --graphviz=/out/graph/orca.dot > /out/configure.log
+    # Headers generated at build time, not configure time, must exist before -M.
+    # 2.5.0 adds git_commit_hash.h (included by src/slic3r/GUI/BuildCommit.cpp),
+    # written by a custom target that only runs cmake -P; nothing is compiled.
+    # (Target list goes to a file: grep -q in a pipe SIGPIPEs ninja under pipefail.)
+    ninja -C /out/build -f build-Release.ninja -t targets all > /out/build/targets.txt
+    for t in git_commit_hash_header; do
+      if grep -q \"^\$t: \" /out/build/targets.txt; then
+        cmake --build /out/build --config Release --target \$t >> /out/configure.log
+      fi
+    done
     python3 /out/tools/preprocess-jobs.py /out/build /out/depsnp > /out/preprocess-jobs.sh
     echo \"TUs: \$(wc -l < /out/preprocess-jobs.sh)\"
     tr '\n' '\0' < /out/preprocess-jobs.sh | xargs -0 -P $JOBS -n 1 bash -c

@@ -59,6 +59,9 @@ def component(h):
              'pngconf': 'png', 'pnglibconf': 'png', 'libqhull_r': 'qhull', 'libqhullcpp': 'qhull',
              'gmpxx': 'gmp', 'oneapi': 'tbb'}.get(n, n)
         return 'prefix/' + n
+    # deps/python3 (2.5.0+) installs CPython under <prefix>/libpython, not <prefix>/include.
+    if h.startswith(os.path.normpath(PREFIX + '../libpython') + '/'):
+        return 'prefix/python3'
     if h.startswith('/usr/include/'):
         r = h[len('/usr/include/'):].split('/')
         if r[0] == 'x86_64-linux-gnu':

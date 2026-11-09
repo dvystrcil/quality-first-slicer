@@ -64,6 +64,8 @@ class ComponentTest(unittest.TestCase):
             p + 'jpeglib.h': 'prefix/jpeg',
             p + 'oneapi/tbb.h': 'prefix/tbb',
             '/usr/include/expat.h': 'system/expat',
+            # 2.5.0 bundles CPython outside include/ (deps/python3 installs to libpython/).
+            WS + 'deps/build/OrcaSlicer_dep/usr/local/libpython/include/python3.12/Python.h': 'prefix/python3',
             '/usr/include/x86_64-linux-gnu/sys/types.h': None,
             '/usr/include/stdio.h': None,
             WS + 'src/glad/include/glad/gl.h': 'src/glad',
