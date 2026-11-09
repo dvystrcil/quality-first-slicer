@@ -41,7 +41,7 @@ These are candidates, written to be measurable. Each needs a yes, an edit, or a 
 
 | # | Deliverable | Status |
 |---|---|---|
-| M1 | Reproducible baseline build of the fork on CI (`baseline-2.4.2`) | **Done** on Linux x86_64 (fork workflow `linux-arc-baseline.yml`) |
+| M1 | Reproducible baseline build of the fork on CI (`baseline-2.5.0`) | **Done** on Linux x86_64 (fork workflow `linux-arc-baseline.yml`, [dvystrcil/OrcaSlicer#3](https://github.com/dvystrcil/OrcaSlicer/pull/3)). Was done first on `baseline-2.4.2`, which stays as the audit reference |
 | M2 | G-code regression corpus + harness (G2), with recorded baselines from stock 2.4.2 and PrusaSlicer | Not started |
 | M3 | Remove the four no-consumer components (R1–R4 in the [use map](dependency-use-map.md)) | Not started |
 | M4 | First evidence-backed default: arc fitting off for Klipper/Kalico process profiles, with corpus diff + test prints | Not started |
@@ -49,7 +49,7 @@ These are candidates, written to be measurable. Each needs a yes, an edit, or a 
 
 **Q6:** Is that the right v0.1? In particular, should G3 (user-owned profiles) come into v0.1? It is the most user-visible difference from OrcaSlicer.
 
-**Q7: DECIDED.** The base is OrcaSlicer v2.5.0; see [0002](decisions/0002-base-on-orcaslicer-2.5.0.md). M1 must be redone on 2.5.0. R1 (OpenCSG + GLEW) is already removed upstream in 2.5.0, and six new dependency projects arrive with it.
+**Q7: DECIDED.** The base is OrcaSlicer v2.5.0; see [0002](decisions/0002-base-on-orcaslicer-2.5.0.md). M1 has been redone on 2.5.0. R1 (OpenCSG + GLEW) is already removed upstream in 2.5.0, and six new dependency projects arrive with it.
 
 ## 4. Platform matrix
 
