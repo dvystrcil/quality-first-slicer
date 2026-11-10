@@ -10,6 +10,12 @@
   "separateMajorMinor": true,
   "packageRules": [
     {
+      "description": "D-042 (dvystrcil/homelab architecture/ways-of-working.md): our own actions follow their semver tag (e.g. @v1) so a fix ships by moving the tag, without a digest PR per repo. Third-party actions stay digest-pinned. Must come after helpers:pinGitHubActionDigests, which it overrides.",
+      "matchDepTypes": ["action", "workflow"],
+      "matchPackageNames": ["dvystrcil/**"],
+      "pinDigests": false
+    },
+    {
       "description": "Group routine patch updates for a smaller review queue",
       "matchUpdateTypes": ["patch"],
       "groupName": "patch updates"
