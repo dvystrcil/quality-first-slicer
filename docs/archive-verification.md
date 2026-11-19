@@ -116,6 +116,6 @@ Result: 12/12 archives verified
 - The four Windows `source-deps` archives were re-verified from the source manifest in the same session (`--artifact python3-win-{bzip2,sqlite,xz,zlib}`): **4 of 4 PASS** (report `2026-11-19T20:59:06Z`).
 - Independent anchors, recorded in each review: the FFmpeg release's `checksums.sha256` and GitHub asset digests ([C1](ffmpeg-windows-prebuilt-review.md)); `uv`'s upstream `.sha256` assets, asset digests and GitHub attestations ([C2](uv-binary-review.md)); the nuget.org catalog SHA-512 and the `cpython-*-deps` tags ([C3](cpython-windows-build-inputs-review.md)).
 - The Windows GMP/MPFR/WebView2 binaries are committed to the OrcaSlicer tree with no hash pin, so they are not in this manifest. Their SHA-256 values are recorded in [`windows-binary-provenance.md`](windows-binary-provenance.md) (C4), and the WebView2 files match the official nuget package.
-- The CI workflow (`audit-tools.yml`) does not yet validate or offer this manifest; that is a follow-up, not done in this change.
+- The CI `test` job JSON-validates this manifest and runs when it changes. The manual `verify-archives` dispatch job still offers only the two source manifests.
 
 A match proves only that the bytes equal the declared hash. It **does not approve any component**.
