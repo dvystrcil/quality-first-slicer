@@ -1,9 +1,60 @@
 # wxWidgets 3.3.2 fork provenance and license review
 
-**Status:** Source lineage substantially resolved; historical build pin, submodule consumption, and release notice packaging remain open  
-**OrcaSlicer baseline:** `v2.4.2`, commit `8500fcdccaa10b5099ac20d252af3a7c560046f1`  
+**Status:** Updated for OrcaSlicer 2.5.0 in §0 (slice D2 of [#55](https://github.com/dvystrcil/quality-first-slicer/issues/55)). 2.5.0 pins a commit and names its three submodules, so the source pin and submodule questions are resolved for 2.5.0. Release notice packaging is still open. Sections 1–6 below are the v2.4.2 review, kept as history. **Not approved** ([AGENTS.md](../AGENTS.md) §6) until the maintainer signs off.  
+**OrcaSlicer baseline:** 2.5.0: fork `baseline-2.5.0` `665552c1` (build files identical to upstream v2.5.0 `40ecc66f`). §1–6: `v2.4.2`, commit `8500fcdccaa10b5099ac20d252af3a7c560046f1`  
 **Build declaration:** `deps/wxWidgets/wxWidgets.cmake`  
 **Method:** GitHub API inspection of the fixed OrcaSlicer CMake declaration, the fork branch/ref, upstream wxWidgets history, selected fork commits, source headers, license files, and the recursive Git tree. No local checkout/build, submodule initialization, archive hash, binary package, or legal review.
+
+## 0. OrcaSlicer 2.5.0 update (slice D2, reviewed 2026-11-19)
+
+**Method:** read `deps/wxWidgets/wxWidgets.cmake` at `665552c1`. Branch, tag, compare, `.gitmodules`, gitlink and file contents came from the GitHub API for `OrcaSlicer/Orca-deps-wxWidgets`, `wxWidgets/wxWidgets` and the three `wxWidgets/*` submodule repositories. Nothing was cloned, built or run.
+
+### 0.1 The 2.5.0 declaration
+
+`deps/wxWidgets/wxWidgets.cmake:32-37`:
+
+| Field | v2.4.2 | 2.5.0 |
+|---|---|---|
+| `GIT_REPOSITORY` | `https://github.com/SoftFever/Orca-deps-wxWidgets` (redirects to the OrcaSlicer org) | `https://github.com/OrcaSlicer/Orca-deps-wxWidgets` |
+| `GIT_TAG` | `v3.3.2` (a **branch** name, §1) | **`b44c39c100975a0ac0e46f937aa3f3eae5e18631`** (a commit) |
+| `GIT_SHALLOW` | `ON` | `ON` |
+| `GIT_SUBMODULES` | not set (all 12 submodules) | `3rdparty/catch 3rdparty/pcre 3rdparty/libwebp` |
+
+2.5.0 fixes the source to one commit, which addresses the main v2.4.2 finding (a mutable branch). There is still no archive hash: integrity rests on Git's commit ID. The historical v2.4.2 build commit is still unknown (§5 item 1). That is a v2.4.2 question and does not affect 2.5.0.
+
+### 0.2 What `b44c39c` is
+
+| Check | Result |
+|---|---|
+| Is `b44c39c` on the fork? | Yes. It is still the tip of branch `v3.3.2` (`branches/v3.3.2` → `b44c39c1…`); compare `b44c39c…v3.3.2` = identical. It is the same commit §1 recorded as the tip on 2026-11-06. Commit date 2026-10-29, "Don't send unsupported Wayland release requests (#8)" |
+| Is it upstream wxWidgets v3.3.2? | **No.** Upstream `wxWidgets/wxWidgets` compare `v3.3.2...b44c39c` = **ahead 4, behind 0**, changing the same four files as in §2 (`build/cmake/wxWidgetsConfig.cmake.in`, `src/gtk/wayland.cpp`, `src/msw/webview_edge.cpp`, `src/osx/cocoa/colour.mm`). So the delta in §2 is exactly what 2.5.0 builds |
+| Fork tags | The fork has tags `orca-3.1.5`, `orca-3.1.5-1` and **`orca-3.3.2`**. `orca-3.3.2` points at `db1005db` (upstream v3.3.2), **not** at `b44c39c`. No tag names the commit 2.5.0 builds |
+
+The license evidence in §3 was read at this same commit, so it applies to 2.5.0 unchanged. The fork's `build/cmake/install.cmake` installs no license file (only its own header comment says "wxWindows licence").
+
+### 0.3 The three submodules
+
+The gitlinks at `b44c39c` are **the same three commits as upstream wxWidgets `v3.3.2`** (contents API on both refs). The fork changes no submodule pin.
+
+| Path | Repository (`.gitmodules`, branch `wx`) | Gitlink at `b44c39c` | Version and upstream lineage | License files at that commit | Compiled by the 2.5.0 build? |
+|---|---|---|---|---|---|
+| `3rdparty/pcre` | `wxWidgets/pcre` | `4f76619e6f20de93f77b5ef6213bf54e0399d166` (2025-12-03, "Update config files") | **PCRE2 10.47** (`configure.ac:11-14`, dated 2025-10-21). `README-WX.md` says it was cloned from `rurban/pcre`, a Git clone of the official PCRE2 repository. The upstream tag `pcre2-10.47` commit `f454e231` is an ancestor (behind 0). 30 paths differ from that tag: autotools files, `README-WX.md`, the added `src/wx/{config.h,pcre2.h}` and `src/pcre2_chartables.c`, the removed `deps/sljit`, and **six `src/pcre2_*.c` sources** (`compile`, `compile_class`, `convert`, `dfa_match`, `script_run`, `study`). The six source diffs were **not reviewed** | `LICENCE.md`: "SPDX-License-Identifier: BSD-3-Clause WITH PCRE2-exception"; library "Copyright (c) 1997-2007 University of Cambridge, Copyright (c) 2007-2024 Philip Hazel"; the JIT compiler is separately 2-clause BSD. Also `COPYING`, `AUTHORS.md` | **Yes.** `-DwxUSE_REGEX=builtin` (`wxWidgets.cmake:55`). `build/cmake/lib/regex.cmake:21-28` builds `wxregex` from `3rdparty/pcre/src/pcre2_*.c` |
+| `3rdparty/libwebp` | `wxWidgets/libwebp` | `e83df81cc965a47c1ca7cc968d1ed99717c55ab7` (2025-12-05, "Increase MSVC version for AVX2") | **libwebp 1.6.0** (`NEWS`). Upstream `webmproject/libwebp` compare `v1.6.0...e83df81` = **ahead 5, behind 0**, changing `cmake/deps.cmake`, `src/dsp/cpu.h` and `wx/src/webp/config.h` (CMake minimum, an option to disable SIMD checks, the MSVC AVX2 version check) | `COPYING`: BSD-style, "Copyright (c) 2010, Google Inc."; `PATENTS`: "Additional IP Rights Grant (Patents)"; `AUTHORS` | **Yes.** `-DwxUSE_LIBWEBP=builtin` (`:64`). `build/cmake/lib/webp.cmake` builds it from `3rdparty/libwebp` with the tools off |
+| `3rdparty/catch` | `wxWidgets/Catch` | `3a4a6a657d295d003e16bcdba45c2832e24b9dec` (2025-01-23) | **Catch2 2.13.10** (`CMakeLists.txt:19`). Upstream `catchorg/Catch2` compare `v2.13.10...3a4a6a6` = ahead 29, behind 0 (not reviewed) | `LICENSE.txt`: Boost Software License 1.0 | **Not by the build files read here.** It is test-only: `wxBUILD_TESTS` defaults to `OFF` (`build/cmake/options.cmake:15`) and `main.cmake:30-32` adds the tests only when it is set. OrcaSlicer does not set it. It is fetched, not compiled |
+
+The other nine submodules (`src/zlib`, `src/png`, `src/expat`, `src/tiff`, `src/jpeg`, `3rdparty/nanosvg`, `src/stc/scintilla`, `src/stc/lexilla`, `3rdparty/lunasvg`) are not initialized in 2.5.0, so their source is not fetched. The matching options take the system or Orca copy or are off: `wxUSE_LIBPNG/ZLIB/LIBJPEG/EXPAT=sys`, `wxUSE_LIBTIFF=OFF`, `wxUSE_NANOSVG=OFF`, `wxUSE_STC=OFF` (`:58-66`). `wxUSE_LUNASVG` defaults to `OFF` (`build/cmake/options.cmake:150`) and OrcaSlicer does not set it.
+
+### 0.4 What this changes and what is still open
+
+| Item from §5 | Status for 2.5.0 |
+|---|---|
+| 1. Historical commit of each release | still unknown for v2.4.2; for 2.5.0 the commit is in the build file |
+| 2. Replace the branch ref with an immutable commit | **done upstream** in 2.5.0 (commit, no archive hash) |
+| 3. Which submodules are initialized and used | **resolved from the build files**: three are fetched, and pcre and libwebp are compiled into wx (§0.3). Not confirmed against a build log |
+| 4. How notices reach the app | **open**, and now includes the PCRE2 (BSD-3-Clause with the PCRE2 exception) and libwebp (BSD + `PATENTS`) notices. Neither wx's install rules nor OrcaSlicer's copy them |
+| 5. Are the four fork changes in the built source? | yes for 2.5.0 (§0.2) |
+
+New: the six PCRE2 source files that differ from the 10.47 tag are not reviewed, and neither is the Catch2 delta (which is not compiled).
 
 ## 1. What OrcaSlicer asks the build to fetch
 
