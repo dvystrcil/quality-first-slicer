@@ -18,7 +18,7 @@
 | **Added: source** | Assimp, libdatachannel, FFmpeg (source build), SLVS, CPython 3.12.13 (+ Windows build externals), pybind11 (`deps_src`), wxInspector | slice B: reviewed, **not approved** (links in §3) |
 | **Added: binary** | FFmpeg Windows prebuilt zips, CPython Windows `bin-deps`, nuget host Python (build-time), `uv` 0.11.21 (root `CMakeLists.txt`) | slice C: reviewed, **not approved** ([C1](ffmpeg-windows-prebuilt-review.md), [C2](uv-binary-review.md), [C3](cpython-windows-build-inputs-review.md)); hashes in [`audit/orcaslicer-v2.5.0-binary-artifacts.json`](../audit/orcaslicer-v2.5.0-binary-artifacts.json) |
 | **Removed** | OpenCSG, GLEW, FreeType (`deps/`), legacy Clipper (`deps_src/clipper`) | historical banners here (A6); removed sections in the [provenance audit §2.3](dependency-provenance-audit.md#23-removed-in-250) and [platform matrix §2.2](platform-dependency-matrix.md#22-removed-in-250) (D1) |
-| **Vendored source changed** | clipper2 1.5.2 → 2.0.1, libigl, libnest2d, imgui, imguizmo, admesh, mcut, miniz, qhull, semver | slice D4 |
+| **Vendored source changed** | clipper2 1.5.2 → 2.0.1, libigl, libnest2d, imgui, imguizmo, admesh, mcut, miniz, qhull, semver | slice D4: [vendored inventory §0](vendored-source-and-patch-inventory.md), **not approved** |
 | **Unchanged pins** | Blosc, Cereal, GLFW, MPFR, NanoSVG (not built), OpenEXR, OpenVDB, Qhull, zlib, libnoise | none; still covered by the existing reviews |
 
 ## 2. Changed dependency declarations (`deps/`)
@@ -91,7 +91,7 @@ Removed components are not deleted from this repository's history. Their reviews
 | Component | v2.4.2 evidence | Existing review | Action |
 |---|---|---|---|
 | OpenCSG 1.4.2 | `deps/OpenCSG/OpenCSG.cmake:5-7`, included at 2.4.2 `deps/CMakeLists.txt:344` | none dedicated; rows in the [provenance audit](dependency-provenance-audit.md), [platform matrix](platform-dependency-matrix.md) | D1: moved to a "removed in 2.5.0" section in both |
-| GLEW (vendored under `deps/GLEW/glew`) | included at 2.4.2 `deps/CMakeLists.txt:341` | none dedicated; rows in the matrix and [vendored inventory](vendored-source-and-patch-inventory.md) | D1: moved to a "removed in 2.5.0" section in the audit and matrix; vendored inventory is D4 |
+| GLEW (vendored under `deps/GLEW/glew`) | included at 2.4.2 `deps/CMakeLists.txt:341` | none dedicated; rows in the matrix and [vendored inventory](vendored-source-and-patch-inventory.md) | D1: moved to a "removed in 2.5.0" section in the audit and matrix; vendored inventory: D4 ([§0.4](vendored-source-and-patch-inventory.md)) |
 | FreeType 2.12.1 | `deps/FREETYPE/FREETYPE.cmake:14-15`, included at 2.4.2 `deps/CMakeLists.txt:397` | rows in the audit, matrix and [Windows binary inventory](windows-binary-provenance.md) (FreeType DLL copy) | D1: moved to a "removed in 2.5.0" section in the audit and matrix; C4 done |
 | Legacy Clipper 6.x (`deps_src/clipper`) | 2.4.2 `deps_src/CMakeLists.txt:18` | [clipper-legacy-license-use-review.md](clipper-legacy-license-use-review.md) | **historical banner added in this change** |
 

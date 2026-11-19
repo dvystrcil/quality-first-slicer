@@ -1,11 +1,112 @@
-# Vendored source and local patch inventory — OrcaSlicer v2.4.2
+# Vendored source and local patch inventory — OrcaSlicer v2.4.2 and 2.5.0
 
-> **Pinned to v2.4.2.** The 2.5.0 baseline changes this picture; what changed is listed in the [2.4.2 → 2.5.0 dependency delta](dependency-delta-2.4.2-to-2.5.0.md). This document is updated for 2.5.0 in slice D4 of [#55](https://github.com/dvystrcil/quality-first-slicer/issues/55); until then, read it as the v2.4.2 record.
+**Status:** Updated for OrcaSlicer 2.5.0 in §0 (slice D4 of [#55](https://github.com/dvystrcil/quality-first-slicer/issues/55)). §0 records every `deps_src/` change and every patch or replacement-file change between v2.4.2 and 2.5.0, and compares each changed vendored file with its upstream. Sections 1–6 below are the v2.4.2 inventory, kept as history; where §0 corrects them, it says so. Origin, nested-license and patch-applicability review is still incomplete for the components 2.5.0 did not touch. **Nothing here is approved** ([AGENTS.md](../AGENTS.md) §6) until the maintainer signs off.  
+**OrcaSlicer baseline:** 2.5.0: fork `baseline-2.5.0` `665552c1e4b950b32707953cbca67e178e219366` (no differences from upstream v2.5.0 `40ecc66f` under `deps/` or `deps_src/`; see the [delta](dependency-delta-2.4.2-to-2.5.0.md)). §1–6: `v2.4.2`, `8500fcdccaa10b5099ac20d252af3a7c560046f1`  
+**Scope:** `deps_src/` tree, its top-level CMake inclusion list, and patch, diff and replacement files under `deps/`  
+**Method:** §0: `git diff 8500fcdc 665552c1 -- deps_src deps` and `git show` in a local OrcaSlicer clone; upstream tags shallow-cloned or read through the GitHub API into scratch directories and compared file by file (Git blob IDs or `diff`). Nothing was built or run. §1–6: GitHub tree and file inspection at the fixed v2.4.2 tag; no local checkout, source build, complete file-by-file review, or SBOM generation.
 
-**Status:** First-pass remote tree inventory; incomplete origin, revision, nested-license, and patch applicability review  
-**Reviewed upstream revision:** `8500fcdccaa10b5099ac20d252af3a7c560046f1` (`v2.4.2`)  
-**Scope:** `deps_src/` tree, its top-level CMake inclusion list, and patch/diff-like files under `deps/`  
-**Method:** GitHub tree and file inspection at the fixed upstream tag. No local checkout, source build, complete file-by-file review, or SBOM generation was performed.
+## 0. OrcaSlicer 2.5.0 update (slice D4, reviewed 2026-11-19)
+
+### 0.1 Summary
+
+- `deps_src/CMakeLists.txt` now adds **26** subdirectories (was 27): `add_subdirectory(clipper)` is gone (`deps_src/CMakeLists.txt`, 2.4.2 line 18). `deps_src/pybind11` is new but is not added there; the root `CMakeLists.txt:1041-1044` builds a `pybind11::embed` interface target from its headers. `deps_src/` therefore holds 27 directories, `hints` included.
+- **clipper2 1.5.2 → 2.0.1.** The vendored tree is upstream `Clipper2_2.0.1` plus Orca changes. Three of them are **new in 2.5.0 and change behaviour**: engine nodes are allocated through oneTBB's `scalable_malloc`, round offsets use a different step count, and concave corners are joined differently. Two files are BETA upstream, and Clipper2 now links `TBB::tbbmalloc`. See §0.2.
+- **libigl:** a whole-tree comparison shows the v2.4.2 copy was **byte-identical to libigl v2.6.0** (`40e7900c`, all 1,241 files). That corrects the "exact upstream revision is unpinned" note in §2 and in the [MCUT/libigl review](mcut-libigl-license-review.md). In 2.5.0, 15 `igl/copyleft/cgal/` files differ from v2.6.0, and every changed line is the CGAL 6 rename `AABB_traits` → `AABB_traits_3` and `AABB_triangle_primitive` → `AABB_triangle_primitive_3`. Upstream libigl `main` has not made that change.
+- **mcut:** the one 2.5.0 change in `tpool.h` is the same as upstream commit `89326e29` ("fix hang in wait_for_data", 2024-11-01), which is on `master` but in no MCUT tag. A whole-tree comparison against v1.2.0 also found **two local deltas the [source-closure review](mcut-libigl-transitive-closure-review.md) did not list**: an added `#include <chrono>` in `frontend.h` and `#include <cstdint>` in `hmesh.h`. Both were already there in v2.4.2.
+- **admesh, imgui, imguizmo, libnest2d, semver:** each 2.5.0 change is an Orca change. None of them is in the upstream version the tree is based on or on the upstream default branch. No license or notice text changed in any of them.
+- **miniz, qhull:** only the Orca-written `CMakeLists.txt` changed (compiler flags and link targets). No upstream source changed.
+- **pybind11 3.0.1 added:** all 54 files are byte-identical to `pybind/pybind11` `v3.0.1` (`f5fbe867`). This was re-checked here and agrees with [B5](cpython-pybind11-provenance-license-review.md).
+- **Legacy Clipper removed** (`deps_src/clipper`, 5 files). Its review is [historical](clipper-legacy-license-use-review.md).
+- **Patch files:** 14 → 9 patch or diff files. The OCCT patch was replaced, the OpenCV patches (2) and PNG patches (3) were deleted, and the GMP patch was edited. One replacement file was added (`deps/TBB/MSVC.cmake`), one was added with SLVS (`deps/SLVS/CMakeLists.txt.in`), and one was removed with OpenCSG (`deps/OpenCSG/CMakeLists.txt.in`). **`deps/Boost/0001-Boost-fix.patch` and `deps/TBB/0001-TBB-GCC13.patch` are not referenced by any build file in v2.4.2 or 2.5.0**, so they are not applied. See §0.4.
+- No license or notice file under `deps_src/` was changed or removed (legacy Clipper had none). The only one added is `deps_src/pybind11/LICENSE` (`git diff --name-status` filtered for license, copying, notice and readme names).
+
+### 0.2 clipper2 1.5.2 → 2.0.1
+
+**Upstream compared:** `AngusJohnson/Clipper2` tag `Clipper2_2.0.1` → commit `21ebba05db8894f0c7217ad35ea518080f324946` (released 2025-12-19), directory `CPP/Clipper2Lib`. For the v2.4.2 copy: tag `Clipper2_1.5.2` → `6901921c4be75126d1de60bfd24bd86a61319fd0`.
+**Orca commit:** `222c6a2df5` "Improve performance by migrating to Clipper2 2.0.1 (#15969)". `clipper.version.h` and the `project()` line in `deps_src/clipper2/CMakeLists.txt` both say 2.0.1.
+
+| File (under `Clipper2Lib/`) | Compared with `Clipper2_2.0.1` |
+|---|---|
+| `include/clipper2/clipper.export.h`, `clipper.version.h` | Byte-identical |
+| `include/clipper2/clipper.core.h`, `clipper.h`, `clipper.minkowski.h`, `clipper.offset.h`, `clipper.rectclip.h`, `clipper.triangulation.h`; `src/clipper.rectclip.cpp`, `clipper.triangulation.cpp` | Namespace switch only: `#ifdef USINGZ namespace Clipper2Lib_Z { #else namespace Clipper2Lib { #endif`. The same switch was in the v2.4.2 copy |
+| `include/clipper2/clipper.engine.h` | Namespace switch; `Clipper2LibArea<T>()` helper used by `PolyPath64::Area()`/`PolyPathD::Area()` (also in v2.4.2); **new in 2.5.0:** a `CLIPPER2_NODE_ALLOCATOR` macro ("Orca: engine nodes are allocated through tbbmalloc") declared in `Vertex`, `OutPt`, `OutRec`, `Active`, `LocalMinima`, `PolyPath` |
+| `src/clipper.engine.cpp` | Namespace switch; **new in 2.5.0:** `#include <oneapi/tbb/scalable_allocator.h>` and class `operator new`/`delete` for those six types using `scalable_malloc`/`scalable_free` ("Orca: tbbmalloc scales far better than the default heap when all slicing threads clip at once") |
+| `src/clipper.offset.cpp` | Namespace switch; **new in 2.5.0, changes output:** (1) round-join step count uses `std::max(round(...), 1)` where upstream uses `ceil(...)` ("Orca: round the step count like Clipper1 did"); (2) a new `OffsetConcaveCrossing()` joins a concave corner at the crossing of the two edge offsets when it is safe, used by `OffsetPolygon()` unless a delta callback is set ("Orca: … 3-point loops make dense inward offsets slow"). Neither is on upstream `main` at `4be46556` (2026-11-19) |
+| `include/clipper2/clipper2_z.hpp`, `src/clipper2_z.cpp` | Not upstream. The Orca/Prusa "hackish wrapper" that compiles the library a second time with `USINGZ`. 2.5.0 adds `#include "clipper.triangulation.cpp"` to `clipper2_z.cpp` |
+
+Other facts from the files:
+
+- `deps_src/clipper2/CMakeLists.txt` compiles the new `clipper.triangulation.{h,cpp}`. Its header says `Release : BETA RELEASE`. No `Triangulate(` call was found under `src/` at `665552c1`, so it is compiled but not called by the app (a `git grep`, not a link-map check).
+- Clipper2 now has `target_link_libraries(Clipper2 PRIVATE TBB::tbbmalloc)`. oneTBB's `tbbmalloc` is now in the Clipper2 link closure. oneTBB is already reviewed as a `deps/` dependency.
+- Every upstream file keeps its `License : https://www.boost.org/LICENSE_1_0.txt` header line. The two wrapper files and `clipper.version.h` have none. As in v2.4.2, upstream's `LICENSE` file (Boost Software License 1.0) is not in the vendored subset.
+- The v2.4.2 copy was not a byte-identical 1.5.2 either. Besides the namespace switch, `Clipper2LibArea` and the wrapper files, 1.5.2 had trailing-whitespace differences in several files (`clipper.export.h` among them). §2 called it "matching upstream release commit `6901921c`", which is true of the version but not of every byte.
+
+### 0.3 Other vendored components changed in 2.5.0
+
+| Component | Upstream compared (tag → commit) | 2.5.0 change (Orca commit) | Same change upstream? |
+|---|---|---|---|
+| **libigl** | `libigl/libigl` `v2.6.0` → `40e7900ccbd767f1f360e0eb10f0f1a6432e0993`, the version `deps_src/libigl/README-OrcaSlicer.md` names. Whole tree: v2.4.2 1,241/1,241 files identical; 2.5.0 1,226 identical, 15 differ | 15 files in `igl/copyleft/cgal/`, 65 lines. After undoing the rename `AABB_traits_3`→`AABB_traits` and `AABB_triangle_primitive_3`→`AABB_triangle_primitive`, the removed and added lines are identical (checked by sorting both sets). This is the CGAL 6 API (`e729dbf142` "Upgrade CGAL from 5.6.3 to 6.2.1 (#16258)") | No. `main` at `b41f1944` has no `AABB_traits_3` in `closest_facet.h` |
+| **libnest2d** | Not resolved (§2 left this open). Checked against `tamasmeszaros/libnest2d` `master` `663daa69`, PrusaSlicer `master` `e6c85c50` (`bundled_deps/libnest2d`) and BambuStudio `master` `8e524a39` (`src/libnest2d`) | `nester.hpp`: six new `Item` fields for z-range and bed-exclusion volumes. `nfpplacer.hpp`: optional `should_check_collision` callback that limits which packed items constrain the NFP; an `on_bin` clamp keeping a pile on the bed when it is aligned off-centre (belt printers); fixed items always go to `excludes`, and the inner-fit NFP is skipped when there are none ("can exceed clipper's range and crash MSVC"). `geometries.hpp`: `Slic3r::ClipperLib::jtSquare` → `Slic3r::jtSquare` (Clipper2 migration). Commits `785aa2637b`, `bfbf5ad1c2`, `61a0db4a87`, `a0a4a33c72`, `222c6a2df5` and merges | No. `should_check_collision` and `on_bin` are absent from all three |
+| **imgui** | `ocornut/imgui` `v1.83` → `ad5d1a8429ea219d3d34e6a36a48918650402697` (`IMGUI_VERSION "1.83"`). Whole tree: 7 of 12 shared files already differed in v2.4.2; 8 in 2.5.0 | `imgui_draw.cpp`: adds U+2103 (℃) to the default glyph ranges (`117ed0060d`, #15202). `imstb_textedit.h` (was identical to v1.83): multi-line click and drag clamp `y` to the text's vertical bounds, two new blocks of 51 and 44 lines (`66d3f3f9c3`, #15052) | No. Not in imgui `master` `77fe4588` `imstb_textedit.h`, nor in BambuStudio `master`. Not checked against `nothings/stb` |
+| **imguizmo** | `CedricGuillemet/ImGuizmo` `1.83` → `664cf2d73864a36b2a8b5091d33fc4578c885eca` (the README's "latest stable tagged version"). `ImGuizmo.cpp` already differed by 912 lines in v2.4.2, so the vendored base is not the 1.83 tag itself; the exact base is still unresolved | `ImGuizmo.cpp`: the view navigator holds mouse capture for the whole drag (`SetNextFrameWantCaptureMouse(true)`, or `CaptureMouseFromApp()` before imgui 1.87), 13 lines (`63085be729`, #17284) | No. Absent from `master` `105e4fde` (`src/ImGuizmo.cpp`) |
+| **admesh** | Orca's admesh is the PrusaSlicer C++ derivative, not `admesh/admesh`. Checked against PrusaSlicer `master` `e6c85c50` (`bundled_deps/admesh/admesh/stlinit.cpp`) and BambuStudio `master` `8e524a39` (`src/admesh/stlinit.cpp`) | `stlinit.cpp`: (1) a file classed as ASCII is re-classed as binary when its size equals the header facet count × 50 + header (`4b4a261787`, #16130); (2) `fscanf`/`sscanf` get field widths (`%255[^\n]`, `%15s %127s %15s`) against stack overflows (`d112a0af29`, #15594). The GPL-2.0-or-later notice block is unchanged | (1) not in either. (2) BambuStudio has a similar `%255[^\n]` fix on a differently named buffer (`solid_content`, line 182), not the same text; the `sscanf` widths are in neither |
+| **mcut** | `cutdigital/mcut` `v1.2.0` → `953375ca9cbfec5f5c697d00265e06b114154b19`. Whole tree: v2.4.2 24 of 29 files identical, 2.5.0 23 | `include/mcut/internal/tpool.h`: `push()` calls `disrupt_wait_for_data()` (which takes `head_mutex` before `notify_one()`) where it called `data_cond.notify_one()` directly (`1466c0e57f`, #16330 "Fix rare hang") | **Yes:** identical to upstream `89326e290ebdfefb4db281cf93e98bc77867d03d` (Dmitry, 2024-11-01), on `master` (`d424aec5`) and in no tag (`git tag --contains` is empty; v1.3.0 is older) |
+| **miniz** | `README-Prusa.txt`: miniz 2.1.0 amalgamated plus Prusa changes. Not compared: only the build file changed | `CMakeLists.txt` (Orca-written; defines `miniz_static`): `-Wno-error=incompatible-pointer-types` for clang-cl (`d865e9e6e1`) | n/a (integration file) |
+| **qhull** | Qhull 2015.2 (`README.txt`). Not compared: only the build file changed | `CMakeLists.txt` (Orca-written; uses `slic3r_remap_configs`): the static system-Qhull branch always links the release `Qhull::qhullcpp`/`qhullstatic_r`, with no `_d` debug variants (`6c6e8be43d`, #14593) | n/a (integration file) |
+| **semver** | Checked against `h2non/semver.c` `master` `bd1db234` (upstream has no `dev` handling) | `semver.c` `compare_prerelease`: inside the existing "Orca: Special handling for 'dev'" block, the two return values are swapped, so `x.y.z-dev` now ranks **above** every other prerelease and below the release (`a8d73e6456`). It changes how the app orders versions, for example for update checks; that use was not traced | No (the `dev` block is Orca's) |
+
+**MCUT, outside the 2.5.0 delta:** the whole-tree comparison found five v2.4.2 files that differ from v1.2.0. The [source-closure review](mcut-libigl-transitive-closure-review.md) §6 lists three of them (`CMakeLists.txt`, `source/math.cpp`, `source/shewchuk.c`). The other two are one added line each: `#include <chrono>` in `include/mcut/internal/frontend.h` and `#include <cstdint>` in `include/mcut/internal/hmesh.h` (OrcaSlicer history: `f6ac67e601` "Fix VS2022 17.13 build failure", then `883607e1d4` "Refactor folder"). `tpool.h` makes six in 2.5.0.
+
+### 0.4 Added and removed
+
+| Change | Evidence | Note |
+|---|---|---|
+| **Added `deps_src/pybind11`** (54 files) | `PYBIND11_VERSION_*` 3/0/1 in `include/pybind11/detail/common.h`; `LICENSE` (BSD-3-Clause-style, Wenzel Jakob); added in `ecddf3d18f` "feat: Python Plugins" | All 54 blob IDs equal `pybind/pybind11` `v3.0.1` → `f5fbe867d2d26e4a0a9177a51f6e568868ad3dc8` (re-checked here through the GitHub tree API). No local change. Reviewed in [B5](cpython-pybind11-provenance-license-review.md), **not approved** |
+| **Removed `deps_src/clipper`** (`clipper.cpp`, `clipper.hpp`, `clipper_z.cpp`, `clipper_z.hpp`, `CMakeLists.txt`) | `222c6a2df5`; `deps_src/CMakeLists.txt` no longer adds it. No `ClipperLib::` or `clipper.hpp` reference is left under `src/` at `665552c1` (`git grep`) | The [legacy Clipper review](clipper-legacy-license-use-review.md) is historical |
+| **Removed `deps/GLEW/glew`** (vendored under `deps/`, not `deps_src/`) | `35bac4cb69` "Remove unused OpenCSG, GLEW and GLU dependencies (#16318)" | Not in the §2 table, which covers `deps_src/` only. The removal is in the [delta §4](dependency-delta-2.4.2-to-2.5.0.md#4-removed) |
+
+### 0.5 Patch and replacement-file inventory for 2.5.0
+
+Patch or diff files under `deps/`: **9** in 2.5.0 (14 in v2.4.2). "Applied" means a non-comment `PATCH_COMMAND` in the 2.5.0 build files names the file; no configure run checked it.
+
+| File | 2.5.0 status | Applied by (2.5.0) | Note |
+|---|---|---|---|
+| `deps/OCCT/0001-BRepMesh-seam-pcurve-at-edge-parameter.patch` | **Added**, replaces `0001-OCCT-fix.patch` (221 lines, install-layout changes, **deleted**) | `deps/OCCT/OCCT.cmake:37` `git apply` | 28 lines, one file: `src/ModelingAlgorithms/TKMesh/BRepMesh/BRepMesh_ModelPreProcessor.cxx`. It takes the seam pcurve's first point at the edge parameter instead of `FirstParameter()`. The build file's comment links [Open-Cascade-SAS/OCCT#572](https://github.com/Open-Cascade-SAS/OCCT/issues/572) ("Cone surface cannot be triangulated", **open**) and says to remove the patch once a release has the fix. `git apply --check` succeeds against that file at `V8_0_1` → `b8f597c677811d1f9f4d8a97f5ae2825c0353a42`. Commits `78a4f2867c`, `8790b07773` |
+| `deps/OpenCV/0001-vs.patch`, `0002-clang19-macos.patch` | **Deleted** | n/a | OpenCV 4.14.0 has no patch (`1008a47870`) |
+| `deps/PNG/PNG.patch`, `0002-clang19-macos.patch`, `macos-arm64.patch` | **Deleted** | n/a | libpng 1.6.59 has no patch and one build path. `PNG.patch` was the one that removed Adler-32 validation behaviour (§3); 2.5.0 no longer carries it (`710341338c`) |
+| `deps/GMP/0001-GMP_GCC15.patch` | **Edited** (3 hunks) | `deps/GMP/GMP.cmake:70` `git apply` (source-build path only) | Only the replacement probe line changed: `void g(int,t1 const*,t1,t2,t1 const*,int){}` → `void g(int a,t1 const*b,t1 c,t2 dd,t1 const*e,int ff){}`, in each of three copies of the configure probe. Unnamed parameters in a C function definition are not valid before C23, which is the likely reason (`1e038bfc53`, "build deps on older GCC"). Now applied to the GMP **6.3.0** source |
+| `deps/OpenEXR/0001-OpenEXR-GCC13.patch` | Unchanged | `deps/OpenEXR/OpenEXR.cmake:34` (`_patch_cmd`) | |
+| `deps/OpenVDB/0001-clang19.patch` | Unchanged | `deps/OpenVDB/OpenVDB.cmake:17` | |
+| `deps/ZLIB/0001-Respect-BUILD_SHARED_LIBS.patch` | Unchanged | `deps/ZLIB/ZLIB.cmake:1`, `:10` | |
+| `deps/Blosc/blosc-mods.patch` | Unchanged | **Not applied**: `PATCH_COMMAND` is commented out at `deps/Blosc/Blosc.cmake:17`, `:36` | As in v2.4.2 |
+| `deps/Boost/0001-Boost-fix.patch` | Unchanged | **Not referenced** by any other file in the OrcaSlicer tree, in v2.4.2 or 2.5.0 (`git grep -l 'Boost-fix' -- . ':!*.patch'` finds nothing) | §3 said "confirm exact application condition". The answer is that nothing applies it |
+| `deps/TBB/0001-TBB-GCC13.patch` | Unchanged | **Not referenced** by any other file in v2.4.2 or 2.5.0 (same `git grep` for `TBB-GCC13`) | Same as Boost |
+
+Replacement files copied over upstream sources (not named `.patch`):
+
+| File | 2.5.0 status | Copied by | Compared with upstream |
+|---|---|---|---|
+| `deps/TBB/MSVC.cmake` (98 lines) | **Added** (`0a7ac3f2ac` "fix: disable TBB LTCG to allow linking with lld-link") | `deps/TBB/TBB.cmake:1-2`: copied to `./cmake/compilers/MSVC.cmake` when `MSVC` (clang-cl included) | oneTBB `v2021.5.0` → `3df08fe234f23e732a122809b40eb129ae22733f` `cmake/compilers/MSVC.cmake` (85 lines): `/W4` only with `TBB_STRICT`; the IPO flags (`-flto`, `/GL`, `-LTCG`) apply only when `TBB_ENABLE_IPO`, which follows `CMAKE_INTERPROCEDURAL_OPTIMIZATION` (`TBB.cmake` passes both `OFF`); the rest is blank-line changes. Build flags only |
+| `deps/TBB/GNU.cmake` | Unchanged (Flatpak + GCC only; not listed in §3) | `deps/TBB/TBB.cmake:3-4` | Against the same tag: adds `-Wno-error=stringop-overflow` (comment cites oneTBB#843) and clears the IPO flags |
+| `deps/SLVS/CMakeLists.txt.in` | **Added** (`5d120921d5`) | `deps/SLVS/SLVS.cmake:8`, replaces upstream's `CMakeLists.txt` | Reviewed in [B4](slvs-provenance-license-review.md) |
+| `deps/OpenCSG/CMakeLists.txt.in` | **Removed** with OpenCSG (`35bac4cb69`) | n/a | |
+
+`deps/OpenEXR/patch_openexr_arm64.cmake` (a CMake script run as `PATCH_COMMAND` on Windows ARM64, `OpenEXR.cmake:39`) is unchanged. The new `deps/` projects' own build steps, such as CPython's `msbuild.rsp` copy (`deps/python3/python3.cmake:167`), are in slices B and C.
+
+### 0.6 Open questions for the maintainer
+
+1. **Clipper2 local changes:** the offset step-count and concave-join changes change geometry output and are not upstream. The allocator change adds a tbbmalloc dependency. Should they be kept, reported upstream, or recorded as a permanent fork delta? (Not a license question; Boost-1.0 allows modification.)
+2. **Unapplied patch files:** `0001-Boost-fix.patch` and `0001-TBB-GCC13.patch` are in the tree but nothing applies them. Record as dead files, or confirm with a configure run?
+3. **libigl pin:** §2 and the [MCUT/libigl review](mcut-libigl-license-review.md) say the libigl revision is unpinned. This comparison pins v2.4.2 to v2.6.0 exactly. Should those docs be updated, or is the correction here enough?
+4. **imguizmo base:** the vendored `ImGuizmo.cpp` is far from the 1.83 tag. Its upstream base is still unresolved.
+5. **Notices:** as for v2.4.2, no build step was found that stages the clipper2, libigl, pybind11 or mcut license texts into an app package. Not re-checked in detail for 2.5.0.
+
+### 0.7 Limitations
+
+- Changed files were compared with the named upstream refs only. Components that 2.5.0 did not change were not compared again, except where a whole-tree comparison was cheap (libigl, mcut, imgui, imguizmo); those results are above.
+- "Not upstream" means not found at the upstream ref named in the table on 2026-11-19. Other forks and older branches were not searched.
+- No build, configure or test run. Whether the patches apply cleanly was checked only for the OCCT patch (`git apply --check` on a single file).
+- **Not approved.** This section records what the files say and draws no legal conclusions.
 
 ## 1. Executive findings
 
