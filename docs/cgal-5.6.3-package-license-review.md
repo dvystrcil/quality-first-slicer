@@ -1,5 +1,7 @@
 # CGAL 5.6.3 package-license review — mesh boolean path
 
+> **Historical: v2.4.2.** OrcaSlicer 2.5.0 builds CGAL 6.2.1. Its review is the [CGAL 6.2.1 package-license review](cgal-6.2.1-package-license-review.md) (slice D3 of [#55](https://github.com/dvystrcil/quality-first-slicer/issues/55)). This document is kept unchanged as the v2.4.2 record.
+
 **Status:** Exact bundled release archive and active GPL-package API use identified; effective provider and full header closure remain configuration-dependent. This is a source-level provenance review, not a legal determination.  
 **Reviewed OrcaSlicer revision:** `8500fcdccaa10b5099ac20d252af3a7c560046f1` (v2.4.2)
 

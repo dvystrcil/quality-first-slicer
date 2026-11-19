@@ -1,5 +1,7 @@
 # Review of OrcaSlicer-maintained dependency sources
 
+> **Pinned to v2.4.2.** In 2.5.0 (slice D of [#55](https://github.com/dvystrcil/quality-first-slicer/issues/55)): wxWidgets is pinned to commit `b44c39c1` with three named submodules ([fork review §0](wxwidgets-3.3.2-fork-provenance-review.md#0-orcaslicer-250-update-slice-d2-reviewed-2026-11-19)), and GMP's source build is 6.3.0 from `ftp.gnu.org` first, with the SoftFever asset only as a second URL ([provenance audit §2.1](dependency-provenance-audit.md#21-declarations-250)). Blosc and OpenVDB pins are unchanged. The text below is the v2.4.2 review.
+
 **Status:** Targeted source-reference review; incomplete provenance and license audit  
 **Upstream baseline:** OrcaSlicer `v2.4.2`, commit `8500fcdccaa10b5099ac20d252af3a7c560046f1`  
 **Reviewed build declarations:** `deps/Blosc/Blosc.cmake`, `deps/OpenVDB/OpenVDB.cmake`, `deps/wxWidgets/wxWidgets.cmake`, `deps/GMP/GMP.cmake`
