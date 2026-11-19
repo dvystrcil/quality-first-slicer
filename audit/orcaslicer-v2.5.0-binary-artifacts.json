@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "upstream": {
+    "repository": "https://github.com/OrcaSlicer/OrcaSlicer",
+    "ref": "v2.5.0",
+    "commit": "40ecc66f78ed72dc368e0c1ebe40d77f00cc8a19",
+    "fork_baseline": {
+      "repository": "https://github.com/dvystrcil/OrcaSlicer",
+      "ref": "baseline-2.5.0",
+      "commit": "665552c1e4b950b32707953cbca67e178e219366"
+    }
+  },
+  "description": "Prebuilt binary downloads pinned by SHA-256 in the OrcaSlicer v2.5.0 build files: the hashed binary pins listed in excluded_pins of orcaslicer-v2.5.0-source-archives.json (FFmpeg Windows zips, uv, CPython Windows bin-deps and nuget host Python). Same schema as the source-archive manifest so tools/verify-source-archives.py can hash-verify them. A hash match is integrity evidence only; it does not approve anything. Issue #55 slice C.",
+  "artifacts": [
+    {
+      "id": "ffmpeg-windows-prebuilt-x64",
+      "source_file": "deps/FFMPEG/FFMPEG.cmake",
+      "urls": [
+        "https://github.com/Noisyfox/FFmpeg-Builds-Orca/releases/download/autobuild-2026-09-18-16-50/ffmpeg-n7.0.3-33-g887d4b4919-win64-orca-shared-7.0.zip"
+      ],
+      "sha256": "85da19daf198f5548259d8aabb349db84997a3f6e6886d8d7764114add9c6dae",
+      "notes": "MSVC x64 only. Prebuilt shared FFmpeg; bin/, lib/ and include/ are copied into the deps prefix. Review: issue #55 slice C1 (docs/ffmpeg-windows-prebuilt-review.md)."
+    },
+    {
+      "id": "ffmpeg-windows-prebuilt-arm64",
+      "source_file": "deps/FFMPEG/FFMPEG.cmake",
+      "urls": [
+        "https://github.com/Noisyfox/FFmpeg-Builds-Orca/releases/download/autobuild-2026-09-18-16-50/ffmpeg-n7.0.3-33-g887d4b4919-winarm64-orca-shared-7.0.zip"
+      ],
+      "sha256": "da480cbb39680056de824c57ec4dc3bd577b479ebbc310ff1f9dc55cf014b4c1",
+      "notes": "MSVC arm64 only. Same handling as the x64 zip. Review: issue #55 slice C1."
+    },
+    {
+      "id": "uv-aarch64-apple-darwin",
+      "source_file": "CMakeLists.txt",
+      "urls": [
+        "https://github.com/astral-sh/uv/releases/download/0.11.21/uv-aarch64-apple-darwin.tar.gz"
+      ],
+      "sha256": "1f921d491ba5ffeea774eb04d6681ecee379101341cbb1500394993b541bf3f4",
+      "notes": "uv 0.11.21 release archive; the executable is extracted and installed into the application. Review: issue #55 slice C2 (docs/uv-binary-review.md)."
+    },
+    {
+      "id": "uv-x86-64-apple-darwin",
+      "source_file": "CMakeLists.txt",
+      "urls": [
+        "https://github.com/astral-sh/uv/releases/download/0.11.21/uv-x86_64-apple-darwin.tar.gz"
+      ],
+      "sha256": "f3c8e5708a84b920c18b691214d54d2b0da6b984789caae95d47c95120cb7765",
+      "notes": "uv 0.11.21 release archive; the executable is extracted and installed into the application. Review: issue #55 slice C2 (docs/uv-binary-review.md)."
+    },
+    {
+      "id": "uv-aarch64-unknown-linux-gnu",
+      "source_file": "CMakeLists.txt",
+      "urls": [
+        "https://github.com/astral-sh/uv/releases/download/0.11.21/uv-aarch64-unknown-linux-gnu.tar.gz"
+      ],
+      "sha256": "88e800834007cc5efd4675f166eb2a51e7e3ad19876d85fa8805a6fb5c922397",
+      "notes": "uv 0.11.21 release archive; the executable is extracted and installed into the application. Review: issue #55 slice C2 (docs/uv-binary-review.md)."
+    },
+    {
+      "id": "uv-x86-64-unknown-linux-gnu",
+      "source_file": "CMakeLists.txt",
+      "urls": [
+        "https://github.com/astral-sh/uv/releases/download/0.11.21/uv-x86_64-unknown-linux-gnu.tar.gz"
+      ],
+      "sha256": "8c88519b0ef0af9801fcdee419bbb12116bd9e6b18e162ae093c932d8b264050",
+      "notes": "uv 0.11.21 release archive; the executable is extracted and installed into the application. Review: issue #55 slice C2 (docs/uv-binary-review.md)."
+    },
+    {
+      "id": "uv-aarch64-pc-windows-msvc",
+      "source_file": "CMakeLists.txt",
+      "urls": [
+        "https://github.com/astral-sh/uv/releases/download/0.11.21/uv-aarch64-pc-windows-msvc.zip"
+      ],
+      "sha256": "74e443f8004022dde57a1bd0d10c097830f9ea8feb4ec927db52cd5d805c2f48",
+      "notes": "uv 0.11.21 release archive; the executable is extracted and installed into the application. Review: issue #55 slice C2 (docs/uv-binary-review.md)."
+    },
+    {
+      "id": "uv-x86-64-pc-windows-msvc",
+      "source_file": "CMakeLists.txt",
+      "urls": [
+        "https://github.com/astral-sh/uv/releases/download/0.11.21/uv-x86_64-pc-windows-msvc.zip"
+      ],
+      "sha256": "ace861f360c6de2babedc1607d0f454b6b09a820dbc8182dc15af927e4df9589",
+      "notes": "uv 0.11.21 release archive; the executable is extracted and installed into the application. Review: issue #55 slice C2 (docs/uv-binary-review.md)."
+    },
+    {
+      "id": "python3-win-libffi-bin",
+      "source_file": "deps/python3/python3.cmake",
+      "urls": [
+        "https://github.com/python/cpython-bin-deps/archive/94cb9a1c7feb608adf2b9f8fe2dbd6925ffbf90d.zip"
+      ],
+      "sha256": "6b0f53490e0dd958708bff32df689cf2163c214147fcb8edb76a403fa6a877ca",
+      "notes": "Windows only. cpython-bin-deps libffi-3.4.4: prebuilt libffi used by CPython's _ctypes. Review: issue #55 slice C3 (docs/cpython-windows-build-inputs-review.md)."
+    },
+    {
+      "id": "python3-win-openssl-bin",
+      "source_file": "deps/python3/python3.cmake",
+      "urls": [
+        "https://github.com/python/cpython-bin-deps/archive/1174fd43d858425c345b16d631716fb98ba492ea.zip"
+      ],
+      "sha256": "b741fd1411a36cb899fee2c39b70a4492f4bc1c6e2301d67df32e9754118a63b",
+      "notes": "Windows only. cpython-bin-deps openssl-bin-3.0.16.2: prebuilt OpenSSL used by CPython's _ssl and _hashlib. Review: issue #55 slice C3."
+    },
+    {
+      "id": "python3-win-host-x86",
+      "source_file": "deps/python3/python3.cmake",
+      "urls": [
+        "https://api.nuget.org/v3-flatcontainer/pythonx86/3.13.16/pythonx86.3.13.16.nupkg"
+      ],
+      "sha256": "c65cf47664b33286dfc5f2a17303668dd59e057869815ed9b270fb3866c1dd15",
+      "notes": "Windows non-ARM64 hosts, build time only (skipped when DEP_PYTHON_HOST is set): runs CPython's PCbuild scripts. Review: issue #55 slice C3."
+    },
+    {
+      "id": "python3-win-host-arm64",
+      "source_file": "deps/python3/python3.cmake",
+      "urls": [
+        "https://api.nuget.org/v3-flatcontainer/pythonarm64/3.13.16/pythonarm64.3.13.16.nupkg"
+      ],
+      "sha256": "bfd77aa5b0edff4a7936a3220e8b79e7c78f864ce13e8fa2c835d9946e11694a",
+      "notes": "Windows ARM64 hosts, build time only. Review: issue #55 slice C3."
+    }
+  ]
+}

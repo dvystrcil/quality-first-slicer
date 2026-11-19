@@ -6,6 +6,7 @@ Two source archive manifests record the URLs and SHA-256 values declared by Orca
 |---|---|---:|---|
 | [`audit/orcaslicer-v2.5.0-source-archives.json`](../audit/orcaslicer-v2.5.0-source-archives.json) | v2.5.0 (`40ecc66f`; fork baseline `665552c1` has identical build files) | 33 | **Current**: see [2.5.0 result](#250-verification-result) |
 | [`audit/orcaslicer-v2.4.2-source-archives.json`](../audit/orcaslicer-v2.4.2-source-archives.json) | v2.4.2 (`8500fcdc`) | 25 | History; the tool's default `--manifest` |
+| [`audit/orcaslicer-v2.5.0-binary-artifacts.json`](../audit/orcaslicer-v2.5.0-binary-artifacts.json) | v2.5.0 (`40ecc66f`) | 12 | **Binary** pins (slice C of [#55](https://github.com/dvystrcil/quality-first-slicer/issues/55)): see [2.5.0 binary result](#250-binary-pin-verification-result) |
 
 The verification utility downloads the bytes and independently recalculates SHA-256; it does not extract or execute downloaded content. [`tools/check-archive-manifest-coverage.py`](../tools/check-archive-manifest-coverage.py) separately checks that a manifest accounts for every pin in a checkout (see [the 2.5.0 delta](dependency-delta-2.4.2-to-2.5.0.md#5-pin-coverage-check)).
 
@@ -93,3 +94,28 @@ Manual workflow run [41740959467](https://github.com/dvystrcil/quality-first-sli
 ## Current limitations
 
 The manifest's expected values were transcribed from upstream CMake source. The 24 matching downloads now have independent byte-level verification evidence against those declarations. NanoSVG remains unresolved as documented above. No archive has been extracted or built as part of this verification run, and no complete SBOM, authenticity review, license review, or legal review has been performed.
+
+## 2.5.0 binary pin verification result
+
+The hashed binary pins that the source manifest lists in `excluded_pins` (FFmpeg Windows zips, `uv`, CPython Windows `bin-deps` and nuget host Python) are in a separate manifest with the same schema, [`audit/orcaslicer-v2.5.0-binary-artifacts.json`](../audit/orcaslicer-v2.5.0-binary-artifacts.json), so the same tool verifies them. The source manifest is unchanged and still accounts for these hashes in `excluded_pins` for the coverage check. Artifact IDs use `-` for `_` (the tool's ID pattern), so `uv-x86-64-…` is the `x86_64-…` triple.
+
+```sh
+python3 tools/verify-source-archives.py \
+  --manifest audit/orcaslicer-v2.5.0-binary-artifacts.json \
+  --cache-dir /tmp/orcaslicer-v2.5.0-binary-artifacts \
+  --report /tmp/orcaslicer-v2.5.0-binary-verification.json
+```
+
+Local run on 2026-11-19 20:58 UTC (report `generated_at` `2026-11-19T20:58:56Z`), `--preserve-mismatches-dir` set:
+
+```text
+Result: 12/12 archives verified
+```
+
+- **12 of 12 PASS**, 199 MB in total: FFmpeg Windows x64 and arm64, `uv` 0.11.21 for all six triples, `bin-deps` libffi-3.4.4 and openssl-bin-3.0.16.2, nuget `pythonx86` and `pythonarm64` 3.13.16. No mismatch, so nothing was preserved.
+- The four Windows `source-deps` archives were re-verified from the source manifest in the same session (`--artifact python3-win-{bzip2,sqlite,xz,zlib}`): **4 of 4 PASS** (report `2026-11-19T20:59:06Z`).
+- Independent anchors, recorded in each review: the FFmpeg release's `checksums.sha256` and GitHub asset digests ([C1](ffmpeg-windows-prebuilt-review.md)); `uv`'s upstream `.sha256` assets, asset digests and GitHub attestations ([C2](uv-binary-review.md)); the nuget.org catalog SHA-512 and the `cpython-*-deps` tags ([C3](cpython-windows-build-inputs-review.md)).
+- The Windows GMP/MPFR/WebView2 binaries are committed to the OrcaSlicer tree with no hash pin, so they are not in this manifest. Their SHA-256 values are recorded in [`windows-binary-provenance.md`](windows-binary-provenance.md) (C4), and the WebView2 files match the official nuget package.
+- The CI `test` job JSON-validates this manifest and runs when it changes. The manual `verify-archives` dispatch job still offers only the two source manifests.
+
+A match proves only that the bytes equal the declared hash. It **does not approve any component**.
