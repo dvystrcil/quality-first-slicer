@@ -53,10 +53,10 @@ The app does not call these classes directly (`git grep` on `src/` finds none of
 
 ## 4. Open questions
 
-1. The eight `TKGeomBase` files (§3): what is their license? Waiting on upstream #1564. The maintainer should decide what to do meanwhile.
+1. The eight `TKGeomBase` files (§3): what is their license? Waiting on upstream #1564. The maintainer should decide what to do meanwhile. STEP import, which [0007](decisions/0007-remove-cad-tab.md) keeps, still links `TKGeomBase`; tracked as a release blocker in [#62](https://github.com/dvystrcil/quality-first-slicer/issues/62).
 2. OCCT's LGPL text and exception notice are not staged into any app package by the build files read here. The exception's "prominent notice" condition is a packaging question.
 3. The MIT (delabella) and Gay/Lucent notices in compiled toolkits will need third-party notice entries.
-4. The ModelingAlgorithms module (`SLIC3R_CAD`) builds `TKExpress`, `TKFeat`, `TKHelix` and `TKXMesh`, which nothing references. Keeping or optionalizing the Design/CAD tab is a product decision (goals [Q17](goals.md)), not made here.
+4. The ModelingAlgorithms module (`SLIC3R_CAD`) builds `TKExpress`, `TKFeat`, `TKHelix` and `TKXMesh`, which nothing references. Keeping or optionalizing the Design/CAD tab is a product decision (goals [Q17](goals.md)), not made here. Later decided: the tab is removed (`SLIC3R_CAD=OFF`, [0007](decisions/0007-remove-cad-tab.md)).
 
 ## 5. Approval
 
