@@ -103,5 +103,5 @@ These come straight from the use map's ranked list. Each one blocks a removal or
 | ~~Q8a~~ | Windows CI: **DECIDED**, GitHub-hosted, right after the 2.5.0 rebase; see [0006](decisions/0006-windows-ci-after-rebase.md) | — |
 | ~~Q9–Q11~~ | Feature scope: **DECIDED**; see [0003](decisions/0003-remove-sla.md), [0004](decisions/0004-remove-creality-lan-discovery.md), [0005](decisions/0005-3d-mouse-optional-off.md) | — |
 | Q12–Q15 | Feature scope: Bambu plugin, Orca Cloud client, printer web UI/camera, MCUT | O4–O6 |
-| Q17 | Review and keep/remove decisions for the six dependency projects added in 2.5.0 (Assimp, DataChannel, FFMPEG, SLVS, python3 + pybind11, wxInspector) | 2.5.0 baseline approval, G4 |
+| Q17 | Review and keep/remove decisions for the six dependency projects added in 2.5.0 (Assimp, DataChannel, FFMPEG, SLVS, python3 + pybind11, wxInspector). **SLVS: DECIDED, remove** with the CAD tab (`SLIC3R_CAD=OFF`); see [0007](decisions/0007-remove-cad-tab.md). The OCCT `TKGeomBase` release blocker is [#62](https://github.com/dvystrcil/quality-first-slicer/issues/62) | 2.5.0 baseline approval, G4 |
 | Q16 | Licensing objective | Framing of #47 |

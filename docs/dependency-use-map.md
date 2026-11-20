@@ -104,7 +104,7 @@ All six have real consumers in this configuration. None is a "remove: unused" ca
 | **Assimp** | v5.4.3 (v5.3.1 when CMake < 3.22), GitHub tag tarball, SHA-256 pinned | 1 | `L/Format/AssimpImport.cpp` ← `L/Model.cpp:441-448`: **`.glb`, `.gltf`, `.fbx` import** with textures, handed to the texture-to-colour dialog | `load_assimp_textured_model` called from `Model.cpp:448`; `Assimp::Importer` used | `assimp::assimp` (`libassimp.a`) + `assimp::zlibstatic` (Assimp's bundled zlib, see 3.4) | none (always on) |
 | **DataChannel** (libdatachannel) | v0.24.5, **git clone by tag** (`deps/DataChannel/DataChannel.cmake:18`), not a hashed archive | 1 | `S/GUI/WebRtcMediaController.cpp` ← `S/GUI/MediaPlayCtrl.cpp:216` (`CameraStreamMode::webrtc`): **printer camera over WebRTC** | 21 `rtc::` uses | `LibDataChannel::LibDataChannel` (`libdatachannel.a`, plus bundled `libjuice.a` and `libusrsctp.a` in the prefix) | none |
 | **FFMPEG** | n7.0.3 source build on Linux/macOS; **prebuilt shared zip from `Noisyfox/FFmpeg-Builds-Orca` on MSVC** (`deps/FFMPEG/FFMPEG.cmake`) | 2 | `S/GUI/AVVideoDecoder.cpp`, `S/GUI/wxMediaCtrl3.cpp` ← `MediaPlayCtrl`, `StatusPanel`: **printer camera / timelapse decoding** (replaces GStreamer) | 30 `av*`/`sws_` uses in `AVVideoDecoder.cpp`, 17 in `wxMediaCtrl3.cpp` | **Shared**: `libavformat/avcodec/swscale/avutil.so` from the prefix via pkg-config (`PkgConfig::LIBAV`, `src/slic3r/CMakeLists.txt:1049-1056`). Static on macOS, prebuilt DLLs on Windows | none |
-| **SLVS** (SolveSpace solver) | `deps/SLVS` | 1 | `L/CAD/SketchSolver.cpp` ← `L/CAD/CadDocument.cpp`, `S/GUI/CAD/DesignPanel.cpp`, `DesignSketchTool.cpp`: **parametric Design/CAD tab** | 46 `Slvs_` uses | `SLVS::slvs` (`libslvs.a`) | **`SLIC3R_CAD`** (default ON, root and `deps/` must match). The same option also pulls in the OCCT modelling modules (`TKBool`, `TKFillet`, `TKOffset`, new in the closure) |
+| **SLVS** (SolveSpace solver) | `deps/SLVS` | 1 | `L/CAD/SketchSolver.cpp` ← `L/CAD/CadDocument.cpp`, `S/GUI/CAD/DesignPanel.cpp`, `DesignSketchTool.cpp`: **parametric Design/CAD tab** | 46 `Slvs_` uses | `SLVS::slvs` (`libslvs.a`) | **`SLIC3R_CAD`** (default ON, root and `deps/` must match). The same option also pulls in the OCCT modelling modules (`TKBool`, `TKFillet`, `TKOffset`, new in the closure). **Decided: remove** (`SLIC3R_CAD=OFF`, [0007](decisions/0007-remove-cad-tab.md)) |
 | **python3** + **pybind11** | CPython 3.12.13 built into `<prefix>/libpython` (`deps/python3`); pybind11 vendored in `deps_src/pybind11` | 27 (pybind11) / 27 (`prefix/python3`) | **Python plugin system**: plugin manager, plugin host bindings (mesh, slicing, presets, UI), script and printer-agent plugin types, post-processor, terminal dialog; `NetworkAgentFactory` registers **Python printer-agent plugins** | real pybind11 API use across `S/plugin/*` | `pybind11::embed` → `Python3::Python` (bundled **shared** libpython); `uv` binary bundled for package installs (3.4) | none for the plugin host; `ORCA_BUILD_PYTHON_STUBGEN_MODULE` only for `orca_stubgen` |
 | **wxInspector** | v1.0.0, `github.com/Noisyfox/wxInspector` tag zip, SHA-256 pinned (`deps/wxInspector/wxInspector.cmake:26-27`) | 229 (header) | `S/GUI/GUI_Utils.hpp:107`: `DPIAware<P>` (base of most windows) inherits `wxInspector::wxInspectable`; `GUI_App.cpp:3215` calls `RegisterOrcaInspectorPlugins()`; plugins in `S/Utils/wxInspectorPlugins/*` | **In Release, `WXINSPECTOR_DISABLE` is defined** (`CMakeLists.txt:102`), so `RegisterPlugin` and `wxInspectable` become empty inline stubs (`<prefix>/include/wx/inspector/inspector.h:15-23, 56-66`) | `wxInspector::wxInspector` (`libwxInspector.a`), linked by both `OrcaSlicer` (`src/CMakeLists.txt:194`) and the wx library list (`:110`). It also pulls `libwx_gtk3u_propgrid-3.3.a` into the closure (`src/CMakeLists.txt:36`: "propgrid is required by wxInspector") | Release: functionally off. Debug: on. See O7 |
 
@@ -115,7 +115,7 @@ All six have real consumers in this configuration. None is a "remove: unused" ca
 | Boost, Eigen, oneTBB, cereal | 435–572 → 542–743 | ubiquitous | Core |
 | OpenSSL / curl | 396 / 242 → 452 / **17** | curl headers are no longer included transitively by most GUI TUs | Network, updates |
 | wxWidgets 3.3 | 323 → 416 | GUI | Core GUI |
-| OCCT | 247 → 265 (include dir renamed `opencascade` → `occt`; STEP toolkits now `TKDESTEP`/`TKDE`; `TKBool`/`TKFillet`/`TKOffset` added for CAD) | `L/Format/STEP.*`, CAD | STEP import, CAD tab |
+| OCCT | 247 → 265 (include dir renamed `opencascade` → `occt`; STEP toolkits now `TKDESTEP`/`TKDE`; `TKBool`/`TKFillet`/`TKOffset` added for CAD) | `L/Format/STEP.*`, CAD | STEP import (kept), CAD tab (removed, [0007](decisions/0007-remove-cad-tab.md)). `TKGeomBase` stays with STEP: [#62](https://github.com/dvystrcil/quality-first-slicer/issues/62) |
 | CGAL (+ GMP, MPFR) | 5 → 9 | cut, boolean, Voronoi checks, triangulation | Core modelling |
 | OpenCV `world` | 6 → 6 | `L/ObjColorUtils.cpp`, **`L/TexturePainting.cpp`, `L/TextureToColor/TextureToColor.cpp`, `src/OrcaSlicer.cpp`** (new), `S/GUI/PartSkipDialog.cpp`, `SkipPartCanvas.cpp` | Colour clustering, texture-to-colour, part-skip |
 | NLopt | 5 → 4 | libnest2d, `L/Arrange.cpp`, `L/SLA/SupportTree*.cpp` | Arrange |
@@ -146,7 +146,7 @@ All six have real consumers in this configuration. None is a "remove: unused" ca
 
 ## 4. Ranked decision list, re-checked on 2.5.0
 
-Maintainer decisions: SLA is to be removed ([0003](decisions/0003-remove-sla.md)), Creality discovery is to be removed ([0004](decisions/0004-remove-creality-lan-discovery.md)), and the 3D mouse becomes an option that is off in project builds ([0005](decisions/0005-3d-mouse-optional-off.md)). Ranking, burden and risk wording for the unchanged items are in [v2.4.2 §4](dependency-use-map-v2.4.2.md#4-ranked-decision-list); only what 2.5.0 changes is repeated here.
+Maintainer decisions: SLA is to be removed ([0003](decisions/0003-remove-sla.md)), Creality discovery is to be removed ([0004](decisions/0004-remove-creality-lan-discovery.md)), the 3D mouse becomes an option that is off in project builds ([0005](decisions/0005-3d-mouse-optional-off.md)), and the Design/CAD tab is removed with `SLIC3R_CAD=OFF` ([0007](decisions/0007-remove-cad-tab.md)). Ranking, burden and risk wording for the unchanged items are in [v2.4.2 §4](dependency-use-map-v2.4.2.md#4-ranked-decision-list); only what 2.5.0 changes is repeated here.
 
 ### Remove: no consumer in the analysed configuration
 
@@ -176,7 +176,7 @@ admesh, clipper2, libigl, CGAL + GMP + MPFR, libnest2d + NLopt, Qhull (prefix), 
 
 Changes from v2.4.2: **clipper** and **FreeType** left the list (removed upstream).
 
-**New projects without a decision yet** ([goals Q17](goals.md)): **Assimp** (`.glb`/`.gltf`/`.fbx` textured import) and **SLVS** (CAD tab, already behind `SLIC3R_CAD`) have a single clear consumer each. Each becomes a keep or an optionalize once the product decides on those features. FFmpeg and DataChannel are under O6, wxInspector is O7, and python3 + pybind11 are O8.
+**New projects without a decision yet** ([goals Q17](goals.md)): **Assimp** (`.glb`/`.gltf`/`.fbx` textured import) and **SLVS** (CAD tab, already behind `SLIC3R_CAD`) have a single clear consumer each. SLVS is now decided: the CAD tab is removed ([0007](decisions/0007-remove-cad-tab.md)). Assimp becomes a keep or an optionalize once the product decides on that feature. FFmpeg and DataChannel are under O6, wxInspector is O7, and python3 + pybind11 are O8.
 
 **Undecided, needs platform evidence:** vendored `deps_src/qhull` (unchanged; `deps/CMakeLists.txt:489-491` still comments out `dep_qhull` for MSVC).
 
@@ -198,7 +198,7 @@ The removal and option PRs listed in [v2.4.2 §6](dependency-use-map-v2.4.2.md#6
 
 - **Step 3 (provenance delta review):** the six new projects, plus three binary or vendored-copy items this run found: the bundled `uv` binary, Assimp's `contrib/zlib` becoming the app's zlib, and the bundled libjuice/usrsctp inside libdatachannel. Not started here.
 - **O7 wxInspector** and **O8 Python plugins**: product decisions first.
-- **Assimp** and **SLVS**: keep/optionalize decisions ([goals Q17](goals.md)).
+- **Assimp**: keep/optionalize decision ([goals Q17](goals.md)). **SLVS**: decided, removed with the CAD tab ([0007](decisions/0007-remove-cad-tab.md)).
 
 ## 7. Reproducing
 
