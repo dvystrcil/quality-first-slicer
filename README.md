@@ -1,5 +1,9 @@
 # Quality-First Slicer
 
+> **Retired (archived 2026-11-27).** Work is paused until the OCCT licence question is resolved. OCCT 8.0.1's `TKGeomBase` toolkit still contains eight files whose header forbids giving them to third parties, even in a `SLIC3R_CAD=OFF` build. No public release can ship until that changes. The blocker and the routes considered are recorded in [#62](https://github.com/dvystrcil/quality-first-slicer/issues/62), which stays open as the restart condition.
+>
+> To resume: un-archive the repo (`gh repo unarchive dvystrcil/quality-first-slicer`), confirm #62 is resolved upstream, and remove this notice.
+
 A quality-first, general-purpose FDM slicer built on the OrcaSlicer foundation.
 
 The project aims to combine OrcaSlicer's practical workflow and broad printer support with a conservative, evidence-driven approach to print quality, reliability, and sensible defaults.
